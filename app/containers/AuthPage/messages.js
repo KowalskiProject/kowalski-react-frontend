@@ -6,8 +6,8 @@
 import { defineMessages } from 'react-intl';
 
 export default defineMessages({
-  header: {
-    id: 'app.containers.AuthPage.header',
-    defaultMessage: 'This is AuthPage container !',
+  friendlyIntroductoryMessage: {
+    id: 'app.containers.AuthPage.friendlyIntroductoryMessage',
+    defaultMessage: 'Your best friend to help in daily management tasks.',
   },
 });

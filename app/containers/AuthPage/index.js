@@ -21,12 +21,17 @@ import messages from './messages';
 
 function AuthPage() {
   return (
-    <div>
+    <div className="columns">
       <Helmet>
         <title>AuthPage</title>
         <meta name="description" content="Description of AuthPage" />
       </Helmet>
-      <FormattedMessage {...messages.header} />
+      <div className="column">
+        <FormattedMessage {...messages.friendlyIntroductoryMessage} />
+      </div>
+      <div className="column">
+        <p>Color menu aqui</p>
+      </div>
     </div>
   );
 }

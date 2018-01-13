@@ -28,5 +28,5 @@
   "boilerplate.containers.LocaleToggle.de": "de",
   "boilerplate.containers.LocaleToggle.en": "en",
   "boilerplate.containers.NotFoundPage.header": "Page not found.",
-  "app.containers.AuthPage.header": "This is my header"
+  "app.containers.AuthPage.friendlyIntroductoryMessage": "Your best friend to help in daily management tasks."
 }
