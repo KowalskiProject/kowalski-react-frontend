@@ -1,8 +1,6 @@
 {
   "boilerplate.components.Footer.author.message": "Made with love by {author}.",
   "boilerplate.components.Footer.license.message": "This project is licensed under the MIT license.",
-  "boilerplate.components.Header.features": "Features",
-  "boilerplate.components.Header.home": "Home",
   "boilerplate.containers.FeaturePage.css.header": "Features",
   "boilerplate.containers.FeaturePage.css.message": "Next generation CSS",
   "boilerplate.containers.FeaturePage.feedback.header": "Instant feedback",
@@ -29,6 +27,7 @@
   "boilerplate.containers.LocaleToggle.en": "en",
   "boilerplate.containers.NotFoundPage.header": "Page not found.",
   "app.title": "SATURNO",
+  "app.components.navbar.home": "Home",
   "app.containers.AuthPage.friendlyIntroductoryMessage": "Your best friend to help in daily management tasks.",
   "app.containers.AuthPage.LoginForm.username": "Username",
   "app.containers.AuthPage.LoginForm.password": "Password",

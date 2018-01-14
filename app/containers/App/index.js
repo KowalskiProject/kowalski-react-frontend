@@ -11,7 +11,7 @@ import { Helmet } from 'react-helmet';
 import styled from 'styled-components';
 import { Switch, Route } from 'react-router-dom';
 
-import HomePage from 'containers/HomePage/Loadable';
+import TimesheetPage from 'containers/TimesheetPage/Loadable';
 import FeaturePage from 'containers/FeaturePage/Loadable';
 import NotFoundPage from 'containers/NotFoundPage/Loadable';
 import AuthPage from 'containers/AuthPage/Loadable';
@@ -26,7 +26,7 @@ const AppWrapper = styled.div`
 
 export default function App() {
   return (
-    <AppWrapper className="container is-fullhd">
+    <AppWrapper>
       <Helmet
         titleTemplate="%s - React.js Boilerplate"
         defaultTitle="React.js Boilerplate"
@@ -36,7 +36,7 @@ export default function App() {
       <Switch>
         <Route path="/auth" component={AuthPage} />
         <Header />
-        <Route exact path="" component={HomePage} />
+        <Route exact path="" component={TimesheetPage} />
         <Route path="/features" component={FeaturePage} />
         <Route path="" component={NotFoundPage} />
       </Switch>
