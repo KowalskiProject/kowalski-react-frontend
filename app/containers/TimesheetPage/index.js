@@ -11,6 +11,7 @@ import { Helmet } from 'react-helmet';
 import { FormattedMessage } from 'react-intl';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
+import styled from 'styled-components';
 
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
@@ -19,14 +20,33 @@ import reducer from './reducer';
 import saga from './saga';
 import messages from './messages';
 
+const CalendarColumn = styled.div`
+  border-right: solid 1px #ccc;
+  min-width: 200px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+`;
+
 function TimesheetPage() {
   return (
-    <div>
+    <div className="kowalski-react-basic-container">
       <Helmet>
         <title>TimesheetPage</title>
         <meta name="description" content="Description of TimesheetPage" />
       </Helmet>
-      <div className="columns">
+      <div className="columns ">
+        {/* Calendar */}
+        <CalendarColumn className="column ">
+          <br />
+          <br />
+          <br />
+          <p>Finally at here</p>
+        </CalendarColumn>
+
+        {/* Day Columns */}
+        <div className="column">
+        </div>
       </div>
     </div>
   );

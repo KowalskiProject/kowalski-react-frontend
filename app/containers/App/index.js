@@ -35,10 +35,13 @@ export default function App() {
       </Helmet>
       <Switch>
         <Route path="/auth" component={AuthPage} />
-        <Header />
-        <Route exact path="" component={TimesheetPage} />
-        <Route path="/features" component={FeaturePage} />
-        <Route path="" component={NotFoundPage} />
+        <Header>
+          <Switch>
+            <Route exact path="" component={TimesheetPage} />
+            <Route path="/features" component={FeaturePage} />
+            <Route path="" component={NotFoundPage} />
+          </Switch>
+        </Header>
       </Switch>
     </AppWrapper>
   );

@@ -1,19 +1,49 @@
 import React from 'react';
-import { FormattedMessage } from 'react-intl';
+import styled from 'styled-components';
+import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
 
 import NavBar from './NavBar';
 import messages from './messages';
 
-class Header extends React.Component { // eslint-disable-line react/prefer-stateless-function
-  render() {
-    return (
-      <NavBar aria-label="main navigation" className="kowalski-back-panel">
-        <a className="navbar-item">
-          <FormattedMessage {...messages.home} />
-        </a>
+const AppNameWrapper = styled.span`
+  font-size: 1.5rem;
+`;
+
+const NavBarMenuWrapper = styled.span`
+  margin-left: 2rem;
+`;
+
+function Header({ intl, children }) {
+  return (
+    <div className="kowalski-react-basic-container-vertical">
+      <NavBar aria-label="main navigation" className="navbar">
+        <div className="navbar-start">
+          <AppNameWrapper className="navbar-item">
+            { intl.formatMessage(messages.appTitle) }
+          </AppNameWrapper>
+        </div>
+        <div className="navbar-end">
+          <span className="navbar-item">
+            <FormattedMessage {...messages.timesheet} />
+          </span>
+          <span className="navbar-item">
+            <FormattedMessage {...messages.projects} />
+          </span>
+          <span className="navbar-item">
+            <FormattedMessage {...messages.people} />
+          </span>
+          <NavBarMenuWrapper className="navbar-item">
+            <FormattedMessage {...messages.usernamePlaceholder} />
+          </NavBarMenuWrapper>
+        </div>
       </NavBar>
-    );
-  }
+      { children }
+    </div>
+  );
 }
 
-export default Header;
+Header.propTypes = {
+  intl: intlShape.isRequired,
+};
+
+export default injectIntl(Header);

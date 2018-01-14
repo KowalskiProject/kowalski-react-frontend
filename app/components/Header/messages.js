@@ -6,8 +6,19 @@
 import { defineMessages } from 'react-intl';
 
 export default defineMessages({
-  home: {
-    id: 'app.components.navbar.home',
-    defaultMessage: 'Home',
+  timesheet: {
+    id: 'app.components.navbar.timesheet',
+  },
+  projects: {
+    id: 'app.components.navbar.projects',
+  },
+  people: {
+    id: 'app.components.navbar.people',
+  },
+  usernamePlaceholder: {
+    id: 'app.components.navbar.usernamePlaceholder',
+  },
+  appTitle: {
+    id: 'app.title',
   },
 });
