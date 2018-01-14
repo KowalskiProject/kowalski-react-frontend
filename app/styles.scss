@@ -1,0 +1,72 @@
+@import url(https://fonts.googleapis.com/css?family=Open+Sans|Poppins);
+// 2. Set your own initial variables
+// Update blue
+$ultraviolet: #654EA3;
+$darkGrey: #414549;
+$mediumpurple:#654EA3;
+$blue:#2D9CDB;
+$greyPurple: #E5E5E5;
+// Add a serif family
+$family-serif: "Poppins", sans-serif;
+
+// 3. Set the derived variables
+// Use the new pink as the primary color
+$primary: $ultraviolet;
+$blue: #1976D2;
+$primary-invert: white;
+// Use the existing orange as the danger color
+$danger: #fff;
+// Use the new serif family
+$family-primary: $family-serif;
+
+$modal-background-background-color: white;
+/* You can add global styles to this file, and also import other style files */
+// 1. Import the initial variables
+
+@import "~bulma";
+
+.auth-page-left-container {
+  background-color: $primary;
+  color: white;
+}
+
+.kowalski-primarily-colored {
+  color: $primary;
+}
+
+.button, .input {
+  border-radius: 0px
+}
+
+html, body, #app {
+  height: 100%;
+  width: 100%;
+}
+
+h1{
+  font-size: 2.875rem;
+  font-family: $family-primary;
+}
+
+h2{
+  font-size: 2.25rem;
+}
+
+h3{
+  font-size: 1.75rem;
+}
+
+h4{
+  font-size: 1.375rem;
+}
+
+h5{
+  font-size: 1.125rem;
+}
+
+h6{
+  font-size:1em;
+}
+p{
+  font-size: 1rem;
+}

@@ -28,5 +28,11 @@
   "boilerplate.containers.LocaleToggle.de": "de",
   "boilerplate.containers.LocaleToggle.en": "en",
   "boilerplate.containers.NotFoundPage.header": "Page not found.",
-  "app.containers.AuthPage.friendlyIntroductoryMessage": "Your best friend to help in daily management tasks."
+  "app.title": "SATURNO",
+  "app.containers.AuthPage.friendlyIntroductoryMessage": "Your best friend to help in daily management tasks.",
+  "app.containers.AuthPage.LoginForm.username": "Username",
+  "app.containers.AuthPage.LoginForm.password": "Password",
+  "app.containers.AuthPage.LoginForm.loginButton": "LOGIN",
+  "app.containers.AuthPage.signInButton": "Sign In",
+  "app.containers.AuthPage.signUpButton": "Sign Up"
 }
