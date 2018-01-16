@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
+import PropTypes from 'prop-types';
 
 import NavBar from './NavBar';
 import messages from './messages';
@@ -44,6 +45,7 @@ function Header({ intl, children }) {
 
 Header.propTypes = {
   intl: intlShape.isRequired,
+  children: PropTypes.object,
 };
 
 export default injectIntl(Header);

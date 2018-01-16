@@ -6,8 +6,10 @@
 import { defineMessages } from 'react-intl';
 
 export default defineMessages({
-  header: {
-    id: 'app.containers.TimesheetPage.header',
-    defaultMessage: 'This is TimesheetPage container !',
+  timesheetLabel: {
+    id: 'app.containers.TimesheetPage.timesheetLabel',
+  },
+  notifications: {
+    id: 'app.containers.TimesheetPage.notifications',
   },
 });

@@ -24,6 +24,7 @@ $modal-background-background-color: white;
 // 1. Import the initial variables
 
 @import "~bulma";
+@import "~bulma-calendar";
 
 .auth-page-left-container {
   background-color: $primary;

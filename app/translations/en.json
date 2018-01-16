@@ -36,5 +36,7 @@
   "app.containers.AuthPage.LoginForm.password": "Password",
   "app.containers.AuthPage.LoginForm.loginButton": "LOGIN",
   "app.containers.AuthPage.signInButton": "Sign In",
-  "app.containers.AuthPage.signUpButton": "Sign Up"
+  "app.containers.AuthPage.signUpButton": "Sign Up",
+  "app.containers.TimesheetPage.timesheetLabel": "Timesheet",
+  "app.containers.TimesheetPage.notifications": "Notifications"
 }
