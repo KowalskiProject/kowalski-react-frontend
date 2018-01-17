@@ -12,13 +12,12 @@ import { FormattedMessage, FormattedDate } from 'react-intl';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 import styled from 'styled-components';
-import startOfWeek from 'date-fns/start_of_week';
-import endOfWeek from 'date-fns/end_of_week';
 
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
 import AppCalendar from 'components/AppCalendar';
-import makeSelectTimesheetPage from './selectors';
+import * as actions from './actions';
+import { makeSelectSelectedDate, makeSelectSelectedRange } from './selectors';
 import reducer from './reducer';
 import saga from './saga';
 import messages from './messages';
@@ -39,11 +38,7 @@ const TimeSheetLabelInsideWrapper = styled.div`
   font-size: 1.3rem;
 `;
 
-function TimesheetPage() {
-  const currentDate = new Date();
-  const extractedStartOfWeek = startOfWeek(currentDate);
-  const extractedEndOfWeek = endOfWeek(currentDate);
-
+function TimesheetPage(props) {
   return (
     <div className="kowalski-react-basic-container">
       <Helmet>
@@ -58,11 +53,17 @@ function TimesheetPage() {
               <FormattedMessage {... messages.timesheetLabel} />
             </TimeSheetLabelInsideWrapper>
             <span>
-              <FormattedDate value={extractedStartOfWeek} /> -
-              <FormattedDate value={extractedEndOfWeek} />
+              <FormattedDate value={props.selectedRange[0]} /> -
+              <FormattedDate value={props.selectedRange[1]} />
             </span>
           </TimeSheetLabelWrapper>
-          <AppCalendar selectedDate={currentDate} />
+          <AppCalendar
+            selectedDate={props.selectedDate}
+            onNextMonthClicked={() => props.onNextMonthClicked()}
+            onPreviousMonthClicked={() => props.onPreviousMonthClicked()}
+            onDateClicked={(day) => props.onDateChanged(day)}
+            options={{ highlightedRanges: [props.selectedRange] }}
+          />
           <TimeSheetLabelWrapper>
             <TimeSheetLabelInsideWrapper>
               <FormattedMessage {... messages.notifications} />
@@ -79,20 +80,19 @@ function TimesheetPage() {
 }
 
 TimesheetPage.propTypes = {
-  dispatch: PropTypes.func.isRequired,
+  selectedDate: PropTypes.objectOf(Date).isRequired,
+  selectedRange: PropTypes.arrayOf(Date).isRequired,
+  onNextMonthClicked: PropTypes.func,
+  onPreviousMonthClicked: PropTypes.func,
+  onDateChanged: PropTypes.func,
 };
 
 const mapStateToProps = createStructuredSelector({
-  timesheetpage: makeSelectTimesheetPage(),
+  selectedDate: makeSelectSelectedDate,
+  selectedRange: makeSelectSelectedRange,
 });
 
-function mapDispatchToProps(dispatch) {
-  return {
-    dispatch,
-  };
-}
-
-const withConnect = connect(mapStateToProps, mapDispatchToProps);
+const withConnect = connect(mapStateToProps, { ...actions });
 
 const withReducer = injectReducer({ key: 'timesheetpage', reducer });
 const withSaga = injectSaga({ key: 'timesheetpage', saga });

@@ -1,26 +1,29 @@
 import { createSelector } from 'reselect';
 import { fromJS } from 'immutable';
+import startOfWeek from 'date-fns/start_of_week';
+import endOfWeek from 'date-fns/end_of_week';
 
 /**
  * Direct selector to the timesheetPage state domain
  */
-const selectTimesheetPageDomain = (state) => state.get('timesheetPage') || fromJS({});
+const selectTimesheetPageDomain = (state) => state.get('timesheetpage') || fromJS({});
 
-/**
- * Other specific selectors
- */
-
-
-/**
- * Default selector used by TimesheetPage
- */
-
-const makeSelectTimesheetPage = () => createSelector(
-  selectTimesheetPageDomain,
-  (substate) => substate.toJS()
+const makeSelectSelectedDate = createSelector(
+  [selectTimesheetPageDomain],
+  (substate) => substate.get('selectedDate'),
 );
 
-export default makeSelectTimesheetPage;
+const makeSelectSelectedRange = createSelector(
+  [makeSelectSelectedDate],
+  (selectedDate) => {
+    const extractedStartOfWeek = startOfWeek(selectedDate);
+    const extractedEndOfWeek = endOfWeek(selectedDate);
+    return [extractedStartOfWeek, extractedEndOfWeek];
+  }
+);
+
 export {
   selectTimesheetPageDomain,
+  makeSelectSelectedDate,
+  makeSelectSelectedRange,
 };

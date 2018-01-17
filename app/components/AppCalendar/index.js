@@ -40,7 +40,7 @@ const renderCalendarDay = (
   referenceDate, { tooltips = {}, highlightedRanges = [], disabledDates = [] }, dateClickCallback, day
 ) => {
   const isWithinCurrentMonth = isSameMonth(day, referenceDate);
-  const isToday = isSameDay(day, referenceDate);
+  const isActive = isSameDay(day, referenceDate);
   const tooltip = filter(tooltips, (k) => isSameDay(k, day))[0];
   const isStartOfRange = highlightedRanges.some((range) => isSameDay(day, range[0]));
   const isEndOfRange = highlightedRanges.some((range) => isSameDay(day, range[1]));
@@ -55,12 +55,13 @@ const renderCalendarDay = (
   ];
 
   const innerClassNameSufixes = [
-    isToday ? ' is-today' : '',
+    isActive ? ' is-active' : '',
     isStartOfRange || isEndOfRange ? ' is-active' : '',
   ];
 
   const outerElementProperties = {
     className: `calendar-date ${outerClassNameSufixes.join('')}`,
+    key: day.getTime(),
   };
 
   const innerElementProperties = {
@@ -71,13 +72,17 @@ const renderCalendarDay = (
     outerElementProperties['data-tooltip'] = tooltip;
   }
 
+  if (dateClickCallback) {
+    innerElementProperties.onClick = () => dateClickCallback(day);
+  }
+
   if (disabledDates.some((date) => isSameDay(day, date))) {
     outerElementProperties.disabled = '';
   }
 
   return (
-    <div {...outerElementProperties} key={day.getTime()}>
-      <button {...innerElementProperties} onClick={dateClickCallback}>
+    <div {...outerElementProperties}>
+      <button {...innerElementProperties}>
         {getDate(day)}
       </button>
     </div>
