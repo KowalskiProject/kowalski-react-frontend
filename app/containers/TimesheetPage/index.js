@@ -12,19 +12,28 @@ import { FormattedMessage, FormattedDate } from 'react-intl';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 import styled from 'styled-components';
+import isBefore from 'date-fns/is_before';
+import addDays from 'date-fns/add_days';
 
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
 import AppCalendar from 'components/AppCalendar';
+import DayColumn from 'components/DayColumn';
 import * as actions from './actions';
 import { makeSelectSelectedDate, makeSelectSelectedRange } from './selectors';
 import reducer from './reducer';
 import saga from './saga';
 import messages from './messages';
 
+const ColumnsWrapper = styled.div`
+  flex-grow 1 !important;
+  display: flex;
+`;
+
 const CalendarColumn = styled.div`
   border-right: solid 1px #ccc;
-  min-width: 333px;
+  width: 333px;
+  flex-grow: 0;
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -38,6 +47,36 @@ const TimeSheetLabelInsideWrapper = styled.div`
   font-size: 1.3rem;
 `;
 
+const DayColumnsWrapper = styled.div`
+  display: flex;
+  flex-grow: 1 !important;
+  flex-direction: column;
+`;
+
+const AboveDaysArea = styled.div`
+  display: flex;
+  flex-direction: row;
+  flex-basis: 55px;
+  flex-grow: 0;
+`;
+
+const DaysArea = styled.div`
+  flex-grow: 1;
+  display: flex;
+  flex-direction: row;
+  background-color: red;
+`;
+
+const renderDays = ([rangeStart, rangeEnd]) => {
+  const dayColumns = [];
+  let currentDate = rangeStart;
+  while (isBefore(currentDate, rangeEnd)) {
+    dayColumns.push(<DayColumn key={currentDate.getTime()} day={currentDate} />);
+    currentDate = addDays(currentDate, 1);
+  }
+  return dayColumns;
+};
+
 function TimesheetPage(props) {
   return (
     <div className="kowalski-react-basic-container">
@@ -45,7 +84,7 @@ function TimesheetPage(props) {
         <title>TimesheetPage</title>
         <meta name="description" content="Description of TimesheetPage" />
       </Helmet>
-      <div className="columns">
+      <ColumnsWrapper className="columns">
         {/* Calendar */}
         <CalendarColumn className="column ">
           <TimeSheetLabelWrapper>
@@ -59,9 +98,9 @@ function TimesheetPage(props) {
           </TimeSheetLabelWrapper>
           <AppCalendar
             selectedDate={props.selectedDate}
-            onNextMonthClicked={() => props.onNextMonthClicked()}
-            onPreviousMonthClicked={() => props.onPreviousMonthClicked()}
-            onDateClicked={(day) => props.onDateChanged(day)}
+            onNextMonthClicked={props.onNextMonthClicked}
+            onPreviousMonthClicked={props.onPreviousMonthClicked}
+            onDateClicked={props.onDateChanged}
             options={{ highlightedRanges: [props.selectedRange] }}
           />
           <TimeSheetLabelWrapper>
@@ -72,9 +111,14 @@ function TimesheetPage(props) {
         </CalendarColumn>
 
         {/* Day Columns */}
-        <div className="column">
-        </div>
-      </div>
+        <DayColumnsWrapper className="column">
+          <AboveDaysArea>
+          </AboveDaysArea>
+          <DaysArea>
+            { renderDays(props.selectedRange) }
+          </DaysArea>
+        </DayColumnsWrapper>
+      </ColumnsWrapper>
     </div>
   );
 }
