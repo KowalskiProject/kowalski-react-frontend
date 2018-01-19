@@ -17,6 +17,7 @@ import addDays from 'date-fns/add_days';
 
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
+import { Switch, Route } from 'react-router-dom';
 import AppCalendar from 'components/AppCalendar';
 import DayColumn from 'components/DayColumn/Loadable';
 import * as actions from './actions';
@@ -24,6 +25,7 @@ import { makeSelectSelectedDate, makeSelectSelectedRange } from './selectors';
 import reducer from './reducer';
 import saga from './saga';
 import messages from './messages';
+import LogHourForm from './LogHourForm';
 
 const MainContainerWrapper = styled.div`
   display: flex;
@@ -70,11 +72,11 @@ const DaysArea = styled.div`
   flex-direction: row;
 `;
 
-const renderDays = ([rangeStart, rangeEnd]) => {
+const renderDays = ([rangeStart, rangeEnd], history) => {
   const dayColumns = [];
   let currentDate = rangeStart;
   while (isBefore(currentDate, rangeEnd)) {
-    dayColumns.push(<DayColumn key={currentDate.getTime()} day={currentDate} />);
+    dayColumns.push(<DayColumn key={currentDate.getTime()} day={currentDate} onFreeSlotClick={() => history.push('/log')} />);
     currentDate = addDays(currentDate, 1);
   }
   return dayColumns;
@@ -113,14 +115,16 @@ function TimesheetPage(props) {
           </TimeSheetLabelWrapper>
         </CalendarColumn>
 
-        {/* Day Columns */}
-        <DayColumnsWrapper className="column">
-          <AboveDaysArea>
-          </AboveDaysArea>
-          <DaysArea>
-            { renderDays(props.selectedRange) }
-          </DaysArea>
-        </DayColumnsWrapper>
+        <Switch>
+          <Route path={`${props.match.url}log`} component={LogHourForm} />
+          <DayColumnsWrapper className="column">
+            <AboveDaysArea>
+            </AboveDaysArea>
+            <DaysArea>
+              { renderDays(props.selectedRange, props.history) }
+            </DaysArea>
+          </DayColumnsWrapper>
+        </Switch>
       </ColumnsWrapper>
     </MainContainerWrapper>
   );
@@ -132,6 +136,8 @@ TimesheetPage.propTypes = {
   onNextMonthClicked: PropTypes.func,
   onPreviousMonthClicked: PropTypes.func,
   onDateChanged: PropTypes.func,
+  match: PropTypes.object,
+  history: PropTypes.any,
 };
 
 const mapStateToProps = createStructuredSelector({

@@ -30,7 +30,7 @@ const SlotsContainer = styled.div`
   position: relative;
 `;
 
-function DayColumn({ day }) {
+function DayColumn({ day, onFreeSlotClick }) {
   return (
     <Wrapper>
       <DayLabelWrapper>
@@ -38,7 +38,7 @@ function DayColumn({ day }) {
         <p>{ format(day, 'D') }</p>
       </DayLabelWrapper>
       <SlotsContainer>
-        <a className="logHourAnchor">+</a>
+        <a className="logHourAnchor" onClick={onFreeSlotClick}>+</a>
       </SlotsContainer>
     </Wrapper>
   );
@@ -46,6 +46,7 @@ function DayColumn({ day }) {
 
 DayColumn.propTypes = {
   day: PropTypes.instanceOf(Date).isRequired,
+  onFreeSlotClick: PropTypes.func,
 };
 
 export default DayColumn;

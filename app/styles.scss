@@ -96,6 +96,15 @@ p{
   font-size: 1rem;
 }
 
+.select {
+  width: 100%;
+}
+
+select {
+  border-radius: 0 !important;
+  width: 100%;
+}
+
 .logHourAnchor {
   position: absolute;
   font-size: 0;
