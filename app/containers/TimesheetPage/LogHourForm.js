@@ -1,6 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
 import PropType from 'prop-types';
+import { Field, reduxForm } from 'redux-form/immutable';
+
+import InputField from 'components/InputField/Loadable';
+import SelectField from 'components/SelectField/Loadable';
+import TextAreaField from 'components/TextAreaField/Loadable';
 
 const Wrapper = styled.div`
   display: flex;
@@ -33,65 +38,67 @@ const FormActionWrapper = styled.div`
   width: 100%;
 `;
 
-function LogHourForm({ history }) {
+function LogHourForm(props) {
+  const { history, error, handleSubmit, submitting } = props;
+
   return (
     <Wrapper>
-      <FormTitle><H1>Add Time</H1></FormTitle>
+      <form onSubmit={handleSubmit}>
+        <FormTitle><H1>Add Time</H1></FormTitle>
 
-      <div className="field">
-        <label htmlFor="project" className="label">Your Projects</label>
-        <div id="project" className="control">
-          <div className="select">
-            <select>
-              <option>Choose a project</option>
-              <option>Project A</option>
-              <option>Project B</option>
-            </select>
-          </div>
-        </div>
-      </div>
+        <Field
+          name="project"
+          id="project"
+          component={SelectField}
+          label="Your Projects"
+          options={[{ label: 'Choose a project' }, { label: 'Project A' }, { label: 'Project B' }]}
+        />
 
-      <div className="field">
-        <label htmlFor="activities" className="label">Activities</label>
-        <div id="activities" className="control">
-          <div className="select">
-            <select>
-              <option>Choose an activity</option>
-              <option>Activity A</option>
-              <option>Activity B</option>
-            </select>
-          </div>
-        </div>
-      </div>
+        <Field
+          name="activities"
+          id="activities"
+          component={SelectField}
+          label="Activities"
+          options={[{ label: 'Choose an activity' }, { label: 'Activity A' }, { label: 'Activity B' }]}
+        />
 
-      <div className="field">
-        <label htmlFor="timelast" className="label">How long it last?</label>
-        <div id="timelast" className="control">
-          <input type="text" className="input" placeholder="blabla" />
-        </div>
-      </div>
+        <Field
+          name="howLongItLast"
+          id="howLongItLast"
+          component={InputField}
+          label="How Long it last?"
+          placeholder="blabla"
+        />
 
-      <div className="field">
-        <label htmlFor="desc" className="label">Description</label>
-        <div id="desc" className="control">
-          <textarea type="text" className="textarea" />
-        </div>
-      </div>
+        <Field
+          name="description"
+          id="description"
+          component={TextAreaField}
+          label="Description"
+        />
 
-      <FormActions>
-        <FormActionWrapper className="control">
-          <FormAction className="button is-primary">Submit</FormAction>
-        </FormActionWrapper>
-        <FormActionWrapper className="control">
-          <FormAction className="button" onClick={() => history.push('/')} >Cancel</FormAction>
-        </FormActionWrapper>
-      </FormActions>
+        {error && <strong>{error}</strong>}
+
+        <FormActions>
+          <FormActionWrapper className="control">
+            <FormAction type="submit" className="button is-primary" disabled={submitting}>Submit</FormAction>
+          </FormActionWrapper>
+          <FormActionWrapper className="control">
+            <FormAction className="button" onClick={() => history.push('/')}>Cancel</FormAction>
+          </FormActionWrapper>
+        </FormActions>
+      </form>
     </Wrapper>
   );
 }
 
 LogHourForm.propTypes = {
   history: PropType.object,
+  error: PropType.any,
+  handleSubmit: PropType.func,
+  submitting: PropType.boolean,
 };
 
-export default LogHourForm;
+export default reduxForm({
+  form: 'logHourForm',
+})(LogHourForm);

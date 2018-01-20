@@ -14,6 +14,7 @@ import {
 
 const initialState = fromJS({
   selectedDate: new Date(),
+  timeSlotEntries: [],
 });
 
 function timesheetPageReducer(state = initialState, { type, payload }) {
