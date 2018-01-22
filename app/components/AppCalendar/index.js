@@ -15,6 +15,8 @@ import isWithinRange from 'date-fns/is_within_range';
 import addDays from 'date-fns/add_days';
 import getDate from 'date-fns/get_date';
 import filter from 'lodash/filter';
+import FaChevronLeft from 'react-icons/lib/fa/chevron-left';
+import FaChevronRight from 'react-icons/lib/fa/chevron-right';
 
 const extractDaysForCalendar = (date) => {
   const extractedStartOfMonth = startOfMonth(date);
@@ -99,13 +101,13 @@ function AppCalendar({ selectedDate, options = {}, onNextMonthClicked, onPreviou
       <div className="calendar-nav">
         <div className="calendar-nav-left">
           <button className="button is-text" onClick={onPreviousMonthClicked}>
-            <i className="fa fa-chevron-left"></i>
+            <FaChevronLeft />
           </button>
         </div>
         <div>{extractMonthAndYearExpression(selectedDate)}</div>
         <div className="calendar-nav-right">
           <button className="button is-text" onClick={onNextMonthClicked}>
-            <i className="fa fa-chevron-right"></i>
+            <FaChevronRight />
           </button>
         </div>
       </div>
