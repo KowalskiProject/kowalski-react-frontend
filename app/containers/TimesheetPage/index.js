@@ -14,6 +14,8 @@ import { compose } from 'redux';
 import styled from 'styled-components';
 import isBefore from 'date-fns/is_before';
 import addDays from 'date-fns/add_days';
+import format from 'date-fns/format';
+import { List } from 'immutable';
 
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
@@ -21,11 +23,17 @@ import { Switch, Route } from 'react-router-dom';
 import AppCalendar from 'components/AppCalendar';
 import DayColumn from 'components/DayColumn/Loadable';
 import * as actions from './actions';
-import { makeSelectSelectedDate, makeSelectSelectedRange } from './selectors';
+import {
+  makeSelectSelectedDate,
+  makeSelectSelectedRange,
+  makeSelectIsSubmitting,
+  makeTimeSlotDayMapSelector,
+} from './selectors';
 import reducer from './reducer';
 import saga from './saga';
 import messages from './messages';
 import LogHourForm from './LogHourForm';
+import { DATE_DAY_FORMAT } from './constants';
 
 const MainContainerWrapper = styled.div`
   display: flex;
@@ -72,11 +80,23 @@ const DaysArea = styled.div`
   flex-direction: row;
 `;
 
-const renderDays = ([rangeStart, rangeEnd], history) => {
+const renderDays = ([rangeStart, rangeEnd], history, timeSlotDayMap) => {
   const dayColumns = [];
   let currentDate = rangeStart;
+  const goToHourForm = () => {
+    history.push({
+      pathname: '/log',
+      search: `?date=${currentDate}`,
+    });
+  };
+
   while (isBefore(currentDate, rangeEnd)) {
-    dayColumns.push(<DayColumn key={currentDate.getTime()} day={currentDate} onFreeSlotClick={() => history.push('/log')} />);
+    dayColumns.push(<DayColumn
+      key={currentDate.getTime()}
+      day={currentDate}
+      onFreeSlotClick={goToHourForm}
+      timeSlots={(timeSlotDayMap.get(format(currentDate, DATE_DAY_FORMAT)) || List()).toJSON()}
+    />);
     currentDate = addDays(currentDate, 1);
   }
   return dayColumns;
@@ -116,12 +136,21 @@ function TimesheetPage(props) {
         </CalendarColumn>
 
         <Switch>
-          <Route path={`${props.match.url}log`} component={LogHourForm} />
+          <Route
+            path={`${props.match.url}log`}
+            render={(myProps) => (
+              <LogHourForm
+                {...myProps}
+                onSubmit={props.submitLogForm}
+                isSubmitting={props.isSubmitting}
+              />
+             )}
+          />
           <DayColumnsWrapper className="column">
             <AboveDaysArea>
             </AboveDaysArea>
             <DaysArea>
-              { renderDays(props.selectedRange, props.history) }
+              { renderDays(props.selectedRange, props.history, props.timeSlotDayMap) }
             </DaysArea>
           </DayColumnsWrapper>
         </Switch>
@@ -138,11 +167,16 @@ TimesheetPage.propTypes = {
   onDateChanged: PropTypes.func,
   match: PropTypes.object,
   history: PropTypes.any,
+  submitLogForm: PropTypes.func,
+  isSubmitting: PropTypes.bool,
+  timeSlotDayMap: PropTypes.object,
 };
 
 const mapStateToProps = createStructuredSelector({
   selectedDate: makeSelectSelectedDate,
   selectedRange: makeSelectSelectedRange,
+  isSubmitting: makeSelectIsSubmitting,
+  timeSlotDayMap: makeTimeSlotDayMapSelector,
 });
 
 const withConnect = connect(mapStateToProps, { ...actions });

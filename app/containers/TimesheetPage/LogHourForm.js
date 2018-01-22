@@ -2,10 +2,13 @@ import React from 'react';
 import styled from 'styled-components';
 import PropType from 'prop-types';
 import { Field, reduxForm } from 'redux-form/immutable';
+import { parse } from 'query-string';
 
 import InputField from 'components/InputField/Loadable';
 import SelectField from 'components/SelectField/Loadable';
 import TextAreaField from 'components/TextAreaField/Loadable';
+
+import { required, timeEntryFormat } from '../../support/forms/validation';
 
 const Wrapper = styled.div`
   display: flex;
@@ -39,11 +42,15 @@ const FormActionWrapper = styled.div`
 `;
 
 function LogHourForm(props) {
-  const { history, error, handleSubmit, submitting } = props;
-
+  const { history, error, onSubmit, handleSubmit, isSubmitting } = props;
+  const date = parse(history.location.search).date;
   return (
     <Wrapper>
-      <form onSubmit={handleSubmit}>
+      <form
+        onSubmit={handleSubmit((values) => {
+          onSubmit(values.set('day', new Date(date)));
+        })}
+      >
         <FormTitle><H1>Add Time</H1></FormTitle>
 
         <Field
@@ -51,21 +58,30 @@ function LogHourForm(props) {
           id="project"
           component={SelectField}
           label="Your Projects"
-          options={[{ label: 'Choose a project' }, { label: 'Project A' }, { label: 'Project B' }]}
-        />
+          validate={[required]}
+        >
+          <option value="">Choose a project</option>
+          <option value="Project A">Project A</option>
+          <option value="Aroject B">Aroject B</option>
+        </Field>
 
         <Field
           name="activities"
           id="activities"
           component={SelectField}
           label="Activities"
-          options={[{ label: 'Choose an activity' }, { label: 'Activity A' }, { label: 'Activity B' }]}
-        />
+          validate={[required]}
+        >
+          <option value="">Choose an activity</option>
+          <option value="Activity A">Activity A</option>
+          <option value="Activity B">Activity B</option>
+        </Field>
 
         <Field
-          name="howLongItLast"
-          id="howLongItLast"
+          name="duration"
+          id="duration"
           component={InputField}
+          validate={[required, timeEntryFormat]}
           label="How Long it last?"
           placeholder="blabla"
         />
@@ -74,6 +90,7 @@ function LogHourForm(props) {
           name="description"
           id="description"
           component={TextAreaField}
+          validate={[required]}
           label="Description"
         />
 
@@ -81,10 +98,12 @@ function LogHourForm(props) {
 
         <FormActions>
           <FormActionWrapper className="control">
-            <FormAction type="submit" className="button is-primary" disabled={submitting}>Submit</FormAction>
+            <FormAction type="submit" className={`button is-primary ${isSubmitting ? 'is-loading' : ''}`} disabled={isSubmitting}>
+              Submit
+            </FormAction>
           </FormActionWrapper>
           <FormActionWrapper className="control">
-            <FormAction className="button" onClick={() => history.push('/')}>Cancel</FormAction>
+            <FormAction className="button" type="button" onClick={() => history.push('/')}>Cancel</FormAction>
           </FormActionWrapper>
         </FormActions>
       </form>
@@ -96,7 +115,8 @@ LogHourForm.propTypes = {
   history: PropType.object,
   error: PropType.any,
   handleSubmit: PropType.func,
-  submitting: PropType.boolean,
+  isSubmitting: PropType.any,
+  onSubmit: PropType.func,
 };
 
 export default reduxForm({

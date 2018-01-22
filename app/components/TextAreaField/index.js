@@ -10,12 +10,13 @@ import PropTypes from 'prop-types';
 
 function TextAreaField({ input, label, type = 'text', placeholder, meta: { touched, error } }) {
   const labelHtml = label ? <label htmlFor={input.id} className="label">{label}</label> : '';
+  const errorInputClasses = touched && error ? 'is-danger' : '';
   return (
     <div className="field">
       {labelHtml}
       <div className="control">
-        <textarea {...input} type={type} className="textarea" placeholder={placeholder} />
-        {touched && error && <span>{error}</span>}
+        <textarea {...input} type={type} className={`textarea ${errorInputClasses}`} placeholder={placeholder} />
+        {touched && error && <p className="help is-danger">{error}</p>}
       </div>
     </div>
   );

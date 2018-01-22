@@ -8,6 +8,7 @@ import React from 'react';
 import styled from 'styled-components';
 import format from 'date-fns/format';
 import PropTypes from 'prop-types';
+import parseAmountOfHours from '../../support/parsers/duration';
 
 const Wrapper = styled.div`
   flex-grow: 0;
@@ -30,7 +31,25 @@ const SlotsContainer = styled.div`
   position: relative;
 `;
 
-function DayColumn({ day, onFreeSlotClick }) {
+const generateSlotWrapper = (hourSlot, totalSlot) => styled.div`
+  background-color: red
+  flex-basis: ${(hourSlot * 100) / totalSlot}%;
+`;
+
+const renderTimeSlots = (timeSlots) => (
+  timeSlots.map((timeSlot) => {
+    const amountOfHours = parseAmountOfHours(timeSlot.get('duration'));
+    const SlotWrapper = generateSlotWrapper(amountOfHours, 8.0);
+    return (
+      <SlotWrapper>
+        <p>{ timeSlot.duration }</p>
+        <p>{ timeSlot.project } - { timeSlot.activity }</p>
+      </SlotWrapper>
+    );
+  })
+);
+
+function DayColumn({ day, onFreeSlotClick, timeSlots }) {
   return (
     <Wrapper>
       <DayLabelWrapper>
@@ -38,7 +57,10 @@ function DayColumn({ day, onFreeSlotClick }) {
         <p>{ format(day, 'D') }</p>
       </DayLabelWrapper>
       <SlotsContainer>
-        <a className="logHourAnchor" onClick={onFreeSlotClick}>+</a>
+        { renderTimeSlots(timeSlots) }
+        <div>
+          <a role="button" className="logHourAnchor" onClick={onFreeSlotClick} tabIndex={0}>+</a>
+        </div>
       </SlotsContainer>
     </Wrapper>
   );
@@ -47,6 +69,7 @@ function DayColumn({ day, onFreeSlotClick }) {
 DayColumn.propTypes = {
   day: PropTypes.instanceOf(Date).isRequired,
   onFreeSlotClick: PropTypes.func,
+  timeSlots: PropTypes.array,
 };
 
 export default DayColumn;

@@ -1,7 +1,12 @@
-// import { fromJS } from 'immutable';
-// import { selectTimesheetPageDomain } from '../selectors';
+import { makeTimeSlotDayMapSelector } from '../selectors';
 
-describe('selectTimesheetPageDomain', () => {
+describe('makeTimeSlotDayMapSelector', () => {
+  describe('when there are same dates', () => {
+    beforeEach(() => {
+
+    });
+  });
+
   it('Expect to have unit tests specified', () => {
     expect(true).toEqual(false);
   });
