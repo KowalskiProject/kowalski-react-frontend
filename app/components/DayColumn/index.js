@@ -11,9 +11,12 @@ import PropTypes from 'prop-types';
 import { List } from 'immutable';
 import parseAmountOfHours from '../../support/parsers/duration';
 
+const wrapperFlexBasis = 14.286;
+const slotsBackgroundColor = '#eee';
+
 const Wrapper = styled.div`
   flex-grow: 0;
-  flex-basis: 14.286%;
+  flex-basis: ${wrapperFlexBasis}%;
   display: flex;
   flex-direction: column;
   align-items: stretch;
@@ -24,25 +27,39 @@ const DayLabelWrapper = styled.div`
 `;
 
 const SlotsContainer = styled.div`
-  flex-grow: 1;
-  background-color: #eee;
-  border-radius: 25px;
+  flex-basis: ${100 - wrapperFlexBasis}%;
+  background-color: ${slotsBackgroundColor};
   border: 2px solid #aaa;
-  margin: 5px;
-  position: relative;
   display: flex;
   flex-direction: column;
 `;
 
 const generateSlotWrapper = (hourSlot, totalSlot) => styled.a`
-  flex-grow: 1;
-  display: block;
+  display: flex;
+  flex-direction: column;
   flex-basis: ${(hourSlot * 100) / totalSlot}%;
+  border-bottom: 2px solid #aaa;
+  justify-content: center;
+  text-align: center;
   padding: 10px;
+  flex-grow: 0;
 `;
 
-const renderTimeSlots = (timeSlots) => (
-  (timeSlots || List()).map((timeSlot, index) => {
+const generatePlusSlotWrapper = (hourSlot, totalSlot) => generateSlotWrapper(hourSlot, totalSlot).extend`
+  display: inline-flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  font-size: 0;
+  flex-grow: 1;
+
+  &:hover {
+    font-size: 3rem;
+  }
+`;
+
+const renderTimeSlots = (timeSlots) => {
+  return (timeSlots || List()).map((timeSlot, index) => {
     const amountOfHours = parseAmountOfHours(timeSlot.get('duration'));
     const SlotWrapper = generateSlotWrapper(amountOfHours, 8.0);
     // TODO put the id of the log instead of index. This is going to be returned by the server,
@@ -54,7 +71,22 @@ const renderTimeSlots = (timeSlots) => (
       </SlotWrapper>
     );
   })
-);
+};
+
+const amountOfHoursInTimeSlots = (timeSlots) => {
+  return (timeSlots || List()).reduce((memo, current) => {
+    return memo + parseAmountOfHours(current.get('duration'));
+  }, 0.0);
+}
+
+const renderPlusButton = (timeSlots, onClickCallback) => {
+  const amountOfHours = 8.0 - amountOfHoursInTimeSlots(timeSlots);
+  const SlotWrapper = generatePlusSlotWrapper(amountOfHours, 8.0);
+
+  return (
+    <SlotWrapper role="button" onClick={onClickCallback} tabIndex={0}>+</SlotWrapper>
+  );
+}
 
 function DayColumn({ day, onFreeSlotClick, timeSlots }) {
   return (
@@ -65,9 +97,7 @@ function DayColumn({ day, onFreeSlotClick, timeSlots }) {
       </DayLabelWrapper>
       <SlotsContainer>
         { renderTimeSlots(timeSlots) }
-        <div>
-          <a role="button" className="logHourAnchor" onClick={onFreeSlotClick} tabIndex={0}>+</a>
-        </div>
+        { renderPlusButton(timeSlots, onFreeSlotClick) }
       </SlotsContainer>
     </Wrapper>
   );

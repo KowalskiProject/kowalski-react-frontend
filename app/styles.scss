@@ -102,20 +102,3 @@ select {
   border-radius: 0 !important;
   width: 100%;
 }
-
-.logHourAnchor {
-  position: absolute;
-  font-size: 0;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  padding-top: 130%;
-  text-align: center;
-  opacity: 0.5;
-  z-index: 1;
-
-  &:hover {
-    font-size: 100px;
-  }
-}
