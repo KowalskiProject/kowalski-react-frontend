@@ -31,14 +31,14 @@ const makeSelectIsSubmitting = createSelector(
 
 const makeTimeSlotEntriesSelector = createSelector(
   [selectTimesheetPageDomain],
-  (substate) => substate.get('timeSlotEntries') || Map(),
+  (substate) => substate.get('timeSlotEntries') || List(),
 );
 
 const makeTimeSlotDayMapSelector = createSelector(
   makeTimeSlotEntriesSelector,
   (timeSlotEntries) => {
     const result = timeSlotEntries.reduce((accumulator, timeSlotEntry) => {
-      const dateDayFormat = format(timeSlotEntry, DATE_DAY_FORMAT);
+      const dateDayFormat = format(timeSlotEntry.get('day'), DATE_DAY_FORMAT);
       return accumulator.set(
         dateDayFormat,
         (accumulator.get(dateDayFormat) || List()).push(timeSlotEntry)

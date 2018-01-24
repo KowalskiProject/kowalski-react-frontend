@@ -83,19 +83,21 @@ const DaysArea = styled.div`
 const renderDays = ([rangeStart, rangeEnd], history, timeSlotDayMap) => {
   const dayColumns = [];
   let currentDate = rangeStart;
-  const goToHourForm = () => {
+
+  const goToHourForm = (date) => () => {
     history.push({
       pathname: '/log',
-      search: `?date=${currentDate}`,
+      search: `?date=${format(date)}`,
     });
   };
 
   while (isBefore(currentDate, rangeEnd)) {
+    const formattedDate = format(currentDate, DATE_DAY_FORMAT);
     dayColumns.push(<DayColumn
-      key={currentDate.getTime()}
+      key={formattedDate}
       day={currentDate}
-      onFreeSlotClick={goToHourForm}
-      timeSlots={(timeSlotDayMap.get(format(currentDate, DATE_DAY_FORMAT)) || List()).toJSON()}
+      onFreeSlotClick={goToHourForm(currentDate)}
+      timeSlots={timeSlotDayMap.get(formattedDate) || List()}
     />);
     currentDate = addDays(currentDate, 1);
   }

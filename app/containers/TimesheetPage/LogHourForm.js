@@ -2,13 +2,16 @@ import React from 'react';
 import styled from 'styled-components';
 import PropType from 'prop-types';
 import { Field, reduxForm } from 'redux-form/immutable';
-import { parse } from 'query-string';
+import { parse as parseQueryParam } from 'query-string';
+import parse from 'date-fns/parse';
 
 import InputField from 'components/InputField/Loadable';
 import SelectField from 'components/SelectField/Loadable';
 import TextAreaField from 'components/TextAreaField/Loadable';
 
 import { required, timeEntryFormat } from '../../support/forms/validation';
+import { DATE_DAY_FORMAT } from './constants';
+import { fromJS } from 'immutable';
 
 const Wrapper = styled.div`
   display: flex;
@@ -41,16 +44,18 @@ const FormActionWrapper = styled.div`
   width: 100%;
 `;
 
+const submissionHook = (onSubmit, day) => (values) => {
+  const newValues = values.set('day', day);
+  onSubmit(newValues);
+};
+
 function LogHourForm(props) {
   const { history, error, onSubmit, handleSubmit, isSubmitting } = props;
-  const date = parse(history.location.search).date;
+  const date = parse(parseQueryParam(history.location.search).date);
+
   return (
     <Wrapper>
-      <form
-        onSubmit={handleSubmit((values) => {
-          onSubmit(values.set('day', new Date(date)));
-        })}
-      >
+      <form onSubmit={handleSubmit(submissionHook(onSubmit, date))}>
         <FormTitle><H1>Add Time</H1></FormTitle>
 
         <Field
@@ -66,8 +71,8 @@ function LogHourForm(props) {
         </Field>
 
         <Field
-          name="activities"
-          id="activities"
+          name="activity"
+          id="activity"
           component={SelectField}
           label="Activities"
           validate={[required]}
