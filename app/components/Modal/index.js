@@ -16,12 +16,18 @@ class Modal extends React.PureComponent {
   };
 
   componentDidMount() {
-    document.addEventListener('keydown', this.props.onDismiss, false);
+    document.addEventListener('keydown', this.dismissOnEsc, false);
   }
 
   componentWillUnmount() {
-    document.removeEventListener('keydown', this.props.onDismiss, false);
+    document.removeEventListener('keydown', this.dismissOnEsc, false);
   }
+
+  dismissOnEsc = (event) => {
+    if (event.keyCode === 27) {
+      this.props.onDismiss();
+    }
+  };
 
   render() {
     const { children, active, onDismiss } = this.props;

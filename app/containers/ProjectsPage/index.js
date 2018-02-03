@@ -17,9 +17,11 @@ import { compose } from 'redux';
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
 import Modal from 'components/Modal/Loadable';
-import makeSelectProjectsPage, {
+import NewProjectForm from './NewProjectForm';
+import {
   makeSelectProjects,
   makeSelectIsNewProjectFormOpen,
+  makeSelectIsSubmittingNewProject,
 } from './selectors';
 import reducer from './reducer';
 import saga from './saga';
@@ -88,7 +90,12 @@ function ProjectsPage(props) {
         </div>
       </ProjectListWrapper>
       <Modal active={isNewProjectFormOpen} onDismiss={closeNewProjectForm}>
-        <p>Eeste é meu form</p>
+        <NewProjectForm
+          onAdd={props.submitNewProjectFormAndCloseIt}
+          onSaveAndAddNew={props.submitNewProjectForm}
+          isSubmitting={props.isSubmittingNewProject}
+          onCancel={closeNewProjectForm}
+        />
       </Modal>
     </MainContainerWrapper>
   );
@@ -99,11 +106,15 @@ ProjectsPage.propTypes = {
   openNewProjectForm: PropTypes.func,
   isNewProjectFormOpen: PropTypes.bool,
   closeNewProjectForm: PropTypes.func,
+  submitNewProjectForm: PropTypes.func,
+  isSubmittingNewProject: PropTypes.bool,
+  submitNewProjectFormAndCloseIt: PropTypes.func,
 };
 
 const mapStateToProps = createStructuredSelector({
   projects: makeSelectProjects(),
   isNewProjectFormOpen: makeSelectIsNewProjectFormOpen(),
+  isSubmittingNewProject: makeSelectIsSubmittingNewProject(),
 });
 
 const withConnect = connect(mapStateToProps, actions);

@@ -30,9 +30,15 @@ const makeSelectIsNewProjectFormOpen = () => createSelector(
   (substate) => substate.get('projectFormOpen'),
 );
 
+const makeSelectIsSubmittingNewProject = () => createSelector(
+  selectProjectsPageDomain,
+  (substate) => substate.get('isSubmittingNewProjectForm'),
+);
+
 export default makeSelectProjectsPage;
 export {
   selectProjectsPageDomain,
   makeSelectProjects,
   makeSelectIsNewProjectFormOpen,
+  makeSelectIsSubmittingNewProject,
 };
