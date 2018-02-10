@@ -13,23 +13,10 @@ import {
   SUBMIT_NEW_PROJECT_FORM,
   SUBMIT_NEW_PROJECT_FORM_AND_CLOSE_IT,
 } from './constants';
+import projects from '../../support/development/projects';
 
 const initialState = fromJS({
-  // projects: [],
-  projects: [
-    {
-      name: 'Projeto de Testes A',
-      description: 'Mussum Ipsum, cacilds vidis litro abertis. Tá deprimidis, eu conheço uma cachacis que pode alegrar sua vidis. Não sou faixa preta cumpadi, sou preto inteiris, inteiris. Cevadis im ampola pa arma uma pindureta. Si num tem leite então bota uma pinga aí cumpadi!',
-    },
-    {
-      name: 'Projeto de Testes B',
-      description: 'Mussum Ipsum, cacilds vidis litro abertis. Tá deprimidis, eu conheço uma cachacis que pode alegrar sua vidis. Não sou faixa preta cumpadi, sou preto inteiris, inteiris. Cevadis im ampola pa arma uma pindureta. Si num tem leite então bota uma pinga aí cumpadi!',
-    },
-    {
-      name: 'Projeto de Testes C',
-      description: 'Mussum Ipsum, cacilds vidis litro abertis. Tá deprimidis, eu conheço uma cachacis que pode alegrar sua vidis. Não sou faixa preta cumpadi, sou preto inteiris, inteiris. Cevadis im ampola pa arma uma pindureta. Si num tem leite então bota uma pinga aí cumpadi!',
-    },
-  ],
+  projects: fromJS(projects),
   projectFormOpen: false,
   isSubmittingNewProjectForm: false,
 });
@@ -37,6 +24,7 @@ const initialState = fromJS({
 function projectsPageReducer(state = initialState, { type, payload }) {
   switch (type) {
     case DEFAULT_ACTION:
+      debugger;
       return state;
     case OPEN_NEW_PROJECT_FORM:
       return state.set('projectFormOpen', true);

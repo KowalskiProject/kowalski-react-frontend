@@ -13,6 +13,7 @@ import { Switch, Route } from 'react-router-dom';
 
 import TimesheetPage from 'containers/TimesheetPage/Loadable';
 import ProjectsPage from 'containers/ProjectsPage/Loadable';
+import ProjectPage from 'containers/ProjectPage/Loadable';
 import FeaturePage from 'containers/FeaturePage/Loadable';
 import NotFoundPage from 'containers/NotFoundPage/Loadable';
 import AuthPage from 'containers/AuthPage/Loadable';
@@ -38,6 +39,7 @@ export default function App() {
         <Route path="/auth" component={AuthPage} />
         <Header>
           <Switch>
+            <Route path="/projects/:code" component={ProjectPage} />
             <Route path="/projects" component={ProjectsPage} />
             <Route exact path="" component={TimesheetPage} />
             <Route path="/features" component={FeaturePage} />

@@ -13,19 +13,9 @@ const makeSelectCurrentUser = () => createSelector(
   (globalState) => globalState.get('currentUser')
 );
 
-const makeSelectLoading = () => createSelector(
+const makeSelectLoadingResource = () => createSelector(
   selectGlobal,
-  (globalState) => globalState.get('loading')
-);
-
-const makeSelectError = () => createSelector(
-  selectGlobal,
-  (globalState) => globalState.get('error')
-);
-
-const makeSelectRepos = () => createSelector(
-  selectGlobal,
-  (globalState) => globalState.getIn(['userData', 'repositories'])
+  (globalState) => substate.get('loadingResource')
 );
 
 const makeSelectLocation = () => createSelector(
@@ -36,8 +26,6 @@ const makeSelectLocation = () => createSelector(
 export {
   selectGlobal,
   makeSelectCurrentUser,
-  makeSelectLoading,
-  makeSelectError,
-  makeSelectRepos,
+  makeSelectLoadingResource,
   makeSelectLocation,
 };

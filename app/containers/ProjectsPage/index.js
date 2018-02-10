@@ -22,6 +22,7 @@ import {
   makeSelectProjects,
   makeSelectIsNewProjectFormOpen,
   makeSelectIsSubmittingNewProject,
+  makeSelectProjectCodes,
 } from './selectors';
 import reducer from './reducer';
 import saga from './saga';
@@ -33,15 +34,24 @@ const MainContainerWrapper = styled.div`
   flex-direction: column;
 `;
 
-const renderProjects = (projects) => (
-  (projects || []).map((project) => (
+const renderProjects = (projects, onSelectProject) => {
+  return (projects || []).map((project, index) => {
     // TODO trocar por
-    <a className="tile is-child box" key={project.get('name')} style={{ display: 'block' }}>
-      <p className="title">{project.get('name')}</p>
-      <p>{project.get('description')}</p>
-    </a>
-  ))
-);
+    return (
+      <a
+        tabIndex={index}
+        className="tile is-child box"
+        role="button"
+        key={project.get('name')}
+        style={{ display: 'block' }}
+        onClick={() => { onSelectProject(project.get('code')); }}
+      >
+        <p className="title">{project.get('name')}</p>
+        <p>{project.get('description')}</p>
+      </a>
+    );
+  });
+};
 
 const margins = `
   margin-top: 2rem;
@@ -72,7 +82,13 @@ const ProjectListWrapper = styled.div`
 `;
 
 function ProjectsPage(props) {
-  const { projects, openNewProjectForm, closeNewProjectForm, isNewProjectFormOpen } = props;
+  const {
+    projects,
+    projectSelected,
+    openNewProjectForm,
+    closeNewProjectForm,
+    isNewProjectFormOpen,
+  } = props;
 
   return (
     <MainContainerWrapper className="kowalski-react-basic-container">
@@ -86,7 +102,7 @@ function ProjectsPage(props) {
       </TitleBar>
       <ProjectListWrapper>
         <div className="tile is-parent is-vertical">
-          { renderProjects(projects) }
+          { renderProjects(projects, projectSelected) }
         </div>
       </ProjectListWrapper>
       <Modal active={isNewProjectFormOpen} onDismiss={closeNewProjectForm}>
@@ -109,6 +125,7 @@ ProjectsPage.propTypes = {
   submitNewProjectForm: PropTypes.func,
   isSubmittingNewProject: PropTypes.bool,
   submitNewProjectFormAndCloseIt: PropTypes.func,
+  projectSelected: PropTypes.func,
 };
 
 const mapStateToProps = createStructuredSelector({

@@ -22,7 +22,12 @@ const makeSelectProjectsPage = () => createSelector(
 
 const makeSelectProjects = () => createSelector(
   selectProjectsPageDomain,
-  (substate) => substate.get('projects')
+  (substate) => substate.get('projects') || fromJS([])
+);
+
+const makeSelectProjectCodes = () => createSelector(
+  makeSelectProjects(),
+  (projects) => projects.map((project) => project.get('code'))
 );
 
 const makeSelectIsNewProjectFormOpen = () => createSelector(
@@ -41,4 +46,5 @@ export {
   makeSelectProjects,
   makeSelectIsNewProjectFormOpen,
   makeSelectIsSubmittingNewProject,
+  makeSelectProjectCodes,
 };

@@ -11,6 +11,7 @@ import {
   SUBMIT_NEW_PROJECT_FORM,
   NEW_PROJECT_SAVED,
   SUBMIT_NEW_PROJECT_FORM_AND_CLOSE_IT,
+  PROJECT_SELECTED,
 } from './constants';
 
 export function defaultAction() {
@@ -49,5 +50,12 @@ export function newProjectSaved(newProjectData) {
   return {
     type: NEW_PROJECT_SAVED,
     payload: newProjectData,
+  };
+}
+
+export function projectSelected(projectCode) {
+  return {
+    type: PROJECT_SELECTED,
+    payload: projectCode,
   };
 }
