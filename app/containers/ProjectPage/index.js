@@ -24,6 +24,8 @@ import {
 import reducer from './reducer';
 import saga from './saga';
 import * as actions from './actions';
+import ActivitiesTab from './ActivitiesTab';
+import GeneralTab from './GeneralTab';
 
 const Wrapper = styled.div`
   display: flex;
@@ -35,6 +37,7 @@ const ProjectSelectorWrapper = styled.div`
   display: flex;
   flex-direction: column;
   flex-basis: 150px;
+  flex-grow: 0;
   border-right: 1px solid black;
   align-items: stretch;
 `;
@@ -46,6 +49,7 @@ const OuterWrapper = styled.div`
 
 const ProjectCodeWrapper = styled.a`
   display: block;
+  width: 150px;
   padding: 2rem;
   text-align: center;
   border-bottom: 1px solid black;
@@ -67,7 +71,10 @@ const TabsWrapper = styled.div`
 `;
 
 const TabContentWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
   flex-grow: 1;
+  margin-left: 2rem;
 `;
 
 class ProjectPage extends React.PureComponent {
@@ -95,16 +102,8 @@ class ProjectPage extends React.PureComponent {
     ));
   }
 
-  renderGeneralTab() {
-    return <div></div>;
-  }
-
-  renderActivitiesTab() {
-    return <div></div>;
-  }
-
   render() {
-    const { selectedTab, selectedTabChanged } = this.props;
+    const { selectedTab, selectedTabChanged, selectedProject } = this.props;
 
     return (
       <OuterWrapper>
@@ -128,8 +127,8 @@ class ProjectPage extends React.PureComponent {
               </ul>
             </TabsWrapper>
             <TabContentWrapper>
-              {selectedTab === 0 && this.renderGeneralTab()}
-              {selectedTab === 1 && this.renderActivitiesTab()}
+              {selectedTab === 0 && <GeneralTab project={selectedProject} />}
+              {selectedTab === 1 && <ActivitiesTab project={selectedProject} />}
             </TabContentWrapper>
           </ProjectPaneWrapper>
         </Wrapper>
