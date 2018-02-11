@@ -11,4 +11,5 @@
 
 export const START_LOADING_RESOURCE = 'app/App/START_LOADING_RESOURCE';
 export const END_LOADING_RESOURCE = 'app/App/END_LOADING_RESOURCE';
+export const NAVIGATE_TO = 'app/App/NAVIGATE_TO';
 export const DEFAULT_LOCALE = 'en';

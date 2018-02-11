@@ -9,7 +9,9 @@
 import React from 'react';
 import { Helmet } from 'react-helmet';
 import styled from 'styled-components';
-import { Switch, Route } from 'react-router-dom';
+import { Switch, Route, withRouter } from 'react-router-dom';
+import { compose } from 'redux';
+import { connect } from 'react-redux';
 
 import TimesheetPage from 'containers/TimesheetPage/Loadable';
 import ProjectsPage from 'containers/ProjectsPage/Loadable';
@@ -18,6 +20,9 @@ import FeaturePage from 'containers/FeaturePage/Loadable';
 import NotFoundPage from 'containers/NotFoundPage/Loadable';
 import AuthPage from 'containers/AuthPage/Loadable';
 import Header from 'components/Header';
+import injectSaga from 'utils/injectSaga';
+import saga from './saga';
+import * as actions from './actions';
 
 const AppWrapper = styled.div`
   margin: 0 auto;
@@ -26,7 +31,9 @@ const AppWrapper = styled.div`
   flex-direction: column;
 `;
 
-export default function App() {
+function App(props) {
+  const { navigateTo } = props;
+
   return (
     <AppWrapper>
       <Helmet
@@ -37,7 +44,7 @@ export default function App() {
       </Helmet>
       <Switch>
         <Route path="/auth" component={AuthPage} />
-        <Header>
+        <Header onTimesheetClicked={() => navigateTo('/')} onProjectsClicked={() => navigateTo('/projects')}>
           <Switch>
             <Route path="/projects/:code" component={ProjectPage} />
             <Route path="/projects" component={ProjectsPage} />
@@ -50,3 +57,11 @@ export default function App() {
     </AppWrapper>
   );
 }
+
+const withSaga = injectSaga({ key: 'global', saga });
+const withConnect = connect(null, actions);
+
+export default withRouter(compose(
+  withConnect,
+  withSaga,
+)(App));

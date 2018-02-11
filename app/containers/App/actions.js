@@ -18,6 +18,7 @@
 import {
   START_LOADING_RESOURCE,
   END_LOADING_RESOURCE,
+  NAVIGATE_TO,
 } from './constants';
 
 export function startLoadingResource() {
@@ -29,5 +30,12 @@ export function startLoadingResource() {
 export function endLoadingResource() {
   return {
     type: END_LOADING_RESOURCE,
+  };
+}
+
+export function navigateTo(path) {
+  return {
+    type: NAVIGATE_TO,
+    payload: path,
   };
 }

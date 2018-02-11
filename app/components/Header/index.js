@@ -14,7 +14,11 @@ const NavBarMenuWrapper = styled.span`
   margin-left: 2rem;
 `;
 
-function Header({ intl, children }) {
+const NavMenu = styled.a`
+  color: inherit;
+`
+
+function Header({ intl, children, onTimesheetClicked, onProjectsClicked }) {
   return (
     <div className="kowalski-react-basic-container-vertical">
       <NavBar aria-label="main navigation" className="navbar">
@@ -25,10 +29,10 @@ function Header({ intl, children }) {
         </div>
         <div className="navbar-end">
           <span className="navbar-item">
-            <FormattedMessage {...messages.timesheet} />
+            <NavMenu onClick={onTimesheetClicked}><FormattedMessage {...messages.timesheet} /></NavMenu>
           </span>
           <span className="navbar-item">
-            <FormattedMessage {...messages.projects} />
+            <NavMenu onClick={onProjectsClicked}><FormattedMessage {...messages.projects} /></NavMenu>
           </span>
           <span className="navbar-item">
             <FormattedMessage {...messages.people} />
@@ -46,6 +50,8 @@ function Header({ intl, children }) {
 Header.propTypes = {
   intl: intlShape.isRequired,
   children: PropTypes.object,
+  onTimesheetClicked: PropTypes.func.isRequired,
+  onProjectsClicked: PropTypes.func.isRequired,
 };
 
 export default injectIntl(Header);
