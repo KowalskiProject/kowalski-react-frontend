@@ -49,6 +49,10 @@ const renderPeople = (people) => (
 export default (props) => {
   const { project } = props;
 
+  if (!project) {
+    return <div></div>;
+  }
+
   return (
     <div style={{ flexGrow: '1', display: 'flex', flexDirection: 'column' }}>
       <ProjectNameWrapper>

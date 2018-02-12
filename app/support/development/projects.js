@@ -39,6 +39,28 @@ export default [
         position: 'Business Analyst',
         pictureUrl: 'https://randomuser.me/api/portraits/men/6.jpg',
       },
+    ],
+    activities: [
+      {
+        id: '1',
+        title: 'Escrita de relatório de atividades',
+      },
+      {
+        id: '2',
+        title: 'Implementação de estratégia de segurança',
+      },
+      {
+        id: '3',
+        title: 'Name',
+      },
+      {
+        id: '4',
+        title: 'Name',
+      },
+      {
+        id: '5',
+        title: 'Name',
+      },
     ]
   },
   {
@@ -96,7 +118,9 @@ export default [
         position: 'Mid Test Analyst',
         pictureUrl: 'https://randomuser.me/api/portraits/women/22.jpg',
       },
-    ]
+    ],
+    activities: [
+    ],
   },
   {
     code: 'C',
@@ -118,6 +142,36 @@ export default [
         position: 'Mid Test Analyst',
         pictureUrl: 'https://randomuser.me/api/portraits/women/24.jpg',
       },
-    ]
+    ],
+    activities: [
+      {
+        id: '1',
+        title: 'Mussum Ipsum, cacilds vidis litro abertis. Si u mundo tá muito paradis?',
+      },
+      {
+        id: '2',
+        title: 'Toma um mé que o mundo vai girarzis! Quem manda na minha terra sou euzis!',
+      },
+      {
+        id: '3',
+        title: 'Praesent malesuada urna nisi, quis volutpat erat hendrerit non.',
+      },
+      {
+        id: '4',
+        title: 'Nam vulputate dapibus. Atirei o pau no gatis, per gatis num morreus.',
+      },
+      {
+        id: '5',
+        title: 'Todo mundo vê os porris que eu tomo, mas ninguém vê os tombis que eu levo!',
+      },
+      {
+        id: '6',
+        title: 'Per aumento de cachacis, eu reclamis. Viva Forevis aptent taciti sociosqu ad litora torquent.',
+      },
+      {
+        id: '7',
+        title: 'Diuretics paradis num copo é motivis de denguis.',
+      },
+    ],
   },
 ];

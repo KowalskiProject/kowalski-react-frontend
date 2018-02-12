@@ -23,6 +23,7 @@ export function* handleSelectedProjectCode({ payload }) {
   if (foundProject !== null) {
     yield put(loadedSelectedProject(foundProject));
   } else {
+    console.log('Project Not found');
     // TODO present an error on the page
   }
 }

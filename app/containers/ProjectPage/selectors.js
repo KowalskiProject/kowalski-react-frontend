@@ -45,7 +45,17 @@ const makeSelectSelectedProject = () => createSelector(
 const makeSelectSelectedTab = () => createSelector(
   selectProjectPageDomain,
   (substate) => substate.get('selectedTab'),
-)
+);
+
+const makeSelectActivityFilteringText = () => createSelector(
+  selectProjectPageDomain,
+  (substate) => substate.get('activityFilteringText'),
+);
+
+const makeSelectExpandedTaskIds = () => createSelector(
+  selectProjectPageDomain,
+  (substate) => substate.get('expandedTaskIds'),
+);
 
 export default makeSelectProjectPage;
 
@@ -55,5 +65,7 @@ export {
   makeSelectSelectedProjectCode,
   makeSelectSelectedProject,
   makeSelectSelectedTab,
+  makeSelectActivityFilteringText,
+  makeSelectExpandedTaskIds,
 };
 
