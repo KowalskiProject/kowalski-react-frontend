@@ -9,6 +9,7 @@
 import React from 'react';
 import { Helmet } from 'react-helmet';
 import styled from 'styled-components';
+import PropTypes from 'prop-types';
 import { Switch, Route, withRouter } from 'react-router-dom';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
@@ -57,6 +58,10 @@ function App(props) {
     </AppWrapper>
   );
 }
+
+App.propTypes = {
+  navigateTo: PropTypes.func,
+};
 
 const withSaga = injectSaga({ key: 'global', saga });
 const withConnect = connect(null, actions);

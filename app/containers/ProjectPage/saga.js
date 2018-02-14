@@ -1,13 +1,23 @@
-import { takeEvery, takeLatest, call, put, select } from 'redux-saga/effects';
+import { takeEvery, call, put } from 'redux-saga/effects';
 import { fromJS } from 'immutable';
 import {
   UPDATE_SELECTED_PROJECT_CODE,
   LOAD_PROJECT_CODES,
   OTHER_PROJECT_CLICKED,
+  SUBMIT_NEW_TASK_FORM_AND_CLOSE_IT,
+  SUBMIT_NEW_ACTIVITY_FORM_AND_CLOSE_IT,
+  SUBMIT_NEW_TASK_FORM,
+  SUBMIT_NEW_ACTIVITY_FORM,
 } from './constants';
-import { loadedSelectedProject, loadedProjectCodes } from './actions';
+import {
+  loadedSelectedProject,
+  loadedProjectCodes,
+  endedSubmitNewActivity,
+  endedSubmitNewTask,
+  dismissNewTaskDialog,
+  dismissNewActivityDialog,
+} from './actions';
 import { startLoadingResource, endLoadingResource } from '../App/actions';
-import { makeSelectProjectCodes } from '../ProjectsPage/selectors';
 import projects from '../../support/development/projects';
 import { handleProjectSelected } from '../ProjectsPage/saga';
 
@@ -23,7 +33,6 @@ export function* handleSelectedProjectCode({ payload }) {
   if (foundProject !== null) {
     yield put(loadedSelectedProject(foundProject));
   } else {
-    console.log('Project Not found');
     // TODO present an error on the page
   }
 }
@@ -38,9 +47,39 @@ export function* handleLoadProjectCodes() {
   yield put(loadedProjectCodes(projectCodesFromAlreadyLoadedProjects));
 }
 
+export function* handleSubmitNewTaskForm({ payload: { taskData, activity, project } }) {
+  yield call(() => new Promise((resolve) => {
+    setTimeout(() => resolve(), 300);
+  }));
+
+  yield put(endedSubmitNewTask({ taskData, activity, project }));
+}
+
+export function* handleSubmitNewTaskFormAndCloseIt({ payload: { taskData, activity, project } }) {
+  yield handleSubmitNewTaskForm({ payload: { taskData, activity, project } });
+  yield put(dismissNewTaskDialog());
+}
+
+export function* handleSubmitNewActivityForm({ payload: { taskData, project } }) {
+  yield call(() => new Promise((resolve) => {
+    setTimeout(() => resolve(), 300);
+  }));
+
+  yield put(endedSubmitNewActivity({ payload: { taskData, project } }));
+}
+
+export function* handleSubmitNewActivityFormAndCloseIt({ payload: { taskData, project } }) {
+  yield handleSubmitNewActivityForm({ payload: { taskData, project } });
+  yield put(dismissNewActivityDialog());
+}
+
 // Individual exports for testing
 export default function* defaultSaga() {
   yield takeEvery(UPDATE_SELECTED_PROJECT_CODE, handleSelectedProjectCode);
   yield takeEvery(LOAD_PROJECT_CODES, handleLoadProjectCodes);
   yield takeEvery(OTHER_PROJECT_CLICKED, handleProjectSelected);
+  yield takeEvery(SUBMIT_NEW_TASK_FORM, handleSubmitNewTaskForm);
+  yield takeEvery(SUBMIT_NEW_TASK_FORM_AND_CLOSE_IT, handleSubmitNewTaskFormAndCloseIt);
+  yield takeEvery(SUBMIT_NEW_ACTIVITY_FORM, handleSubmitNewActivityForm);
+  yield takeEvery(SUBMIT_NEW_ACTIVITY_FORM_AND_CLOSE_IT, handleSubmitNewActivityFormAndCloseIt);
 }

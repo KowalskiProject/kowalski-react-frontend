@@ -1,20 +1,66 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import FaAngleDown from 'react-icons/lib/fa/angle-down';
 import FaAngleUp from 'react-icons/lib/fa/angle-up';
+import { List } from 'immutable';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import { expandTaskListItem, collapseTaskListItem } from './actions';
+import {
+  expandTaskListItem as expandTaskListItemAction,
+  collapseTaskListItem as collapseTaskListItemAction,
+  launchNewTaskDialog as launchNewTaskDialogAction,
+} from './actions';
 import { makeSelectExpandedTaskIds } from './selectors';
 
+const renderTasks = (tasks) => (
+  (tasks || List()).map((task) => (
+    <tr>
+      <td>{task.title}</td>
+      <td>{task.owner.name}</td>
+      <td>{task.description}</td>
+    </tr>
+  ))
+);
+
+const renderActivityCardContent = ({ activity, onCreateNewTaskClicked, project }) => (
+  <div className="card-content">
+    <div className="content">
+      <table className="table">
+        <thead>
+          <tr>
+            <th>Task</th>
+            <th>Owner</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          { renderTasks(activity.tasks) }
+          <tr>
+            <td colSpan={3}><a tabIndex={0} role="button" onClick={() => onCreateNewTaskClicked(activity, project)}>+ Create new task</a></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+);
+
+renderActivityCardContent.propTypes = {
+  activity: PropTypes.any,
+  onCreateNewTaskClicked: PropTypes.func,
+  project: PropTypes.any,
+};
+
 const ActivityListItem = (props) => {
-  const { activity, expandedTaskIds } = props;
-  const { expandTaskListItem, collapseTaskListItem} = props;
-  const isExpanded = expandedTaskIds.includes(activity.id);
+  const { activity, expandedActivityIds, project } = props;
+  const { expandTaskListItem, collapseTaskListItem, launchNewTaskDialog } = props;
+  const isExpanded = expandedActivityIds.includes(activity.id);
 
   return (
     <div className="card">
       <header className="card-header">
         <a
+          role="button"
+          tabIndex={0}
           className="card-header-icon"
           aria-label="activity details"
           onClick={
@@ -35,21 +81,33 @@ const ActivityListItem = (props) => {
           {activity.title}
         </p>
       </header>
-      { isExpanded && <div className="card-content">
-        <div className="content">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus nec iaculis mauris.
-          <a href="#">@bulmaio</a>. <a href="#">#css</a> <a href="#">#responsive</a>
-          <br />
-        </div>
-      </div> }
+      {
+        isExpanded && renderActivityCardContent(
+          { onCreateNewTaskClicked: launchNewTaskDialog, project, activity }
+        )
+      }
     </div>
   );
-}
+};
+
+ActivityListItem.propTypes = {
+  activity: PropTypes.any,
+  project: PropTypes.any,
+  expandedActivityIds: PropTypes.objectOf(List),
+  expandTaskListItem: PropTypes.func,
+  collapseTaskListItem: PropTypes.func,
+  launchNewTaskDialog: PropTypes.func,
+};
+
 
 const mapStateToProps = createStructuredSelector({
-  expandedTaskIds: makeSelectExpandedTaskIds(),
+  expandedActivityIds: makeSelectExpandedTaskIds(),
 });
 
 export default connect(
-  mapStateToProps, { expandTaskListItem, collapseTaskListItem }
+  mapStateToProps, {
+    expandTaskListItem: expandTaskListItemAction,
+    collapseTaskListItem: collapseTaskListItemAction,
+    launchNewTaskDialog: launchNewTaskDialogAction,
+  }
 )(ActivityListItem);

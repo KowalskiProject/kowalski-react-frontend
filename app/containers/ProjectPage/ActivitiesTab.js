@@ -3,8 +3,30 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import styled from 'styled-components';
 import FaSearch from 'react-icons/lib/fa/search';
-import { changedActivitiesTextFilter } from './actions';
-import { makeSelectActivityFilteringText } from './selectors';
+import PropTypes from 'prop-types';
+import Modal from 'components/Modal/Loadable';
+import NewTaskForm from './NewTaskForm';
+import {
+  changedActivitiesTextFilter as changedActivitiesTextFilterAction,
+  launchNewTaskDialog as launchNewTaskDialogAction,
+  dismissNewTaskDialog as dismissNewTaskDialogAction,
+  submitNewTaskFormAndCloseIt as submitNewTaskFormAndCloseItAction,
+  launchNewActivityDialog as launchNewActivityDialogAction,
+  dismissNewActivityDialog as dismissNewActivityDialogAction,
+  submitNewActivityForm as submitNewActivityFormAction,
+  submitNewActivityFormAndCloseIt as submitNewActivityFormAndCloseItAction,
+  submitNewTaskForm as submitNewTaskFormAction,
+} from './actions';
+import {
+  makeSelectActivityFilteringText,
+  makeSelectIsNewTaskFormDialogOpened,
+  makeSelectActivityLoadedIntoNewTaskForm,
+  makeSelectProjectLoadedIntoNewTaskForm,
+  makeSelectIsNewActivityFormDialogOpened,
+  makeSelectProjectLoadedIntoNewActivityForm,
+  makeSelectIsSubmittingNewActivity,
+  makeSelectIsSubmittingNewTask,
+} from './selectors';
 import ActivityListItem from './ActivityListItem';
 
 const Container = styled.div`
@@ -34,13 +56,13 @@ const ActivityListContainer = styled.div`
 const ActivityContainer = styled.div`
 `;
 
-const renderActivities = (activities, term) => (
+const renderActivities = (project, term) => (
   // TODO key must be activitiy ID -> will be fetched from server in the future
-  activities
-    .filter(({title}) => title.includes(term))
-    .map((activity, index) => (
+  project.activities
+    .filter(({ title }) => title.includes(term))
+    .map((activity) => (
       <ActivityContainer key={activity.title}>
-        <ActivityListItem activity={activity} />
+        <ActivityListItem activity={activity} project={project} />
       </ActivityContainer>
     ))
 );
@@ -74,14 +96,64 @@ const ActivitiesTab = (props) => {
         <NewActivityButton className="button">Add activity</NewActivityButton>
       </ToolbarContainer>
       <ActivityListContainer>
-        { renderActivities(project.activities, activityFilteringText) }
+        { renderActivities(project, activityFilteringText) }
       </ActivityListContainer>
+      {/* <Modal active={props.isNewActivityFormDialogOpened} onDismiss={props.dismissNewActivityDialog}>
+        <NewActivityForm
+          project={props.projectLoadedIntoNewTaskForm}
+          onAdd={props.submitNewActivityFormAndCloseIt}
+          onSaveAndAddNew={props.submitNewActivityForm}
+          isSubmitting={props.isSubmittingNewActivity}
+          onCancel={props.dismissNewActivityDialog}
+        />
+      </Modal> */}
+      {/* <Modal active={props.isNewTaskFormDialogOpened} onDismiss={props.dismissNewTaskDialog}>
+        <NewTaskForm
+          project={props.projectLoadedIntoNewTaskForm}
+          selectedActivity={props.activityLoadedIntoNewTaskForm}
+          onAdd={props.submitNewActivityFormAndCloseIt}
+          onSaveAndAddNew={props.submitNewActivityForm}
+          isSubmitting={props.isSubmittingNewActivity}
+          onCancel={props.dismissNewActivityDialog}
+        />
+      </Modal> */}
     </Container>
-  )
+  );
+};
+
+ActivitiesTab.propTypes = {
+  project: PropTypes.any,
+  changedActivitiesTextFilter: PropTypes.func,
+  activityFilteringText: PropTypes.any,
+  projectLoadedIntoNewTaskForm: PropTypes.func,
+  activityLoadedIntoNewTaskForm: PropTypes.func,
+  submitNewActivityFormAndCloseIt: PropTypes.func,
+  submitNewActivityForm: PropTypes.func,
+  isSubmittingNewActivity: PropTypes.bool,
+  dismissNewActivityDialog: PropTypes.func,
+  isNewTaskFormDialogOpened: PropTypes.bool,
+  dismissNewTaskDialog: PropTypes.func,
 };
 
 const mapStateToProps = createStructuredSelector({
   activityFilteringText: makeSelectActivityFilteringText(),
+  isNewTaskFormDialogOpened: makeSelectIsNewTaskFormDialogOpened(),
+  activityLoadedIntoNewTaskForm: makeSelectActivityLoadedIntoNewTaskForm(),
+  projectLoadedIntoNewTaskForm: makeSelectProjectLoadedIntoNewTaskForm(),
+  isNewActivityFormDialogOpened: makeSelectIsNewActivityFormDialogOpened(),
+  projectLoadedIntoNewActivityForm: makeSelectProjectLoadedIntoNewActivityForm(),
+  isSubmittingNewActivity: makeSelectIsSubmittingNewActivity(),
+  isSubmittingNewTask: makeSelectIsSubmittingNewTask(),
 });
 
-export default connect(mapStateToProps, { changedActivitiesTextFilter })(ActivitiesTab);
+export default connect(mapStateToProps, {
+  launchNewTaskDialog: launchNewTaskDialogAction,
+  dismissNewTaskDialog: dismissNewTaskDialogAction,
+  submitNewTaskForm: submitNewTaskFormAction,
+  submitNewTaskFormAndCloseIt: submitNewTaskFormAndCloseItAction,
+  launchNewActivityDialog: launchNewActivityDialogAction,
+  dismissNewActivityDialog: dismissNewActivityDialogAction,
+  submitNewActivityForm: submitNewActivityFormAction,
+  submitNewActivityFormAndCloseIt: submitNewActivityFormAndCloseItAction,
+  changedActivitiesTextFilter: changedActivitiesTextFilterAction,
+})(ActivitiesTab);

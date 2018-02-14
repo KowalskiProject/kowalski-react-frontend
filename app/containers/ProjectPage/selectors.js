@@ -54,7 +54,42 @@ const makeSelectActivityFilteringText = () => createSelector(
 
 const makeSelectExpandedTaskIds = () => createSelector(
   selectProjectPageDomain,
-  (substate) => substate.get('expandedTaskIds'),
+  (substate) => substate.get('expandedActivityIds'),
+);
+
+const makeSelectIsNewTaskFormDialogOpened = () => createSelector(
+  selectProjectPageDomain,
+  (substate) => substate.get('isNewTaskFormDialogOpened'),
+);
+
+const makeSelectActivityLoadedIntoNewTaskForm = () => createSelector(
+  selectProjectPageDomain,
+  (substate) => substate.get('activityLoadedIntoNewTaskForm'),
+);
+
+const makeSelectIsNewActivityFormDialogOpened = () => createSelector(
+  selectProjectPageDomain,
+  (substate) => substate.get('isNewActivityFormDialogOpened'),
+);
+
+const makeSelectProjectLoadedIntoNewTaskForm = () => createSelector(
+  selectProjectPageDomain,
+  (substate) => substate.get('projectLoadedIntoNewTaskForm'),
+);
+
+const makeSelectProjectLoadedIntoNewActivityForm = () => createSelector(
+  selectProjectPageDomain,
+  (substate) => substate.get('projectLoadedIntoNewActivityForm'),
+);
+
+const makeSelectIsSubmittingNewActivity = () => createSelector(
+  selectProjectPageDomain,
+  (substate) => substate.get('isSubmittingNewActivity'),
+);
+
+const makeSelectIsSubmittingNewTask = () => createSelector(
+  selectProjectPageDomain,
+  (substate) => substate.get('isSubmittingNewTask'),
 );
 
 export default makeSelectProjectPage;
@@ -67,5 +102,12 @@ export {
   makeSelectSelectedTab,
   makeSelectActivityFilteringText,
   makeSelectExpandedTaskIds,
+  makeSelectIsNewTaskFormDialogOpened,
+  makeSelectActivityLoadedIntoNewTaskForm,
+  makeSelectIsNewActivityFormDialogOpened,
+  makeSelectProjectLoadedIntoNewActivityForm,
+  makeSelectIsSubmittingNewActivity,
+  makeSelectIsSubmittingNewTask,
+  makeSelectProjectLoadedIntoNewTaskForm,
 };
 

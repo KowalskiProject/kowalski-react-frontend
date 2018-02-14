@@ -15,6 +15,16 @@ import {
   CHANGED_ACTIVITIES_TEXT_FILTER,
   EXPAND_TASK_LIST_ITEM,
   COLLAPSE_TASK_LIST_ITEM,
+  LAUNCH_NEW_TASK_DIALOG,
+  DISMISS_NEW_TASK_DIALOG,
+  SUBMIT_NEW_TASK_FORM,
+  LAUNCH_NEW_ACTIVITY_DIALOG,
+  DISMISS_NEW_ACTIVITY_DIALOG,
+  SUBMIT_NEW_ACTIVITY_FORM,
+  SUBMIT_NEW_ACTIVITY_FORM_AND_CLOSE_IT,
+  SUBMIT_NEW_TASK_FORM_AND_CLOSE_IT,
+  ENDED_SUBMIT_NEW_TASK,
+  ENDED_SUBMIT_NEW_ACTIVITY,
 } from './constants';
 
 export function defaultAction() {
@@ -34,7 +44,7 @@ export function otherProjectClicked(projectCode) {
   return {
     type: OTHER_PROJECT_CLICKED,
     payload: projectCode,
-  }
+  };
 }
 
 export function loadedSelectedProject(projectData) {
@@ -82,5 +92,73 @@ export function collapseTaskListItem(taskId) {
   return {
     type: COLLAPSE_TASK_LIST_ITEM,
     payload: taskId,
+  };
+}
+
+export function launchNewTaskDialog(activity, project) {
+  return {
+    type: LAUNCH_NEW_TASK_DIALOG,
+    payload: { activity, project },
+  };
+}
+
+export function dismissNewTaskDialog() {
+  return {
+    type: DISMISS_NEW_TASK_DIALOG,
+  };
+}
+
+export function submitNewTaskForm({ taskData, activity, project }) {
+  return {
+    type: SUBMIT_NEW_TASK_FORM,
+    payload: { taskData, activity, project },
+  };
+}
+
+export function submitNewTaskFormAndCloseIt({ taskData, activity, project }) {
+  return {
+    type: SUBMIT_NEW_TASK_FORM_AND_CLOSE_IT,
+    payload: { taskData, activity, project },
+  };
+}
+
+export function endedSubmitNewTask({ activityData, activity, project }) {
+  return {
+    type: ENDED_SUBMIT_NEW_TASK,
+    payload: { activityData, activity, project },
+  };
+}
+
+export function launchNewActivityDialog(project) {
+  return {
+    type: LAUNCH_NEW_ACTIVITY_DIALOG,
+    payload: project,
+  };
+}
+
+export function dismissNewActivityDialog() {
+  return {
+    type: DISMISS_NEW_ACTIVITY_DIALOG,
+  };
+}
+
+export function submitNewActivityForm({ activityData, project }) {
+  return {
+    type: SUBMIT_NEW_ACTIVITY_FORM,
+    payload: { activityData, project },
+  };
+}
+
+export function submitNewActivityFormAndCloseIt({ activityData, project }) {
+  return {
+    type: SUBMIT_NEW_ACTIVITY_FORM_AND_CLOSE_IT,
+    payload: { activityData, project },
+  };
+}
+
+export function endedSubmitNewActivity({ activityData, project }) {
+  return {
+    type: ENDED_SUBMIT_NEW_ACTIVITY,
+    payload: { activityData, project },
   };
 }
