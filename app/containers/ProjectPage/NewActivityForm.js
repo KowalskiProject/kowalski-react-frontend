@@ -2,12 +2,11 @@ import React from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import InputField from 'components/InputField/Loadable';
-import SelectField from 'components/SelectField/Loadable';
 import TextAreaField from 'components/TextAreaField/Loadable';
 import { Field, reduxForm } from 'redux-form/immutable';
 
 import { required } from '../../support/forms/validation';
-import { NEW_TASK_FORM_ID } from './constants';
+import { NEW_ACTIVITY_FORM_ID } from './constants';
 
 const Wrapper = styled.div`
   display: flex;
@@ -39,43 +38,26 @@ const FormActionWrapper = styled.div`
   width: 100%;
 `;
 
-function NewTaskForm(props) {
+function NewActivityForm(props) {
   const { error, isSubmitting, onCancel, handleSubmit, onAdd, onSaveAndAddNew } = props;
-  const { project } = props;
-
   return (
     <Wrapper className="box">
       <form onSubmit={handleSubmit(onAdd)}>
-        <FormTitle><H1>Create new task</H1></FormTitle>
+        <FormTitle><H1>Create new activity</H1></FormTitle>
 
         <Field
-          name="title"
-          id="title"
+          name="name"
+          id="name"
           component={InputField}
-          label="Task Title"
+          label="Activity Name"
           validate={[required]}
         />
-
-        <Field
-          name="owner"
-          id="owner"
-          component={SelectField}
-          label="Project Members"
-          validate={[required]}
-        >
-          <option value="">Select a person</option>
-          { project &&
-            project.people.map((person) => (
-              <option value={person.name}>{person.name}</option>
-            ))
-          }
-        </Field>
 
         <Field
           name="description"
           id="description"
           component={TextAreaField}
-          label="Task Description"
+          label="Activity Description"
           validate={[required]}
         />
 
@@ -101,8 +83,7 @@ function NewTaskForm(props) {
   );
 }
 
-NewTaskForm.propTypes = {
-  project: PropTypes.any,
+NewActivityForm.propTypes = {
   error: PropTypes.any,
   isSubmitting: PropTypes.any,
   onCancel: PropTypes.func,
@@ -112,5 +93,5 @@ NewTaskForm.propTypes = {
 };
 
 export default reduxForm({
-  form: NEW_TASK_FORM_ID,
-})(NewTaskForm);
+  form: NEW_ACTIVITY_FORM_ID,
+})(NewActivityForm);

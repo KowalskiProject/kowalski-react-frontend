@@ -6,6 +6,7 @@ import FaSearch from 'react-icons/lib/fa/search';
 import PropTypes from 'prop-types';
 import Modal from 'components/Modal/Loadable';
 import NewTaskForm from './NewTaskForm';
+import NewActivityForm from './NewActivityForm';
 import {
   changedActivitiesTextFilter as changedActivitiesTextFilterAction,
   launchNewTaskDialog as launchNewTaskDialogAction,
@@ -72,7 +73,7 @@ const Input = styled.input`
 `;
 
 const ActivitiesTab = (props) => {
-  const { project, changedActivitiesTextFilter, activityFilteringText } = props;
+  const { project, changedActivitiesTextFilter, activityFilteringText, launchNewActivityDialog } = props;
 
   return (
     <Container>
@@ -93,12 +94,12 @@ const ActivitiesTab = (props) => {
 
         </div>
 
-        <NewActivityButton className="button">Add activity</NewActivityButton>
+        <NewActivityButton className="button" onClick={() => launchNewActivityDialog(project)}>Add activity</NewActivityButton>
       </ToolbarContainer>
       <ActivityListContainer>
         { renderActivities(project, activityFilteringText) }
       </ActivityListContainer>
-      {/* <Modal active={props.isNewActivityFormDialogOpened} onDismiss={props.dismissNewActivityDialog}>
+      <Modal active={props.isNewActivityFormDialogOpened} onDismiss={props.dismissNewActivityDialog}>
         <NewActivityForm
           project={props.projectLoadedIntoNewTaskForm}
           onAdd={props.submitNewActivityFormAndCloseIt}
@@ -106,17 +107,17 @@ const ActivitiesTab = (props) => {
           isSubmitting={props.isSubmittingNewActivity}
           onCancel={props.dismissNewActivityDialog}
         />
-      </Modal> */}
-      {/* <Modal active={props.isNewTaskFormDialogOpened} onDismiss={props.dismissNewTaskDialog}>
+      </Modal>
+      <Modal active={props.isNewTaskFormDialogOpened} onDismiss={props.dismissNewTaskDialog}>
         <NewTaskForm
           project={props.projectLoadedIntoNewTaskForm}
           selectedActivity={props.activityLoadedIntoNewTaskForm}
           onAdd={props.submitNewActivityFormAndCloseIt}
           onSaveAndAddNew={props.submitNewActivityForm}
           isSubmitting={props.isSubmittingNewActivity}
-          onCancel={props.dismissNewActivityDialog}
+          onCancel={props.dismissNewTaskDialog}
         />
-      </Modal> */}
+      </Modal>
     </Container>
   );
 };
@@ -133,6 +134,8 @@ ActivitiesTab.propTypes = {
   dismissNewActivityDialog: PropTypes.func,
   isNewTaskFormDialogOpened: PropTypes.bool,
   dismissNewTaskDialog: PropTypes.func,
+  isNewActivityFormDialogOpened: PropTypes.bool,
+  launchNewActivityDialog: PropTypes.func,
 };
 
 const mapStateToProps = createStructuredSelector({

@@ -15,6 +15,7 @@ export const CHANGED_ACTIVITIES_TEXT_FILTER = 'app/ProjectPage/CHANGED_ACTIVITIE
 export const EXPAND_TASK_LIST_ITEM = 'app/ProjectPage/EXPAND_TASK_LIST_ITEM';
 export const COLLAPSE_TASK_LIST_ITEM = 'app/ProjectPage/COLLAPSE_TASK_LIST_ITEM';
 export const NEW_TASK_FORM_ID = 'app/ProjectPage/NEW_TASK_FORM_ID';
+export const NEW_ACTIVITY_FORM_ID = 'app/ProjectPage/NEW_ACTIVITY_FORM_ID';
 export const LAUNCH_NEW_TASK_DIALOG = 'app/ProjectPage/LAUNCH_NEW_TASK_DIALOG';
 export const DISMISS_NEW_TASK_DIALOG = 'app/ProjectPage/DISMISS_NEW_TASK_DIALOG';
 export const SUBMIT_NEW_TASK_FORM = 'app/ProjectPage/SUBMIT_NEW_TASK_FORM';

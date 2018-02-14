@@ -1,5 +1,6 @@
 import { takeEvery, call, put } from 'redux-saga/effects';
 import { fromJS } from 'immutable';
+import { reset } from 'redux-form';
 import {
   UPDATE_SELECTED_PROJECT_CODE,
   LOAD_PROJECT_CODES,
@@ -8,6 +9,10 @@ import {
   SUBMIT_NEW_ACTIVITY_FORM_AND_CLOSE_IT,
   SUBMIT_NEW_TASK_FORM,
   SUBMIT_NEW_ACTIVITY_FORM,
+  DISMISS_NEW_ACTIVITY_DIALOG,
+  DISMISS_NEW_TASK_DIALOG,
+  NEW_TASK_FORM_ID,
+  NEW_ACTIVITY_FORM_ID,
 } from './constants';
 import {
   loadedSelectedProject,
@@ -73,6 +78,14 @@ export function* handleSubmitNewActivityFormAndCloseIt({ payload: { taskData, pr
   yield put(dismissNewActivityDialog());
 }
 
+export function* clearTaskForm() {
+  yield put(reset(NEW_TASK_FORM_ID));
+}
+
+export function* clearActivityForm() {
+  yield put(reset(NEW_ACTIVITY_FORM_ID));
+}
+
 // Individual exports for testing
 export default function* defaultSaga() {
   yield takeEvery(UPDATE_SELECTED_PROJECT_CODE, handleSelectedProjectCode);
@@ -82,4 +95,6 @@ export default function* defaultSaga() {
   yield takeEvery(SUBMIT_NEW_TASK_FORM_AND_CLOSE_IT, handleSubmitNewTaskFormAndCloseIt);
   yield takeEvery(SUBMIT_NEW_ACTIVITY_FORM, handleSubmitNewActivityForm);
   yield takeEvery(SUBMIT_NEW_ACTIVITY_FORM_AND_CLOSE_IT, handleSubmitNewActivityFormAndCloseIt);
+  yield takeEvery(DISMISS_NEW_ACTIVITY_DIALOG, clearActivityForm);
+  yield takeEvery(DISMISS_NEW_TASK_DIALOG, clearTaskForm);
 }
