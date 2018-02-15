@@ -12,7 +12,7 @@ import { List } from 'immutable';
 import parseAmountOfHours from '../../support/parsers/duration';
 
 const wrapperFlexBasis = 14.286;
-const slotsBackgroundColor = '#eee';
+const slotsBackgroundColor = '#fff';
 
 const Wrapper = styled.div`
   flex-grow: 0;
@@ -29,7 +29,8 @@ const DayLabelWrapper = styled.div`
 const SlotsContainer = styled.div`
   flex-basis: ${100 - wrapperFlexBasis}%;
   background-color: ${slotsBackgroundColor};
-  border: 2px solid #aaa;
+  border: 0.5px solid #aaa;
+  border-right:0px;
   display: flex;
   flex-direction: column;
 `;
@@ -38,7 +39,6 @@ const generateSlotWrapper = (hourSlot, totalSlot) => styled.a`
   display: flex;
   flex-direction: column;
   flex-basis: ${(hourSlot * 100) / totalSlot}%;
-  border-bottom: 2px solid #aaa;
   justify-content: center;
   text-align: center;
   padding: 10px;

@@ -30,6 +30,8 @@ const H3Wrapper = styled.h3`
   margin-top: 100px;
   margin-left: 50px;
   margin-right: 50px;
+  font-size:25px;
+  font-weight:200;
 `;
 
 const RightPanelWrapper = styled.div`
@@ -81,6 +83,7 @@ function AuthPage() {
       </Helmet>
       <div className="column auth-page-left-container">
         <H3Wrapper><FormattedMessage {...messages.friendlyIntroductoryMessage} /></H3Wrapper>
+
       </div>
       <RightPanelWrapper className="column">
         <ButtonsArea className="buttons has-addons">

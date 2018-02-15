@@ -101,3 +101,19 @@ select {
   border-radius: 0 !important;
   width: 100%;
 }
+.control {
+  input {
+    height: 50px;
+  }
+}
+.calendar{
+  .calendar-nav{
+    background:white;
+    color: $ultraviolet;
+    button{
+      svg {
+        color: $ultraviolet;
+      }
+    }
+  }
+}
