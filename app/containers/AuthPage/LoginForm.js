@@ -19,7 +19,8 @@ import styled from 'styled-components';
 import messages from './messages';
 
 const ButtonWrapper = styled.button`
-  width: 100%
+  width: 100%;
+  height:60px;
 `;
 
 function AuthPage({ intl }) {
