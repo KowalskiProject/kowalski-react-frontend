@@ -41,9 +41,12 @@ const Container = styled.div`
 const ToolbarContainer = styled.div`
   display: flex;
   justify-content: flex-end;
+ 
 `;
 
 const NewActivityButton = styled.button`
+  width:226px;
+  height:74px;
   margin-left: 1rem;
 `;
 
@@ -70,6 +73,7 @@ const renderActivities = (project, term) => (
 
 const Input = styled.input`
   width: 400px;
+  height: 22px;
 `;
 
 const ActivitiesTab = (props) => {

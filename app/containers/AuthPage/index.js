@@ -11,7 +11,10 @@ import { Helmet } from 'react-helmet';
 import { FormattedMessage } from 'react-intl';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
+
 import styled from 'styled-components';
+import SaturnoLogo from 'images/saturno-logo.svg';
+import Calendar from 'images/calendar_illustration.png';
 
 import LoginForm from 'containers/AuthPage/LoginForm';
 import injectSaga from 'utils/injectSaga';
@@ -32,12 +35,13 @@ const H3Wrapper = styled.h3`
   margin-right: 50px;
   font-size:25px;
   font-weight:200;
+  color:white;
 `;
 
 const RightPanelWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  flex-grow: 1;
+  
 `;
 
 const ButtonsArea = styled.div`
@@ -53,8 +57,8 @@ const FormTitleWrapper = styled.div`
   display: flex;
   flex-basis: 30%;
   flex-grow: 1;
-  margin-top: 80px;
-  margin-bottom: 20px;
+  margin-top: 10%;
+  padding-bottom:10%;
   justify-content: center;
   font-size: 3rem;
 `;
@@ -81,9 +85,9 @@ function AuthPage() {
         <title>AuthPage</title>
         <meta name="description" content="Description of AuthPage" />
       </Helmet>
-      <div className="column auth-page-left-container">
+      <div className="column has-text-centered auth-page-left-container">
         <H3Wrapper><FormattedMessage {...messages.friendlyIntroductoryMessage} /></H3Wrapper>
-
+        <img src={Calendar} alt="Illustartion of a calendar" />
       </div>
       <RightPanelWrapper className="column">
         <ButtonsArea className="buttons has-addons">
@@ -95,7 +99,7 @@ function AuthPage() {
           </button>
         </ButtonsArea>
         <FormTitleWrapper>
-          <span className="kowalski-primarily-colored"><FormattedMessage {...messages.appTitle} /></span>
+          <span className="kowalski-primarily-colored"> <img src={SaturnoLogo} alt="react-boilerplate - Logo" /></span>
         </FormTitleWrapper>
         <FormWrapper>
           <LoginForm />
