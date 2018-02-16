@@ -20,7 +20,7 @@ import messages from './messages';
 
 const ButtonWrapper = styled.button`
   width: 100%;
-  height:60px;
+  height:60px !important;
 `;
 
 function AuthPage({ intl }) {

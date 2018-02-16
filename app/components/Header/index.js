@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
 import PropTypes from 'prop-types';
-
+import SaturnoLogo from 'images/saturno-logo.svg';
 import NavBar from './NavBar';
 import messages from './messages';
 
@@ -24,7 +24,7 @@ function Header({ intl, children, onTimesheetClicked, onProjectsClicked }) {
       <NavBar aria-label="main navigation" className="navbar">
         <div className="navbar-start">
           <AppNameWrapper className="navbar-item">
-            { intl.formatMessage(messages.appTitle) }
+            <img src={SaturnoLogo} alt="react-boilerplate - Logo" />
           </AppNameWrapper>
         </div>
         <div className="navbar-end">

@@ -104,7 +104,7 @@ function AppCalendar({ selectedDate, options = {}, onNextMonthClicked, onPreviou
             <FaChevronLeft />
           </button>
         </div>
-        <div>{extractMonthAndYearExpression(selectedDate)}</div>
+        <div className="yearMonth" >{extractMonthAndYearExpression(selectedDate)}</div>
         <div className="calendar-nav-right">
           <button className="button is-text" onClick={onNextMonthClicked}>
             <FaChevronRight />

@@ -26,6 +26,7 @@ $family-primary: $family-serif;
 .auth-page-left-container {
   background-color: $primary;
   color: white;
+  padding-top:5%;
 }
 
 .kowalski-primarily-colored {
@@ -52,6 +53,7 @@ $family-primary: $family-serif;
 html, body, #app {
   height: 100%;
   width: 100%;
+
 }
 
 .kowalski-react-basic-container {
@@ -68,29 +70,43 @@ html, body, #app {
 h1{
   font-size: 2.875rem;
   font-family: $family-primary;
+  color:#414549;
+
 }
 
 h2{
   font-size: 2.25rem;
+  color:#414549;
+
 }
 
 h3{
   font-size: 1.75rem;
+  color:#414549;
+
 }
 
 h4{
   font-size: 1.375rem;
+  color:#414549;
+
 }
 
 h5{
   font-size: 1.125rem;
+  color:#414549;
+
 }
 
 h6{
   font-size:1em;
+  color:#414549;
+
 }
 p{
   font-size: 1rem;
+  color:#414549;
+
 }
 
 .select {
@@ -107,13 +123,35 @@ select {
   }
 }
 .calendar{
+  min-width:18em;
+  min-height:18em;
   .calendar-nav{
     background:white;
     color: $ultraviolet;
+    padding-bottom: 0;
     button{
       svg {
         color: $ultraviolet;
       }
     }
+    .yearMonth{
+      font-size:16px;
+    }
   }
+  .calendar-body{
+    padding-bottom: 0;
+  }
+}
+
+.projectBox{
+  color: #414549;
+  padding:2%;
+}
+
+.projectBox:hover{
+  box-shadow: 0 3px 3px -2px rgba(0, 0, 0, .2), 0 3px 4px 0 rgba(0, 0, 0, .14), 0 1px 8px 0 rgba(0, 0, 0, .12);
+
+}
+.card{
+  margin-bottom: 20px;
 }

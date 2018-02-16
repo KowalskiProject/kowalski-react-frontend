@@ -28,9 +28,9 @@ const ProjectPeopleHeader = styled.h4`
 `
 const ProjectPeopleContent = styled.div`
   flex-grow: 1;
-  border-left: 1px solid black;
-  border-top: 1px solid black;
-  border-right: 1px solid black;
+  border-left: 1px solid #dbdbdb;
+  border-top: 1px solid #dbdbdb;
+  border-right: 1px solid #dbdbdb;
   margin-right: 2rem;
   padding-left: 3rem;
   padding-right: 3rem;

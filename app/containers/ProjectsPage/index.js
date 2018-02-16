@@ -40,7 +40,7 @@ const renderProjects = (projects, onSelectProject) => {
     return (
       <a
         tabIndex={index}
-        className="tile is-child box"
+        className="tile is-child projectBox"
         role="button"
         key={project.get('name')}
         style={{ display: 'block' }}
@@ -68,10 +68,14 @@ const TitleBar = styled.div`
 `;
 
 const PageTitle = styled.h1`
-  display: block
+  display: block;
+  font-weight:300px;
 `;
 
 const AddProjectButton = styled.button`
+width:226px;
+height:67px !important;
+color: #654EA3;
 `;
 
 const ProjectListWrapper = styled.div`
@@ -79,6 +83,7 @@ const ProjectListWrapper = styled.div`
   display: flex;
   flex-grow: 1;
   flex-direction: column;
+  
 `;
 
 function ProjectsPage(props) {
