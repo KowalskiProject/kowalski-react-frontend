@@ -46,7 +46,9 @@ const ToolbarContainer = styled.div`
 
 const NewActivityButton = styled.button`
   width:226px;
-  height:74px;
+  height:50px;
+  border-radius:2px;
+  border:1px solid #654EA3;
   margin-left: 1rem;
 `;
 
