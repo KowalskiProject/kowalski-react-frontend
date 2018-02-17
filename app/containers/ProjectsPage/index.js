@@ -74,7 +74,9 @@ const PageTitle = styled.h1`
 
 const AddProjectButton = styled.button`
 width:226px;
-height:67px !important;
+height:50px !important;
+border-radius:2px;
+border:1px solid #654EA3;
 color: #654EA3;
 `;
 
