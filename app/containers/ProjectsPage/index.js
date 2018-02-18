@@ -144,7 +144,7 @@ class ProjectsPage extends React.Component { // eslint-disable-line react/prefer
             isSubmitting={this.props.isSubmittingNewProject}
             onCancel={closeNewProjectForm}
           />
-        </Modal>name
+        </Modal>
       </MainContainerWrapper>
     );
   }

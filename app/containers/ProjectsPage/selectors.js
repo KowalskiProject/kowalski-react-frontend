@@ -50,6 +50,11 @@ const makeSelectLoadingProjectsErrorMsg = () => createSelector(
   (substate) => substate.get('makeSelectIsLoadingProjects'),
 );
 
+const makeSelectNewProjectFormSubmissionError = () => createSelector(
+  selectProjectsPageDomain,
+  (substate) => substate.get('newProjectFormSubmissionError'),
+)
+
 export default makeSelectProjectsPage;
 export {
   selectProjectsPageDomain,
@@ -59,4 +64,5 @@ export {
   makeSelectProjectCodes,
   makeSelectIsLoadingProjects,
   makeSelectLoadingProjectsErrorMsg,
+  makeSelectNewProjectFormSubmissionError,
 };

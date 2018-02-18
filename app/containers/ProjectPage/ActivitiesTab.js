@@ -67,7 +67,7 @@ const renderActivities = (project, term) => (
   project.get('activities')
     .filter((activity) => activity.get('name').includes(term))
     .map((activity) => (
-      <ActivityContainer key={activity.get('name')}>
+      <ActivityContainer key={activity.get('activityId')}>
         <ActivityListItem activity={activity} project={project} />
       </ActivityContainer>
     ))

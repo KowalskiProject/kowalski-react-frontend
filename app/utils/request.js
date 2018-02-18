@@ -39,8 +39,18 @@ function checkStatus(response) {
  *
  * @return {object}           The response data
  */
-export default function request(url, { parseResponse = true, ...options }) {
+export default function request(url, { parseResponse = true, saveNewToken = true, ...options }) {
   return fetch(url, options)
     .then(checkStatus)
+    .then((response) => saveNewToken ? saveToken(response) : response)
     .then((response) => parseResponse ? parseJSON(response) : response);
+}
+
+function saveToken(response) {
+  try {
+    const token = response.headers.get('Authorization').match(/Bearer (.*)/)[1];
+    localStorage.setItem('authToken', token);
+  } finally {
+    return response;
+  }
 }

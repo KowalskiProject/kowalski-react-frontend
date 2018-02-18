@@ -1,7 +1,12 @@
 import { takeEvery, call, put } from 'redux-saga/effects';
 import { push } from 'react-router-redux';
-import { reset } from 'redux-form';
 import {
+  reset,
+  stopSubmit,
+  startSubmit,
+} from 'redux-form';
+import {
+  startProjectLoading,
   newProjectSaved,
   closeNewProjectForm,
   endProjectLoading,
@@ -19,25 +24,44 @@ import {
   PROJECT_SELECTED,
   START_PROJECTS_LOADING,
 } from './constants';
-import { getProjects } from '../../support/backend/KowalskiBackendClient';
+import { getProjects, createProject } from '../../support/backend/KowalskiBackendClient';
 import { SERVER_BASE_URL } from '../../utils/constants';
 import { fromJS } from 'immutable';
 
 export function* submitProjectForm({ payload }) {
-  yield call(() => new Promise((resolve) => {
-    setTimeout(() => resolve(), 300);
-  }));
-  yield put(newProjectSaved(payload));
+  yield put(startSubmit(NEW_PROJECT_FORM_ID));
+  try {
+    yield call(createProject, {
+      config: { baseUrl: SERVER_BASE_URL },
+      token: localStorage.getItem('authToken'),
+      projectData: payload.toJSON(),
+    });
+    yield put(stopSubmit(NEW_PROJECT_FORM_ID));
+    yield put(startProjectLoading());
+    return true;
+  } catch (e) {
+    console.log('Error while trying to submit form: ', e);
+    yield put(stopSubmit(
+      NEW_PROJECT_FORM_ID,
+      { _error: 'There was an error while trying to communicate with the server =(' },
+    ));
+  }
+
+  return false;
 }
 
 export function* handleSubmit({ payload }) {
-  yield submitProjectForm({ payload });
-  yield clearProjectForm();
+  const successful = yield submitProjectForm({ payload });
+  if (successful) {
+    yield clearProjectForm();
+  }
 }
 
 export function* handleSubmitAndCloseForm({ payload }) {
-  yield submitProjectForm({ payload });
-  yield put(closeNewProjectForm());
+  const successful = yield submitProjectForm({ payload });
+  if (successful) {
+    yield put(closeNewProjectForm());
+  }
 }
 
 export function* clearProjectForm() {
