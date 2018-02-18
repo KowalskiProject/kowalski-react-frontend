@@ -12,3 +12,5 @@ export const SUBMIT_NEW_PROJECT_FORM_AND_CLOSE_IT = 'app/ProjectsPage/SUBMIT_NEW
 export const NEW_PROJECT_SAVED = 'app/ProjectsPage/NEW_PROJECT_SAVED';
 export const NEW_PROJECT_FORM_ID = 'newProjectForm';
 export const PROJECT_SELECTED = 'app/ProjectsPage/PROJECT_SELECTED';
+export const START_PROJECTS_LOADING = 'app/ProjectsPage/START_PROJECTS_LOADING';
+export const END_PROJECTS_LOADING = 'app/ProjectsPage/END_PROJECTS_LOADING';

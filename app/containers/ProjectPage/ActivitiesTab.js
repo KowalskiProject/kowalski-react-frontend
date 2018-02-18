@@ -41,7 +41,7 @@ const Container = styled.div`
 const ToolbarContainer = styled.div`
   display: flex;
   justify-content: flex-end;
- 
+
 `;
 
 const NewActivityButton = styled.button`
@@ -64,10 +64,10 @@ const ActivityContainer = styled.div`
 
 const renderActivities = (project, term) => (
   // TODO key must be activitiy ID -> will be fetched from server in the future
-  project.activities
-    .filter(({ title }) => title.includes(term))
+  project.get('activities')
+    .filter((activity) => activity.get('name').includes(term))
     .map((activity) => (
-      <ActivityContainer key={activity.title}>
+      <ActivityContainer key={activity.get('name')}>
         <ActivityListItem activity={activity} project={project} />
       </ActivityContainer>
     ))

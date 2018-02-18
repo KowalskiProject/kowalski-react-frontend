@@ -12,6 +12,8 @@ import {
   NEW_PROJECT_SAVED,
   SUBMIT_NEW_PROJECT_FORM_AND_CLOSE_IT,
   PROJECT_SELECTED,
+  START_PROJECTS_LOADING,
+  END_PROJECTS_LOADING,
 } from './constants';
 
 export function defaultAction() {
@@ -59,3 +61,17 @@ export function projectSelected(projectCode) {
     payload: projectCode,
   };
 }
+
+export function startProjectLoading() {
+  return {
+    type: START_PROJECTS_LOADING,
+  };
+}
+
+export function endProjectLoading(payload) {
+  return {
+    type: END_PROJECTS_LOADING,
+    payload,
+  };
+}
+

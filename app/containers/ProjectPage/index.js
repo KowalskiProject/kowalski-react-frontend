@@ -19,7 +19,9 @@ import {
   makeSelectProjectCodes,
   makeSelectSelectedProject,
   makeSelectSelectedProjectCode,
-  makeSelectSelectedTab
+  makeSelectSelectedTab,
+  makeSelectLoadingProjectCodesError,
+  makeSelectLoadingProjectError,
 } from './selectors';
 import reducer from './reducer';
 import saga from './saga';
@@ -78,19 +80,39 @@ const TabContentWrapper = styled.div`
 `;
 
 class ProjectPage extends React.PureComponent {
+  selectedProjectCode() {
+    return this.props.match.params.code;
+  }
+
   componentDidMount() {
     this.props.loadProjectCodes();
+    this.props.updateSelectedProjectCode(this.selectedProjectCode());
   }
 
   componentDidUpdate() {
-    const selectedProjectCode = this.props.match.params.code;
-    if (selectedProjectCode !== this.props.selectedProjectCode) {
-      this.props.updateSelectedProjectCode(selectedProjectCode);
+    if (this.selectedProjectCode() !== this.props.selectedProjectCode) {
+      this.props.updateSelectedProjectCode(this.selectedProjectCode());
     }
   }
 
   renderProjectMenuItems() {
-    const { projectCodes, otherProjectClicked, selectedProjectCode } = this.props;
+    const {
+      projectCodes,
+      otherProjectClicked,
+      selectedProjectCode,
+      loadingProjectCodesError,
+    } = this.props;
+
+    if (loadingProjectCodesError) {
+      return (
+        <article className="message is-danger">
+          <div className="message-body">
+            { loadingProjectCodesError }
+          </div>
+        </article>
+      );
+    }
+
     return (projectCodes).map((code) => (
       <ProjectCodeWrapper
         selected={code === selectedProjectCode}
@@ -145,6 +167,8 @@ ProjectPage.propTypes = {
   selectedTab: PropTypes.number,
   selectedTabChanged: PropTypes.func,
   otherProjectClicked: PropTypes.func,
+  loadingProjectCodesError: PropTypes.string,
+  loadingProjectError: PropTypes.string,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -152,6 +176,8 @@ const mapStateToProps = createStructuredSelector({
   selectedProjectCode: makeSelectSelectedProjectCode(),
   selectedProject: makeSelectSelectedProject(),
   selectedTab: makeSelectSelectedTab(),
+  loadingProjectCodesError: makeSelectLoadingProjectCodesError(),
+  loadingProjectError: makeSelectLoadingProjectError(),
 });
 
 const withConnect = connect(mapStateToProps, actions);

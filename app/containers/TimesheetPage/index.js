@@ -34,6 +34,7 @@ import saga from './saga';
 import messages from './messages';
 import LogHourForm from './LogHourForm';
 import { DATE_DAY_FORMAT } from './constants';
+import { unauthorizedAccessDetected } from '../App/actions';
 
 const MainContainerWrapper = styled.div`
   display: flex;
@@ -106,61 +107,69 @@ const renderDays = ([rangeStart, rangeEnd], history, timeSlotDayMap) => {
   return dayColumns;
 };
 
-function TimesheetPage(props) {
-  return (
-    <MainContainerWrapper className="kowalski-react-basic-container">
-      <Helmet>
-        <title>TimesheetPage</title>
-        <meta name="description" content="Description of TimesheetPage" />
-      </Helmet>
-      <ColumnsWrapper className="columns">
-        {/* Calendar */}
-        <CalendarColumn className="column">
-          <TimeSheetLabelWrapper>
-            <TimeSheetLabelInsideWrapper>
-              <FormattedMessage {... messages.timesheetLabel} />
-            </TimeSheetLabelInsideWrapper>
-            <span>
-              <FormattedDate value={props.selectedRange[0]} /> -
-              <FormattedDate value={props.selectedRange[1]} />
-            </span>
-          </TimeSheetLabelWrapper>
-          <AppCalendar
-            selectedDate={props.selectedDate}
-            onNextMonthClicked={props.onNextMonthClicked}
-            onPreviousMonthClicked={props.onPreviousMonthClicked}
-            onDateClicked={props.onDateChanged}
-            options={{ highlightedRanges: [props.selectedRange] }}
-          />
-          <TimeSheetLabelWrapper>
-            <TimeSheetLabelInsideWrapper>
-              <FormattedMessage {... messages.notifications} />
-            </TimeSheetLabelInsideWrapper>
-          </TimeSheetLabelWrapper>
-        </CalendarColumn>
+class TimesheetPage extends React.Component {
+  componentWillMount() {
+    if (!localStorage.getItem('authToken')) {
+      this.props.unauthorizedAccessDetected();
+    }
+  }
 
-        <Switch>
-          <Route
-            path={`${props.match.url}log`}
-            render={(myProps) => (
-              <LogHourForm
-                {...myProps}
-                onSubmit={props.submitLogForm}
-                isSubmitting={props.isSubmitting}
-              />
-             )}
-          />
-          <DayColumnsWrapper className="column">
-            <AboveDaysArea>
-            </AboveDaysArea>
-            <DaysArea>
-              { renderDays(props.selectedRange, props.history, props.timeSlotDayMap) }
-            </DaysArea>
-          </DayColumnsWrapper>
-        </Switch>
-      </ColumnsWrapper>
-    </MainContainerWrapper>
-  );
+  render() {
+    return (
+      <MainContainerWrapper className="kowalski-react-basic-container">
+        <Helmet>
+          <title>TimesheetPage</title>
+          <meta name="description" content="Description of TimesheetPage" />
+        </Helmet>
+        <ColumnsWrapper className="columns">
+          {/* Calendar */}
+          <CalendarColumn className="column">
+            <TimeSheetLabelWrapper>
+              <TimeSheetLabelInsideWrapper>
+                <FormattedMessage {... messages.timesheetLabel} />
+              </TimeSheetLabelInsideWrapper>
+              <span>
+                <FormattedDate value={this.props.selectedRange[0]} /> -
+                <FormattedDate value={this.props.selectedRange[1]} />
+              </span>
+            </TimeSheetLabelWrapper>
+            <AppCalendar
+              selectedDate={this.props.selectedDate}
+              onNextMonthClicked={this.props.onNextMonthClicked}
+              onPreviousMonthClicked={this.props.onPreviousMonthClicked}
+              onDateClicked={this.props.onDateChanged}
+              options={{ highlightedRanges: [this.props.selectedRange] }}
+            />
+            <TimeSheetLabelWrapper>
+              <TimeSheetLabelInsideWrapper>
+                <FormattedMessage {... messages.notifications} />
+              </TimeSheetLabelInsideWrapper>
+            </TimeSheetLabelWrapper>
+          </CalendarColumn>
+
+          <Switch>
+            <Route
+              path={`${this.props.match.url}log`}
+              render={(myProps) => (
+                <LogHourForm
+                  {...myProps}
+                  onSubmit={this.props.submitLogForm}
+                  isSubmitting={this.props.isSubmitting}
+                />
+              )}
+            />
+            <DayColumnsWrapper className="column">
+              <AboveDaysArea>
+              </AboveDaysArea>
+              <DaysArea>
+                { renderDays(this.props.selectedRange, this.props.history, this.props.timeSlotDayMap) }
+              </DaysArea>
+            </DayColumnsWrapper>
+          </Switch>
+        </ColumnsWrapper>
+      </MainContainerWrapper>
+    );
+  }
 }
 
 TimesheetPage.propTypes = {
@@ -174,6 +183,7 @@ TimesheetPage.propTypes = {
   submitLogForm: PropTypes.func,
   isSubmitting: PropTypes.bool,
   timeSlotDayMap: PropTypes.object,
+  unauthorizedAccessDetected: PropTypes.func,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -183,7 +193,7 @@ const mapStateToProps = createStructuredSelector({
   timeSlotDayMap: makeTimeSlotDayMapSelector,
 });
 
-const withConnect = connect(mapStateToProps, { ...actions });
+const withConnect = connect(mapStateToProps, { ...actions, unauthorizedAccessDetected });
 
 const withReducer = injectReducer({ key: 'timesheetpage', reducer });
 const withSaga = injectSaga({ key: 'timesheetpage', saga });

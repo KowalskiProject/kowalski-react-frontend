@@ -92,6 +92,16 @@ const makeSelectIsSubmittingNewTask = () => createSelector(
   (substate) => substate.get('isSubmittingNewTask'),
 );
 
+const makeSelectLoadingProjectCodesError = () => createSelector(
+  selectProjectPageDomain,
+  (substate) => substate.get('loadingProjectCodesError'),
+);
+
+const makeSelectLoadingProjectError = () => createSelector(
+  selectProjectPageDomain,
+  (substate) => substate.get('loadingProjectError'),
+);
+
 export default makeSelectProjectPage;
 
 export {
@@ -109,5 +119,7 @@ export {
   makeSelectIsSubmittingNewActivity,
   makeSelectIsSubmittingNewTask,
   makeSelectProjectLoadedIntoNewTaskForm,
+  makeSelectLoadingProjectCodesError,
+  makeSelectLoadingProjectError,
 };
 

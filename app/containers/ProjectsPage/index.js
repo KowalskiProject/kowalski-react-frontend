@@ -9,10 +9,11 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 import { Helmet } from 'react-helmet';
-// import { FormattedMessage } from 'react-intl';
+
 import { createStructuredSelector } from 'reselect';
 import { List } from 'immutable';
 import { compose } from 'redux';
+import { RingLoader } from 'react-spinners';
 
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
@@ -22,36 +23,33 @@ import {
   makeSelectProjects,
   makeSelectIsNewProjectFormOpen,
   makeSelectIsSubmittingNewProject,
-  makeSelectProjectCodes,
+  makeSelectIsLoadingProjects,
+  makeSelectLoadingProjectsErrorMsg,
 } from './selectors';
 import reducer from './reducer';
 import saga from './saga';
 import * as actions from './actions';
-// import messages from './messages';
 
 const MainContainerWrapper = styled.div`
   display: flex;
   flex-direction: column;
 `;
 
-const renderProjects = (projects, onSelectProject) => {
-  return (projects || []).map((project, index) => {
-    // TODO trocar por
-    return (
-      <a
-        tabIndex={index}
-        className="tile is-child projectBox"
-        role="button"
-        key={project.get('name')}
-        style={{ display: 'block' }}
-        onClick={() => { onSelectProject(project.get('code')); }}
-      >
-        <p className="title">{project.get('name')}</p>
-        <p>{project.get('description')}</p>
-      </a>
-    );
-  });
-};
+const renderProjects = (projects, onSelectProject) => (
+  (projects || []).map((project, index) => (
+    <a
+      tabIndex={index}
+      className="tile is-child projectBox"
+      role="button"
+      key={project.get('projectId')}
+      style={{ display: 'block' }}
+      onClick={() => { onSelectProject(project.get('projectId')); }}
+    >
+      <p className="title">{project.get('name')}</p>
+      <p>{project.get('description')}</p>
+    </a>
+  ))
+);
 
 const margins = `
   margin-top: 2rem;
@@ -73,11 +71,11 @@ const PageTitle = styled.h1`
 `;
 
 const AddProjectButton = styled.button`
-width:226px;
-height:50px !important;
-border-radius:2px;
-border:1px solid #654EA3;
-color: #654EA3;
+  width:226px;
+  height:50px !important;
+  border-radius:2px;
+  border:1px solid #654EA3;
+  color: #654EA3;
 `;
 
 const ProjectListWrapper = styled.div`
@@ -85,43 +83,71 @@ const ProjectListWrapper = styled.div`
   display: flex;
   flex-grow: 1;
   flex-direction: column;
-  
 `;
 
-function ProjectsPage(props) {
-  const {
-    projects,
-    projectSelected,
-    openNewProjectForm,
-    closeNewProjectForm,
-    isNewProjectFormOpen,
-  } = props;
+class ProjectsPage extends React.Component { // eslint-disable-line react/prefer-stateless-function
+  componentDidMount() {
+    this.props.startProjectLoading();
+  }
 
-  return (
-    <MainContainerWrapper className="kowalski-react-basic-container">
-      <Helmet>
-        <title>Projetos</title>
-        <meta name="description" content="Description of ProjectsPage" />
-      </Helmet>
-      <TitleBar>
-        <PageTitle>Projects</PageTitle>
-        <AddProjectButton className="button" onClick={openNewProjectForm}>Add project</AddProjectButton>
-      </TitleBar>
-      <ProjectListWrapper>
-        <div className="tile is-parent is-vertical">
-          { renderProjects(projects, projectSelected) }
-        </div>
-      </ProjectListWrapper>
-      <Modal active={isNewProjectFormOpen} onDismiss={closeNewProjectForm}>
-        <NewProjectForm
-          onAdd={props.submitNewProjectFormAndCloseIt}
-          onSaveAndAddNew={props.submitNewProjectForm}
-          isSubmitting={props.isSubmittingNewProject}
-          onCancel={closeNewProjectForm}
-        />
-      </Modal>
-    </MainContainerWrapper>
-  );
+  renderProjectsPanel() {
+    const {
+      projects,
+      projectSelected,
+      isLoadingProjects,
+      loadingProjectsErrorMsg,
+    } = this.props;
+
+    if (isLoadingProjects) {
+      return <RingLoader />;
+    } else if (loadingProjectsErrorMsg) {
+      return (
+        <article className="message is-danger">
+          <div className="message-body">
+            { loadingProjectsErrorMsg }
+          </div>
+        </article>
+      );
+    }
+
+    return (
+      <div className="tile is-parent is-vertical">
+        {renderProjects(projects, projectSelected)}
+      </div>
+    );
+  }
+
+  render() {
+    const {
+      openNewProjectForm,
+      closeNewProjectForm,
+      isNewProjectFormOpen,
+    } = this.props;
+
+    return (
+      <MainContainerWrapper className="kowalski-react-basic-container">
+        <Helmet>
+          <title>Projetos</title>
+          <meta name="description" content="Description of ProjectsPage" />
+        </Helmet>
+        <TitleBar>
+          <PageTitle>Projects</PageTitle>
+          <AddProjectButton className="button" onClick={openNewProjectForm}>Add project</AddProjectButton>
+        </TitleBar>
+        <ProjectListWrapper>
+          { this.renderProjectsPanel() }
+        </ProjectListWrapper>
+        <Modal active={isNewProjectFormOpen} onDismiss={closeNewProjectForm}>
+          <NewProjectForm
+            onAdd={this.props.submitNewProjectFormAndCloseIt}
+            onSaveAndAddNew={this.props.submitNewProjectForm}
+            isSubmitting={this.props.isSubmittingNewProject}
+            onCancel={closeNewProjectForm}
+          />
+        </Modal>name
+      </MainContainerWrapper>
+    );
+  }
 }
 
 ProjectsPage.propTypes = {
@@ -132,13 +158,18 @@ ProjectsPage.propTypes = {
   submitNewProjectForm: PropTypes.func,
   isSubmittingNewProject: PropTypes.bool,
   submitNewProjectFormAndCloseIt: PropTypes.func,
+  startProjectLoading: PropTypes.func,
   projectSelected: PropTypes.func,
+  isLoadingProjects: PropTypes.bool,
+  loadingProjectsErrorMsg: PropTypes.string,
 };
 
 const mapStateToProps = createStructuredSelector({
   projects: makeSelectProjects(),
   isNewProjectFormOpen: makeSelectIsNewProjectFormOpen(),
   isSubmittingNewProject: makeSelectIsSubmittingNewProject(),
+  isLoadingProjects: makeSelectIsLoadingProjects(),
+  loadingProjectsErrorMsg: makeSelectLoadingProjectsErrorMsg(),
 });
 
 const withConnect = connect(mapStateToProps, actions);

@@ -24,6 +24,7 @@ import reducer from './reducer';
 import saga from './saga';
 import messages from './messages';
 
+
 const ColumnsWrapper = styled.div`
   flex-grow: 1;
 `;
@@ -41,7 +42,6 @@ const H3Wrapper = styled.h3`
 const RightPanelWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  
 `;
 
 const ButtonsArea = styled.div`
@@ -78,7 +78,7 @@ const ButtonText = styled.span`
   font-size: 0.9rem;
 `;
 
-function AuthPage() {
+function AuthPage(props) { // eslint-disable-line react/prefer-stateless-function
   return (
     <ColumnsWrapper className="columns">
       <Helmet>
@@ -109,27 +109,10 @@ function AuthPage() {
   );
 }
 
-AuthPage.propTypes = {
-  dispatch: PropTypes.func.isRequired,
-};
-
-const mapStateToProps = createStructuredSelector({
-  authpage: makeSelectAuthPage(),
-});
-
-function mapDispatchToProps(dispatch) {
-  return {
-    dispatch,
-  };
-}
-
-const withConnect = connect(mapStateToProps, mapDispatchToProps);
-
 const withReducer = injectReducer({ key: 'authpage', reducer });
 const withSaga = injectSaga({ key: 'authpage', saga });
 
 export default compose(
   withReducer,
   withSaga,
-  withConnect,
 )(AuthPage);

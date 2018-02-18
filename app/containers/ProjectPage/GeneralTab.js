@@ -56,18 +56,18 @@ export default (props) => {
   return (
     <div style={{ flexGrow: '1', display: 'flex', flexDirection: 'column' }}>
       <ProjectNameWrapper>
-        {project.name}
+        {project.get('name')}
       </ProjectNameWrapper>
       <ProjectDescriptionWrapper>
         <ProjectDescriptionHeader>Description</ProjectDescriptionHeader>
         <ProjectDescriptionContent>
-          <p>{project.description}</p>
+          <p>{project.get('description')}</p>
         </ProjectDescriptionContent>
       </ProjectDescriptionWrapper>
       <ProjectPeopleWrapper>
         <ProjectPeopleHeader>People</ProjectPeopleHeader>
         <ProjectPeopleContent>
-          { renderPeople(project.people) }
+          { renderPeople(project.get('people')) }
         </ProjectPeopleContent>
       </ProjectPeopleWrapper>
     </div>

@@ -19,6 +19,9 @@ import {
   START_LOADING_RESOURCE,
   END_LOADING_RESOURCE,
   NAVIGATE_TO,
+  EXPIRED_SECTION_DETECTED,
+  UNAUTHORIZED_ACCESS_DETECTED,
+  REAUTH_ATTEMPT_DETECTED,
 } from './constants';
 
 export function startLoadingResource() {
@@ -37,5 +40,23 @@ export function navigateTo(path) {
   return {
     type: NAVIGATE_TO,
     payload: path,
+  };
+}
+
+export function expiredSectionDetected() {
+  return {
+    type: EXPIRED_SECTION_DETECTED,
+  };
+}
+
+export function unauthorizedAccessDetected() {
+  return {
+    type: UNAUTHORIZED_ACCESS_DETECTED,
+  };
+}
+
+export function reauthenticationAttemptDetected() {
+  return {
+    type: REAUTH_ATTEMPT_DETECTED,
   };
 }

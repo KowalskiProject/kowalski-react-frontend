@@ -9,7 +9,7 @@ import {
   UPDATE_SELECTED_PROJECT_CODE,
   LOADED_SELECTED_PROJECT,
   LOAD_PROJECT_CODES,
-  LOADED_PROJECT_CODES,
+  END_PROJECT_CODES_LOADING,
   SELECTED_TAB_CHANGED,
   OTHER_PROJECT_CLICKED,
   CHANGED_ACTIVITIES_TEXT_FILTER,
@@ -60,10 +60,10 @@ export function loadProjectCodes() {
   };
 }
 
-export function loadedProjectCodes(projectCodes) {
+export function endProjectCodesLoading(payload) {
   return {
-    type: LOADED_PROJECT_CODES,
-    payload: projectCodes,
+    type: END_PROJECT_CODES_LOADING,
+    payload,
   };
 }
 

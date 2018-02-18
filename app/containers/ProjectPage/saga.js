@@ -1,4 +1,4 @@
-import { takeEvery, call, put } from 'redux-saga/effects';
+import { takeEvery, call, all, put } from 'redux-saga/effects';
 import { fromJS } from 'immutable';
 import { reset } from 'redux-form';
 import {
@@ -14,42 +14,83 @@ import {
   NEW_TASK_FORM_ID,
   NEW_ACTIVITY_FORM_ID,
 } from './constants';
+
 import {
   loadedSelectedProject,
-  loadedProjectCodes,
+  endProjectCodesLoading,
   endedSubmitNewActivity,
   endedSubmitNewTask,
   dismissNewTaskDialog,
   dismissNewActivityDialog,
 } from './actions';
-import { startLoadingResource, endLoadingResource } from '../App/actions';
+
+import {
+  getProjects,
+  getProject,
+  getProjectAccountable,
+  getProjectMembers,
+  getProjectActivities,
+} from '../../support/backend/KowalskiBackendClient';
+
+import { expiredSectionDetected } from '../App/actions';
+
 import projects from '../../support/development/projects';
 import { handleProjectSelected } from '../ProjectsPage/saga';
+import { SERVER_BASE_URL } from '../../utils/constants';
 
 export function* handleSelectedProjectCode({ payload }) {
-  yield put(startLoadingResource());
-  yield call(() => new Promise((resolve) => {
-    setTimeout(() => resolve(), 300);
-  }));
-  yield put(endLoadingResource());
+  const commonConfig = {
+    config: { baseUrl: SERVER_BASE_URL },
+    token: localStorage.getItem('authToken'),
+    projectId: payload
+  };
 
-  // Temporary Solution - must request to the server
-  const foundProject = projects.find((project) => project.code === payload);
-  if (foundProject !== null) {
-    yield put(loadedSelectedProject(foundProject));
-  } else {
-    // TODO present an error on the page
+  try {
+    const [ project, members, activities ] = yield all([
+      call(getProject, commonConfig),
+      call(getProjectMembers, commonConfig),
+      call(getProjectActivities, commonConfig),
+    ]);
+
+    console.log(project, members, activities);
+
+    yield put(loadedSelectedProject({
+      success: true,
+      data: fromJS({ ...project, people: members, activities })
+    }));
+  } catch (e) {
+    console.log(e);
+    if (e.response && e.response.status) {
+      if (e.response.status === 403) {
+        yield put(loadedSelectedProject({ success: false, errorMsg: null }));
+        yield put(expiredSectionDetected());
+        return;
+      }
+    }
+    yield put(loadedSelectedProject({ success: false, errorMsg: 'There was an error while trying to communicate with the server =(' }));
   }
 }
 
 export function* handleLoadProjectCodes() {
-  yield call(() => new Promise((resolve) => {
-    setTimeout(() => resolve(), 300);
-  }));
-  // TEMPORARY SOLUTION -> should request from server
-  const projectCodesFromAlreadyLoadedProjects = fromJS(projects.map((project) => project.code));
-
-  yield put(loadedProjectCodes(projectCodesFromAlreadyLoadedProjects));
+  try {
+    const projects = yield call(
+      getProjects,
+      { config: { baseUrl: SERVER_BASE_URL }, token: localStorage.getItem('authToken') },
+    );
+    const projectCodes = projects.map((project) => project.projectId);
+    console.log(projectCodes);
+    yield put(endProjectCodesLoading({ success: true, data: fromJS(projectCodes) }));
+  } catch (e) {
+    console.log(e);
+    if (e.response && e.response.status) {
+      if (e.response.status === 403) {
+        yield put(endProjectCodesLoading({ success: false, errorMsg: null }));
+        yield put(expiredSectionDetected());
+        return;
+      }
+    }
+    yield put(endProjectCodesLoading({ success: false, errorMsg: 'There was an error while trying to communicate with the server =(' }));
+  }
 }
 
 export function* handleSubmitNewTaskForm({ payload: { taskData, activity, project } }) {

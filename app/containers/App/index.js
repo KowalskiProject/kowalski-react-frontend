@@ -24,6 +24,8 @@ import Header from 'components/Header';
 import injectSaga from 'utils/injectSaga';
 import saga from './saga';
 import * as actions from './actions';
+import requireAuth from '../../hoc/requireAuth';
+import requireUnAuth from '../../hoc/requireUnAuth';
 
 const AppWrapper = styled.div`
   margin: 0 auto;
@@ -44,14 +46,14 @@ function App(props) {
         <meta name="description" content="A React.js Boilerplate application" />
       </Helmet>
       <Switch>
-        <Route path="/auth" component={AuthPage} />
+        <Route path="/auth" component={requireUnAuth(AuthPage)} />
         <Header onTimesheetClicked={() => navigateTo('/')} onProjectsClicked={() => navigateTo('/projects')}>
           <Switch>
-            <Route path="/projects/:code" component={ProjectPage} />
-            <Route path="/projects" component={ProjectsPage} />
-            <Route exact path="" component={TimesheetPage} />
-            <Route path="/features" component={FeaturePage} />
-            <Route path="" component={NotFoundPage} />
+            <Route path="/projects/:code" component={requireAuth(ProjectPage)} />
+            <Route path="/projects" component={requireAuth(ProjectsPage)} />
+            <Route exact path="" component={requireAuth(TimesheetPage)} />
+            <Route path="/features" component={requireAuth(FeaturePage)} />
+            <Route path="" component={requireAuth(NotFoundPage)} />
           </Switch>
         </Header>
       </Switch>

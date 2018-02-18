@@ -15,8 +15,8 @@ import { makeSelectExpandedTaskIds } from './selectors';
 const renderTasks = (tasks) => (
   (tasks || List()).map((task) => (
     <tr>
-      <td>{task.title}</td>
-      <td>{task.owner.name}</td>
+      <td>{task.get('name')}</td>
+      <td>{task.get('accountable') ? task.get('accountable').get('name') : 'Undefined'}</td>
       <td>{task.description}</td>
     </tr>
   ))
@@ -53,7 +53,7 @@ renderActivityCardContent.propTypes = {
 const ActivityListItem = (props) => {
   const { activity, expandedActivityIds, project } = props;
   const { expandTaskListItem, collapseTaskListItem, launchNewTaskDialog } = props;
-  const isExpanded = expandedActivityIds.includes(activity.id);
+  const isExpanded = expandedActivityIds.includes(activity.get('activityId'));
 
   return (
     <div className="card">
@@ -65,8 +65,8 @@ const ActivityListItem = (props) => {
           aria-label="activity details"
           onClick={
             () => isExpanded
-              ? collapseTaskListItem(activity.id)
-              : expandTaskListItem(activity.id)
+              ? collapseTaskListItem(activity.get('activityId'))
+              : expandTaskListItem(activity.get('activityId'))
           }
         >
           <span className="icon">
@@ -78,7 +78,7 @@ const ActivityListItem = (props) => {
           </span>
         </a>
         <p className="card-header-title">
-          {activity.title}
+          {activity.get('name')}
         </p>
       </header>
       {
