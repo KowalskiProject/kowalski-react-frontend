@@ -47,6 +47,13 @@ export function getProjectMembers({ config: { baseUrl }, token, projectId }) {
   });
 }
 
+export function getActivityTasks({ config: { baseUrl }, token, _projectId, activityId }) {
+  return request(`${baseUrl}/activities/${activityId}/tasks`, {
+    method: 'GET',
+    headers: generateAuthHeader(token),
+  });
+}
+
 export function getProjectAccountable({ config: { baseUrl }, token, projectId }) {
   return request(`${baseUrl}/projects/${projectId}/accountable`, {
     method: 'GET',

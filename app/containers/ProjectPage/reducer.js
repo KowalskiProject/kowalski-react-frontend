@@ -18,6 +18,7 @@ import {
   ENDED_SUBMIT_NEW_ACTIVITY,
   LAUNCH_NEW_TASK_DIALOG,
   DISMISS_NEW_TASK_DIALOG,
+  TASKS_LOADED,
 } from './constants';
 
 const initialState = fromJS({
@@ -56,7 +57,7 @@ function projectPageReducer(state = initialState, { type, payload }) {
     case CHANGED_ACTIVITIES_TEXT_FILTER:
       return state.set('activityFilteringText', payload);
     case EXPAND_TASK_LIST_ITEM:
-      return state.set('expandedActivityIds', state.get('expandedActivityIds').push(payload));
+      return state.set('expandedActivityIds', state.get('expandedActivityIds').push(payload.activityId));
     case COLLAPSE_TASK_LIST_ITEM:
       return state.set(
         'expandedActivityIds',
@@ -80,12 +81,16 @@ function projectPageReducer(state = initialState, { type, payload }) {
         .set('isNewTaskFormDialogOpened', false)
         .set('activityLoadedIntoNewTaskForm', null)
         .set('projectLoadedIntoNewTaskForm', null);
-    case ENDED_SUBMIT_NEW_ACTIVITY:
-      return state;
-        // .set(
-        //   'selectedProject',
-        //   state.get('selectedProject').get('activities'),
-        // );
+    case TASKS_LOADED:
+      return state.setIn([
+          'selectedProject', 'activities',
+          state.get('selectedProject').get('activities').findIndex((activity) => (
+            activity.get('activityId') === payload.activityId
+          )),
+          'tasks',
+        ],
+        payload.taskList
+      );
     default:
       return state;
   }

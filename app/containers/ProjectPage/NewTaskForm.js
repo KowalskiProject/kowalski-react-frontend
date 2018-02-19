@@ -65,8 +65,8 @@ function NewTaskForm(props) {
         >
           <option value="">Select a person</option>
           { project &&
-            project.people.map((person) => (
-              <option value={person.name}>{person.name}</option>
+            project.get('people').map((person) => (
+              <option value={person.get('name')}>{person.get('name')}</option>
             ))
           }
         </Field>

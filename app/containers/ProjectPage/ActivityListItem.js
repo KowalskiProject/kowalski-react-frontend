@@ -34,7 +34,7 @@ const renderActivityCardContent = ({ activity, onCreateNewTaskClicked, project }
           </tr>
         </thead>
         <tbody>
-          { renderTasks(activity.tasks) }
+          { renderTasks(activity.get('tasks')) }
           <tr>
             <td colSpan={3}><a tabIndex={0} role="button" onClick={() => onCreateNewTaskClicked(activity, project)}>+ Create new task</a></td>
           </tr>
@@ -66,7 +66,7 @@ const ActivityListItem = (props) => {
           onClick={
             () => isExpanded
               ? collapseTaskListItem(activity.get('activityId'))
-              : expandTaskListItem(activity.get('activityId'))
+              : expandTaskListItem(activity.get('activityId'), activity.get('projectId'))
           }
         >
           <span className="icon">

@@ -25,6 +25,7 @@ import {
   SUBMIT_NEW_TASK_FORM_AND_CLOSE_IT,
   ENDED_SUBMIT_NEW_TASK,
   ENDED_SUBMIT_NEW_ACTIVITY,
+  TASKS_LOADED,
 } from './constants';
 
 export function defaultAction() {
@@ -81,10 +82,10 @@ export function changedActivitiesTextFilter(newText) {
   };
 }
 
-export function expandTaskListItem(taskId) {
+export function expandTaskListItem(activityId, projectId) {
   return {
     type: EXPAND_TASK_LIST_ITEM,
-    payload: taskId,
+    payload: { activityId, projectId },
   };
 }
 
@@ -160,5 +161,12 @@ export function endedSubmitNewActivity({ activityData, project }) {
   return {
     type: ENDED_SUBMIT_NEW_ACTIVITY,
     payload: { activityData, project },
+  };
+}
+
+export function tasksLoaded({ activityId, taskList }) {
+  return {
+    type: TASKS_LOADED,
+    payload: { activityId, taskList },
   };
 }

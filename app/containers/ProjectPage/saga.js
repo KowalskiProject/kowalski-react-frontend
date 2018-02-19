@@ -13,6 +13,7 @@ import {
   DISMISS_NEW_TASK_DIALOG,
   NEW_TASK_FORM_ID,
   NEW_ACTIVITY_FORM_ID,
+  EXPAND_TASK_LIST_ITEM,
 } from './constants';
 
 import {
@@ -23,6 +24,7 @@ import {
   dismissNewTaskDialog,
   dismissNewActivityDialog,
   updateSelectedProjectCode,
+  tasksLoaded,
 } from './actions';
 
 import {
@@ -32,6 +34,7 @@ import {
   getProjectMembers,
   getProjectActivities,
   createActivity,
+  getActivityTasks,
 } from '../../support/backend/KowalskiBackendClient';
 
 import { expiredSectionDetected } from '../App/actions';
@@ -160,6 +163,20 @@ export function* clearActivityForm() {
   yield put(reset(NEW_ACTIVITY_FORM_ID));
 }
 
+export function* handleFetchTaskList({ payload: { activityId, projectId } }) {
+  try {
+    const tasks = yield call(getActivityTasks, {
+      config: { baseUrl: SERVER_BASE_URL },
+      token: localStorage.getItem('authToken'),
+      activityId,
+      projectId,
+    });
+    yield put(tasksLoaded({ activityId, taskList: fromJS(tasks) }));
+  } catch (e) {
+    console.log('Error while trying to load list of tasks', e);
+  }
+}
+
 // Individual exports for testing
 export default function* defaultSaga() {
   yield takeEvery(UPDATE_SELECTED_PROJECT_CODE, handleSelectedProjectCode);
@@ -171,4 +188,5 @@ export default function* defaultSaga() {
   yield takeEvery(SUBMIT_NEW_ACTIVITY_FORM_AND_CLOSE_IT, handleSubmitNewActivityFormAndCloseIt);
   yield takeEvery(DISMISS_NEW_ACTIVITY_DIALOG, clearActivityForm);
   yield takeEvery(DISMISS_NEW_TASK_DIALOG, clearTaskForm);
+  yield takeEvery(EXPAND_TASK_LIST_ITEM, handleFetchTaskList);
 }

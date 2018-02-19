@@ -62,16 +62,21 @@ const ActivityListContainer = styled.div`
 const ActivityContainer = styled.div`
 `;
 
-const renderActivities = (project, term) => (
+const renderActivities = (project, term) => {
   // TODO key must be activitiy ID -> will be fetched from server in the future
-  project.get('activities')
+  console.log("Project on renderActivities", project);
+  if (!project) {
+    return <div></div>;
+  }
+
+  return project.get('activities')
     .filter((activity) => activity.get('name').includes(term))
     .map((activity) => (
       <ActivityContainer key={activity.get('activityId')}>
         <ActivityListItem activity={activity} project={project} />
       </ActivityContainer>
     ))
-);
+};
 
 const Input = styled.input`
   width: 600px;
@@ -80,6 +85,7 @@ const Input = styled.input`
 
 const ActivitiesTab = (props) => {
   const { project, changedActivitiesTextFilter, activityFilteringText, launchNewActivityDialog } = props;
+  console.log(project);
 
   return (
     <Container className="activitieTabWrapper">
@@ -116,7 +122,7 @@ const ActivitiesTab = (props) => {
       </Modal>
       <Modal active={props.isNewTaskFormDialogOpened} onDismiss={props.dismissNewTaskDialog}>
         <NewTaskForm
-          project={props.projectLoadedIntoNewTaskForm}
+          project={project}
           selectedActivity={props.activityLoadedIntoNewTaskForm}
           onAdd={props.submitNewActivityFormAndCloseIt}
           onSaveAndAddNew={props.submitNewActivityForm}
@@ -150,7 +156,6 @@ const mapStateToProps = createStructuredSelector({
   activityLoadedIntoNewTaskForm: makeSelectActivityLoadedIntoNewTaskForm(),
   projectLoadedIntoNewTaskForm: makeSelectProjectLoadedIntoNewTaskForm(),
   isNewActivityFormDialogOpened: makeSelectIsNewActivityFormDialogOpened(),
-  projectLoadedIntoNewActivityForm: makeSelectProjectLoadedIntoNewActivityForm(),
   isSubmittingNewActivity: makeSelectIsSubmittingNewActivity(),
   isSubmittingNewTask: makeSelectIsSubmittingNewTask(),
 });
