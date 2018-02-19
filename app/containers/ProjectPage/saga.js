@@ -1,6 +1,6 @@
 import { takeEvery, call, all, put } from 'redux-saga/effects';
 import { fromJS } from 'immutable';
-import { reset } from 'redux-form';
+import { reset, startSubmit, stopSubmit } from 'redux-form';
 import {
   UPDATE_SELECTED_PROJECT_CODE,
   LOAD_PROJECT_CODES,
@@ -22,6 +22,7 @@ import {
   endedSubmitNewTask,
   dismissNewTaskDialog,
   dismissNewActivityDialog,
+  updateSelectedProjectCode,
 } from './actions';
 
 import {
@@ -30,6 +31,7 @@ import {
   getProjectAccountable,
   getProjectMembers,
   getProjectActivities,
+  createActivity,
 } from '../../support/backend/KowalskiBackendClient';
 
 import { expiredSectionDetected } from '../App/actions';
@@ -93,12 +95,26 @@ export function* handleLoadProjectCodes() {
   }
 }
 
-export function* handleSubmitNewTaskForm({ payload: { taskData, activity, project } }) {
-  yield call(() => new Promise((resolve) => {
-    setTimeout(() => resolve(), 300);
-  }));
+export function* handleSubmitNewTaskForm({ payload }) {
+  yield put(startSubmit(NEW_TASK_FORM_ID));
+  try {
+    yield call(createActivity, {
+      config: { baseUrl: SERVER_BASE_URL },
+      token: localStorage.getItem('authToken'),
+      activityData: payload.toJSON(),
+    });
+    yield put(stopSubmit(NEW_TASK_FORM_ID));
+    yield put(startProjectLoading());
+    return true;
+  } catch (e) {
+    console.log('Error while trying to submit form: ', e);
+    yield put(stopSubmit(
+      NEW_TASK_FORM_ID,
+      { _error: 'There was an error while trying to communicate with the server =(' },
+    ));
+  }
 
-  yield put(endedSubmitNewTask({ taskData, activity, project }));
+  return false;
 }
 
 export function* handleSubmitNewTaskFormAndCloseIt({ payload: { taskData, activity, project } }) {
@@ -106,17 +122,34 @@ export function* handleSubmitNewTaskFormAndCloseIt({ payload: { taskData, activi
   yield put(dismissNewTaskDialog());
 }
 
-export function* handleSubmitNewActivityForm({ payload: { taskData, project } }) {
-  yield call(() => new Promise((resolve) => {
-    setTimeout(() => resolve(), 300);
-  }));
+export function* handleSubmitNewActivityForm({ payload }) {
+  yield put(startSubmit(NEW_ACTIVITY_FORM_ID));
+  try {
+    yield call(createActivity, {
+      config: { baseUrl: SERVER_BASE_URL },
+      token: localStorage.getItem('authToken'),
+      projectId: payload.get('projectId'),
+      activityData: payload.toJSON(),
+    });
+    yield put(stopSubmit(NEW_ACTIVITY_FORM_ID));
+    yield put(updateSelectedProjectCode(payload.get('projectId')));
+    return true;
+  } catch (e) {
+    console.log('Error while trying to submit form: ', e);
+    yield put(stopSubmit(
+      NEW_ACTIVITY_FORM_ID,
+      { _error: 'There was an error while trying to communicate with the server =(' },
+    ));
+  }
 
-  yield put(endedSubmitNewActivity({ payload: { taskData, project } }));
+  return false;
 }
 
-export function* handleSubmitNewActivityFormAndCloseIt({ payload: { taskData, project } }) {
-  yield handleSubmitNewActivityForm({ payload: { taskData, project } });
-  yield put(dismissNewActivityDialog());
+export function* handleSubmitNewActivityFormAndCloseIt({ payload }) {
+  const successful = yield handleSubmitNewActivityForm({ payload });
+  if (successful) {
+    yield put(dismissNewActivityDialog());
+  }
 }
 
 export function* clearTaskForm() {

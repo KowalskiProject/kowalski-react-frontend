@@ -142,17 +142,17 @@ export function dismissNewActivityDialog() {
   };
 }
 
-export function submitNewActivityForm({ activityData, project }) {
+export function submitNewActivityForm(payload) {
   return {
     type: SUBMIT_NEW_ACTIVITY_FORM,
-    payload: { activityData, project },
+    payload,
   };
 }
 
-export function submitNewActivityFormAndCloseIt({ activityData, project }) {
+export function submitNewActivityFormAndCloseIt(payload) {
   return {
     type: SUBMIT_NEW_ACTIVITY_FORM_AND_CLOSE_IT,
-    payload: { activityData, project },
+    payload,
   };
 }
 

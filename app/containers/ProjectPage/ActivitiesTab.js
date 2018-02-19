@@ -107,7 +107,7 @@ const ActivitiesTab = (props) => {
       </ActivityListContainer>
       <Modal active={props.isNewActivityFormDialogOpened} onDismiss={props.dismissNewActivityDialog}>
         <NewActivityForm
-          project={props.projectLoadedIntoNewTaskForm}
+          project={project}
           onAdd={props.submitNewActivityFormAndCloseIt}
           onSaveAndAddNew={props.submitNewActivityForm}
           isSubmitting={props.isSubmittingNewActivity}

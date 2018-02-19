@@ -31,6 +31,15 @@ export function createProject({ config: { baseUrl }, token, projectData }) {
   });
 }
 
+export function createActivity({ config: { baseUrl }, token, projectId, activityData }) {
+  return request(`${baseUrl}/projects/${projectId}/activities`, {
+    method: 'POST',
+    body: JSON.stringify(activityData),
+    headers: generateAuthHeader(token),
+    parseResponse: false,
+  });
+}
+
 export function getProjectMembers({ config: { baseUrl }, token, projectId }) {
   return request(`${baseUrl}/projects/${projectId}/members`, {
     method: 'GET',
