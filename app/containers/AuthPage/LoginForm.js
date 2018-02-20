@@ -20,19 +20,19 @@ import {
 } from './selectors';
 import messages from './messages';
 import * as actions from './actions';
+import { makeSelectPageBeforeAuthError } from '../App/selectors';
 
 const ButtonWrapper = styled.button`
   width: 100%;
   height:60px !important;
 `;
 
-function LoginForm({ intl, username, password, changedUsername, changedPassword, submitCredentials, isSubmitting, serverErrorMsg }) {
+function LoginForm({ intl, username, password, changedUsername, changedPassword, submitCredentials, isSubmitting, serverErrorMsg, pageBeforeAuthError }) {
   const handleSubmit = (e) => {
     e.preventDefault();
-    submitCredentials({ username, password });
+    console.log("This is my page before auth error: ", pageBeforeAuthError);
+    submitCredentials({ username, password, pageBeforeAuthError });
   };
-
-  console.log(serverErrorMsg);
 
   return (
     <form onSubmit={handleSubmit}>
@@ -85,6 +85,7 @@ LoginForm.propTypes = {
   submitCredentials: PropTypes.func,
   isSubmitting: PropTypes.bool,
   serverErrorMsg: PropTypes.string,
+  pageBeforeAuthError: PropTypes.string,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -92,6 +93,7 @@ const mapStateToProps = createStructuredSelector({
   password: makeSelectPassword(),
   isSubmitting: makeSelectIsSubmitting(),
   serverErrorMsg: makeSelectServerErrorMsg(),
+  pageBeforeAuthError: makeSelectPageBeforeAuthError(),
 });
 
 const withConnect = connect(mapStateToProps, actions);

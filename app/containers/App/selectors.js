@@ -13,19 +13,19 @@ const makeSelectCurrentUser = () => createSelector(
   (globalState) => globalState.get('currentUser')
 );
 
-const makeSelectLoadingResource = () => createSelector(
-  selectGlobal,
-  (globalState) => substate.get('loadingResource')
-);
-
 const makeSelectLocation = () => createSelector(
   selectRoute,
   (routeState) => routeState.get('location').toJS()
 );
 
+const makeSelectPageBeforeAuthError = () => createSelector(
+  selectGlobal,
+  (globalState) => globalState.get('pageBeforeAuthError'),
+);
+
 export {
   selectGlobal,
   makeSelectCurrentUser,
-  makeSelectLoadingResource,
   makeSelectLocation,
+  makeSelectPageBeforeAuthError,
 };

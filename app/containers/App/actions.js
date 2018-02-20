@@ -23,6 +23,7 @@ import {
   UNAUTHORIZED_ACCESS_DETECTED,
   REAUTH_ATTEMPT_DETECTED,
   REQUEST_ERROR_RECEIVED,
+  SAVE_PAGE_BEFORE_AUTH_ERROR,
 } from './constants';
 
 export function startLoadingResource() {
@@ -65,6 +66,13 @@ export function reauthenticationAttemptDetected() {
 export function requestErrorReceived(payload) {
   return {
     type: REQUEST_ERROR_RECEIVED,
+    payload,
+  };
+}
+
+export function savePageBeforeAuthError(payload) {
+  return {
+    type: SAVE_PAGE_BEFORE_AUTH_ERROR,
     payload,
   };
 }

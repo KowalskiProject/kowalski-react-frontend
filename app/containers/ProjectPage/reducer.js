@@ -15,7 +15,6 @@ import {
   COLLAPSE_TASK_LIST_ITEM,
   LAUNCH_NEW_ACTIVITY_DIALOG,
   DISMISS_NEW_ACTIVITY_DIALOG,
-  ENDED_SUBMIT_NEW_ACTIVITY,
   LAUNCH_NEW_TASK_DIALOG,
   DISMISS_NEW_TASK_DIALOG,
   TASKS_LOADED,
@@ -83,14 +82,14 @@ function projectPageReducer(state = initialState, { type, payload }) {
         .set('projectLoadedIntoNewTaskForm', null);
     case TASKS_LOADED:
       return state.setIn([
-          'selectedProject', 'activities',
-          state.get('selectedProject').get('activities').findIndex((activity) => (
-            activity.get('activityId') === payload.activityId
-          )),
-          'tasks',
-        ],
-        payload.taskList
-      );
+        'selectedProject', 'activities',
+        state.get('selectedProject').get('activities').findIndex((activity) => (
+          activity.get('activityId') === payload.activityId
+        )),
+        'tasks',
+      ],
+      payload.taskList
+    );
     default:
       return state;
   }

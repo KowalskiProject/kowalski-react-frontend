@@ -1,4 +1,4 @@
-import { takeEvery, put } from 'redux-saga/effects';
+import { takeEvery, put, select } from 'redux-saga/effects';
 import { push } from 'react-router-redux';
 import {
   NAVIGATE_TO,
@@ -10,8 +10,10 @@ import {
 
 import {
   expiredSectionDetected,
+  savePageBeforeAuthError,
 } from './actions';
 import { isAuthError } from '../../support/backend/utils';
+import { makeSelectLocation } from './selectors';
 
 export function* handleNavigateTo({ payload }) {
   yield put(push(payload));
@@ -32,6 +34,9 @@ export function* handleReauthAtemptDetected() {
 
 export function* handleRequestErrorReceived({ payload: { error, dispatchOnAuthError, dispatchOnOtherErrors } }) {
   if (isAuthError(error)) {
+    const { pathname, search } = yield select(makeSelectLocation());
+    const location = pathname + search;
+    yield put(savePageBeforeAuthError(location));
     yield put(expiredSectionDetected());
     for (let i = 0; i < dispatchOnAuthError.length; i += 1) {
       yield put(dispatchOnAuthError[i]);

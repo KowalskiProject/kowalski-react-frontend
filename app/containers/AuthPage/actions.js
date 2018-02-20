@@ -32,10 +32,10 @@ export function changedPassword(password) {
   };
 }
 
-export function submitCredentials({ username, password }) {
+export function submitCredentials(payload) {
   return {
     type: SUBMITTED_CREDENTIALS,
-    payload: { username, password },
+    payload,
   };
 }
 
