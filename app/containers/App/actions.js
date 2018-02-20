@@ -22,6 +22,7 @@ import {
   EXPIRED_SECTION_DETECTED,
   UNAUTHORIZED_ACCESS_DETECTED,
   REAUTH_ATTEMPT_DETECTED,
+  REQUEST_ERROR_RECEIVED,
 } from './constants';
 
 export function startLoadingResource() {
@@ -58,5 +59,12 @@ export function unauthorizedAccessDetected() {
 export function reauthenticationAttemptDetected() {
   return {
     type: REAUTH_ATTEMPT_DETECTED,
+  };
+}
+
+export function requestErrorReceived(payload) {
+  return {
+    type: REQUEST_ERROR_RECEIVED,
+    payload,
   };
 }

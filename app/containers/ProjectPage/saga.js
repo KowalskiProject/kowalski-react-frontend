@@ -19,8 +19,6 @@ import {
 import {
   loadedSelectedProject,
   endProjectCodesLoading,
-  endedSubmitNewActivity,
-  endedSubmitNewTask,
   dismissNewTaskDialog,
   dismissNewActivityDialog,
   updateSelectedProjectCode,
@@ -30,49 +28,45 @@ import {
 import {
   getProjects,
   getProject,
-  getProjectAccountable,
+  // getProjectAccountable,
   getProjectMembers,
   getProjectActivities,
   createActivity,
   getActivityTasks,
 } from '../../support/backend/KowalskiBackendClient';
 
-import { expiredSectionDetected } from '../App/actions';
+import { requestErrorReceived } from '../App/actions';
 
-import projects from '../../support/development/projects';
 import { handleProjectSelected } from '../ProjectsPage/saga';
-import { SERVER_BASE_URL } from '../../utils/constants';
+import { genCommonReqConfig } from '../../support/backend/utils';
 
 export function* handleSelectedProjectCode({ payload }) {
   const commonConfig = {
-    config: { baseUrl: SERVER_BASE_URL },
-    token: localStorage.getItem('authToken'),
-    projectId: payload
+    ...genCommonReqConfig(),
+    projectId: payload,
   };
 
   try {
-    const [ project, members, activities ] = yield all([
+    const [project, members, activities] = yield (all([
       call(getProject, commonConfig),
       call(getProjectMembers, commonConfig),
       call(getProjectActivities, commonConfig),
-    ]);
-
-    console.log(project, members, activities);
+    ]));
 
     yield put(loadedSelectedProject({
       success: true,
-      data: fromJS({ ...project, people: members, activities })
+      data: fromJS({ ...project, people: members, activities }),
     }));
   } catch (e) {
-    console.log(e);
-    if (e.response && e.response.status) {
-      if (e.response.status === 403) {
-        yield put(loadedSelectedProject({ success: false, errorMsg: null }));
-        yield put(expiredSectionDetected());
-        return;
-      }
-    }
-    yield put(loadedSelectedProject({ success: false, errorMsg: 'There was an error while trying to communicate with the server =(' }));
+    yield put(requestErrorReceived({
+      error: e,
+      dispatchOnAuthError: [
+        loadedSelectedProject({ success: false, errorMsg: '' }),
+      ],
+      dispatchOnOtherErrors: [
+        loadedSelectedProject({ success: false, errorMsg: 'There was an error while trying to communicate with the server =(' }),
+      ],
+    }));
   }
 }
 
@@ -80,41 +74,46 @@ export function* handleLoadProjectCodes() {
   try {
     const projects = yield call(
       getProjects,
-      { config: { baseUrl: SERVER_BASE_URL }, token: localStorage.getItem('authToken') },
+      genCommonReqConfig(),
     );
     const projectCodes = projects.map((project) => project.projectId);
-    console.log(projectCodes);
     yield put(endProjectCodesLoading({ success: true, data: fromJS(projectCodes) }));
   } catch (e) {
-    console.log(e);
-    if (e.response && e.response.status) {
-      if (e.response.status === 403) {
-        yield put(endProjectCodesLoading({ success: false, errorMsg: null }));
-        yield put(expiredSectionDetected());
-        return;
-      }
-    }
-    yield put(endProjectCodesLoading({ success: false, errorMsg: 'There was an error while trying to communicate with the server =(' }));
+    yield put(requestErrorReceived({
+      error: e,
+      dispatchOnAuthError: [
+        endProjectCodesLoading({ success: false, errorMsg: '' }),
+      ],
+      dispatchOnOtherErrors: [
+        endProjectCodesLoading({ success: false, errorMsg: 'There was an error while trying to communicate with the server =(' }),
+      ],
+    }));
   }
 }
 
 export function* handleSubmitNewTaskForm({ payload }) {
   yield put(startSubmit(NEW_TASK_FORM_ID));
   try {
-    yield call(createActivity, {
-      config: { baseUrl: SERVER_BASE_URL },
-      token: localStorage.getItem('authToken'),
-      activityData: payload.toJSON(),
-    });
+    yield call(
+      createActivity, {
+        ...genCommonReqConfig(),
+        activityData: payload.toJSON(),
+      }
+    );
     yield put(stopSubmit(NEW_TASK_FORM_ID));
-    yield put(startProjectLoading());
+    // yield put(startProjectLoading());
     return true;
   } catch (e) {
-    console.log('Error while trying to submit form: ', e);
-    yield put(stopSubmit(
-      NEW_TASK_FORM_ID,
-      { _error: 'There was an error while trying to communicate with the server =(' },
-    ));
+    yield put(requestErrorReceived({
+      error: e,
+      dispatchOnAuthError: [stopSubmit(NEW_TASK_FORM_ID)],
+      dispatchOnOtherErrors: [
+        stopSubmit(
+          NEW_TASK_FORM_ID,
+          { _error: 'There was an error while trying to communicate with the server =(' },
+        ),
+      ],
+    }));
   }
 
   return false;
@@ -129,8 +128,7 @@ export function* handleSubmitNewActivityForm({ payload }) {
   yield put(startSubmit(NEW_ACTIVITY_FORM_ID));
   try {
     yield call(createActivity, {
-      config: { baseUrl: SERVER_BASE_URL },
-      token: localStorage.getItem('authToken'),
+      ...genCommonReqConfig(),
       projectId: payload.get('projectId'),
       activityData: payload.toJSON(),
     });
@@ -138,11 +136,16 @@ export function* handleSubmitNewActivityForm({ payload }) {
     yield put(updateSelectedProjectCode(payload.get('projectId')));
     return true;
   } catch (e) {
-    console.log('Error while trying to submit form: ', e);
-    yield put(stopSubmit(
-      NEW_ACTIVITY_FORM_ID,
-      { _error: 'There was an error while trying to communicate with the server =(' },
-    ));
+    yield put(requestErrorReceived({
+      error: e,
+      dispatchOnAuthError: [stopSubmit(NEW_ACTIVITY_FORM_ID)],
+      dispatchOnOtherErrors: [
+        stopSubmit(
+          NEW_ACTIVITY_FORM_ID,
+          { _error: 'There was an error while trying to communicate with the server =(' },
+        ),
+      ],
+    }));
   }
 
   return false;
@@ -166,14 +169,22 @@ export function* clearActivityForm() {
 export function* handleFetchTaskList({ payload: { activityId, projectId } }) {
   try {
     const tasks = yield call(getActivityTasks, {
-      config: { baseUrl: SERVER_BASE_URL },
-      token: localStorage.getItem('authToken'),
+      ...genCommonReqConfig(),
       activityId,
       projectId,
     });
     yield put(tasksLoaded({ activityId, taskList: fromJS(tasks) }));
   } catch (e) {
-    console.log('Error while trying to load list of tasks', e);
+    yield put(requestErrorReceived({
+      error: e,
+      dispatchOnAuthError: [stopSubmit(NEW_ACTIVITY_FORM_ID)],
+      dispatchOnOtherErrors: [
+        stopSubmit(
+          NEW_ACTIVITY_FORM_ID,
+          { _error: 'There was an error while trying to communicate with the server =(' },
+        ),
+      ],
+    }));
   }
 }
 
