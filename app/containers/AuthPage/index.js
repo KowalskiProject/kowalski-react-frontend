@@ -5,11 +5,8 @@
  */
 
 import React from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import { Helmet } from 'react-helmet';
 import { FormattedMessage } from 'react-intl';
-import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 
 import styled from 'styled-components';
@@ -19,7 +16,6 @@ import Calendar from 'images/calendar_illustration.png';
 import LoginForm from 'containers/AuthPage/LoginForm';
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
-import makeSelectAuthPage from './selectors';
 import reducer from './reducer';
 import saga from './saga';
 import messages from './messages';
@@ -78,7 +74,7 @@ const ButtonText = styled.span`
   font-size: 0.9rem;
 `;
 
-function AuthPage(props) { // eslint-disable-line react/prefer-stateless-function
+function AuthPage() { // eslint-disable-line react/prefer-stateless-function
   return (
     <ColumnsWrapper className="columns">
       <Helmet>
@@ -91,10 +87,10 @@ function AuthPage(props) { // eslint-disable-line react/prefer-stateless-functio
       </div>
       <RightPanelWrapper className="column">
         <ButtonsArea className="buttons has-addons">
-          <button className="button is-medium" onClick={() => alert('Not Implemented yet')}>
+          <button className="button is-medium">
             <ButtonText><FormattedMessage {...messages.signupButton} /></ButtonText>
           </button>
-          <button className="button is-primary is-medium" onClick={() => alert('Not Implemented yet')}>
+          <button className="button is-primary is-medium">
             <ButtonText><FormattedMessage {...messages.signinButton} /></ButtonText>
           </button>
         </ButtonsArea>

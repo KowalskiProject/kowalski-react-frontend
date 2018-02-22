@@ -50,7 +50,8 @@ function saveToken(response) {
   try {
     const token = response.headers.get('Authorization').match(/Bearer (.*)/)[1];
     localStorage.setItem('authToken', token);
-  } finally {
-    return response;
+  } catch (e) {
+    // don't do anythin
   }
+  return response;
 }

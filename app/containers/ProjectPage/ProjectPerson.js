@@ -1,5 +1,6 @@
-import React from 'react'
+import React from 'react';
 import styled from 'styled-components';
+import PropTypes from 'prop-types';
 
 const PersonContainer = styled.div`
   display: flex;
@@ -14,14 +15,14 @@ const PersonPictureContainer = styled.div`
 
 const P = styled.p`
   font-size: 0.8rem;
-`
+`;
 const Img = styled.img`
   max-height: 100%;
   max-width: 100%;
   margin: auto;
 `;
 
-export default (props) => {
+export default function ProjectPerson(props) {
   const { person } = props;
 
   return (
@@ -33,4 +34,8 @@ export default (props) => {
       <P>{person.position}</P>
     </PersonContainer>
   );
+}
+
+ProjectPerson.propTypes = {
+  person: PropTypes.object,
 };

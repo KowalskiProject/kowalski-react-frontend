@@ -5,9 +5,9 @@ import {
   stopSubmit,
   startSubmit,
 } from 'redux-form';
+import { fromJS } from 'immutable';
 import {
   startProjectLoading,
-  newProjectSaved,
   closeNewProjectForm,
   endProjectLoading,
 } from './actions';
@@ -26,7 +26,6 @@ import {
 } from './constants';
 import { getProjects, createProject } from '../../support/backend/KowalskiBackendClient';
 import { SERVER_BASE_URL } from '../../utils/constants';
-import { fromJS } from 'immutable';
 
 export function* submitProjectForm({ payload }) {
   yield put(startSubmit(NEW_PROJECT_FORM_ID));
@@ -40,7 +39,6 @@ export function* submitProjectForm({ payload }) {
     yield put(startProjectLoading());
     return true;
   } catch (e) {
-    console.log('Error while trying to submit form: ', e);
     yield put(stopSubmit(
       NEW_PROJECT_FORM_ID,
       { _error: 'There was an error while trying to communicate with the server =(' },
@@ -78,7 +76,6 @@ export function* handleProjectLoading() {
       getProjects,
       { config: { baseUrl: SERVER_BASE_URL }, token: localStorage.getItem('authToken') },
     );
-    console.log(projects);
     yield put(endProjectLoading({ success: true, data: fromJS(projects) }));
   } catch (e) {
     if (e.response && e.response.status) {

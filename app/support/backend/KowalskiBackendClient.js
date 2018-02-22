@@ -47,7 +47,7 @@ export function getProjectMembers({ config: { baseUrl }, token, projectId }) {
   });
 }
 
-export function getActivityTasks({ config: { baseUrl }, token, _projectId, activityId }) {
+export function getActivityTasks({ config: { baseUrl }, token, activityId }) {
   return request(`${baseUrl}/activities/${activityId}/tasks`, {
     method: 'GET',
     headers: generateAuthHeader(token),
@@ -73,13 +73,4 @@ function generateAuthHeader(token) {
   headers.append('Authorization', `Bearer ${token}`);
   headers.append('Content-Type', 'application/json');
   return headers;
-}
-
-function saveNewToken(response) {
-  try {
-    const token = response.headers.get('Authorization').match(/Bearer (.*)/)[1];
-    localStorage.setItem('authToken', token);
-  } finally {
-    return response;
-  }
 }

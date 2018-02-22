@@ -10,8 +10,6 @@ import SelectField from 'components/SelectField/Loadable';
 import TextAreaField from 'components/TextAreaField/Loadable';
 
 import { required, timeEntryFormat } from '../../support/forms/validation';
-import { DATE_DAY_FORMAT } from './constants';
-import { fromJS } from 'immutable';
 
 const Wrapper = styled.div`
   display: flex;

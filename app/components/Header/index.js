@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import PropTypes from 'prop-types';
 import SaturnoLogo from 'images/saturno-logo.svg';
 import NavBar from './NavBar';
@@ -16,9 +16,9 @@ const NavBarMenuWrapper = styled.span`
 
 const NavMenu = styled.a`
   color: inherit;
-`
+`;
 
-function Header({ intl, children, onTimesheetClicked, onProjectsClicked }) {
+function Header({ children, onTimesheetClicked, onProjectsClicked }) {
   return (
     <div className="kowalski-react-basic-container-vertical">
       <NavBar aria-label="main navigation" className="navbar">
@@ -48,7 +48,6 @@ function Header({ intl, children, onTimesheetClicked, onProjectsClicked }) {
 }
 
 Header.propTypes = {
-  intl: intlShape.isRequired,
   children: PropTypes.object,
   onTimesheetClicked: PropTypes.func.isRequired,
   onProjectsClicked: PropTypes.func.isRequired,

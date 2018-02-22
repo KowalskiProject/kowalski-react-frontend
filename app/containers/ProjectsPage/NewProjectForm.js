@@ -8,7 +8,7 @@ import TextAreaField from 'components/TextAreaField/Loadable';
 
 import { required } from '../../support/forms/validation';
 import { NEW_PROJECT_FORM_ID } from './constants';
-import { formatDate }  from '../../support/backend/formatters';
+import { formatDate } from '../../support/backend/formatters';
 
 const Wrapper = styled.div`
   display: flex;
@@ -42,7 +42,6 @@ const FormActionWrapper = styled.div`
 
 function NewProjectForm(props) {
   const { error, isSubmitting, onCancel, handleSubmit, onAdd, onSaveAndAddNew } = props;
-  console.log(error);
 
   const myOnSubmit = (formData, func) => (
     func(formData
@@ -73,14 +72,15 @@ function NewProjectForm(props) {
           validate={[required]}
         />
 
-        { error &&
-            <div className="control" style={{ marginTop: '1rem' }}>
-              <article className="message is-danger">
-                <div className="message-body">
-                  { error }
-                </div>
-              </article>
-            </div>
+        {
+          error &&
+          <div className="control" style={{ marginTop: '1rem' }}>
+            <article className="message is-danger">
+              <div className="message-body">
+                { error }
+              </div>
+            </article>
+          </div>
         }
 
         <FormActions>
@@ -89,7 +89,8 @@ function NewProjectForm(props) {
               className="button"
               type="button"
               disabled={isSubmitting}
-              onClick={handleSubmit((formData) => myOnSubmit(formData, onSaveAndAddNew))}>
+              onClick={handleSubmit((formData) => myOnSubmit(formData, onSaveAndAddNew))}
+            >
               Save and add new
             </FormAction>
           </FormActionWrapper>

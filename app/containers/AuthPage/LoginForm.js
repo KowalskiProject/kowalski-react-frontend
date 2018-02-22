@@ -30,7 +30,6 @@ const ButtonWrapper = styled.button`
 function LoginForm({ intl, username, password, changedUsername, changedPassword, submitCredentials, isSubmitting, serverErrorMsg, pageBeforeAuthError }) {
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("This is my page before auth error: ", pageBeforeAuthError);
     submitCredentials({ username, password, pageBeforeAuthError });
   };
 

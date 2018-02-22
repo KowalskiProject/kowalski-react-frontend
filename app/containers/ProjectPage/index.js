@@ -14,7 +14,7 @@ import { compose } from 'redux';
 
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
-import { List, Map } from 'immutable';
+import { List } from 'immutable';
 import {
   makeSelectProjectCodes,
   makeSelectSelectedProject,
@@ -80,10 +80,6 @@ const TabContentWrapper = styled.div`
 `;
 
 class ProjectPage extends React.PureComponent {
-  selectedProjectCode() {
-    return this.props.match.params.code;
-  }
-
   componentDidMount() {
     this.props.loadProjectCodes();
     this.props.updateSelectedProjectCode(this.selectedProjectCode());
@@ -93,6 +89,10 @@ class ProjectPage extends React.PureComponent {
     if (this.selectedProjectCode() !== this.props.selectedProjectCode) {
       this.props.updateSelectedProjectCode(this.selectedProjectCode());
     }
+  }
+
+  selectedProjectCode() {
+    return this.props.match.params.code;
   }
 
   renderProjectMenuItems() {
@@ -124,9 +124,44 @@ class ProjectPage extends React.PureComponent {
     ));
   }
 
-  render() {
-    const { selectedTab, selectedTabChanged, selectedProject } = this.props;
+  renderProjectPane() {
+    const { loadingProjectError, selectedTab, selectedTabChanged, selectedProject } = this.props;
 
+    if (loadingProjectError) {
+      return (
+        <ProjectPaneWrapper>
+          <div className="control" style={{ marginTop: '1rem' }}>
+            <article className="message is-danger">
+              <div className="message-body">
+                { loadingProjectError }
+              </div>
+            </article>
+          </div>
+        </ProjectPaneWrapper>
+      );
+    }
+
+    return (
+      <ProjectPaneWrapper>
+        <TabsWrapper className="tabs">
+          <ul>
+            <li className={selectedTab === 0 ? 'is-active' : ''}>
+              <a role="button" tabIndex={0} onClick={() => selectedTabChanged(0)}>General</a>
+            </li>
+            <li className={selectedTab === 1 ? 'is-active' : ''}>
+              <a role="button" tabIndex={0} onClick={() => selectedTabChanged(1)}>Activities</a>
+            </li>
+          </ul>
+        </TabsWrapper>
+        <TabContentWrapper>
+          {selectedTab === 0 && <GeneralTab project={selectedProject} />}
+          {selectedTab === 1 && <ActivitiesTab project={selectedProject} />}
+        </TabContentWrapper>
+      </ProjectPaneWrapper>
+    );
+  }
+
+  render() {
     return (
       <OuterWrapper>
         <Helmet>
@@ -137,22 +172,7 @@ class ProjectPage extends React.PureComponent {
           <ProjectSelectorWrapper>
             { this.renderProjectMenuItems() }
           </ProjectSelectorWrapper>
-          <ProjectPaneWrapper>
-            <TabsWrapper className="tabs">
-              <ul>
-                <li className={selectedTab === 0 ? 'is-active' : ''}>
-                  <a onClick={() => selectedTabChanged(0)}>General</a>
-                </li>
-                <li className={selectedTab === 1 ? 'is-active' : ''}>
-                  <a onClick={() => selectedTabChanged(1)}>Activities</a>
-                </li>
-              </ul>
-            </TabsWrapper>
-            <TabContentWrapper>
-              {selectedTab === 0 && <GeneralTab project={selectedProject} />}
-              {selectedTab === 1 && <ActivitiesTab project={selectedProject} />}
-            </TabContentWrapper>
-          </ProjectPaneWrapper>
+          { this.renderProjectPane() }
         </Wrapper>
       </OuterWrapper>
     );
@@ -169,6 +189,8 @@ ProjectPage.propTypes = {
   otherProjectClicked: PropTypes.func,
   loadingProjectCodesError: PropTypes.string,
   loadingProjectError: PropTypes.string,
+  selectedProjectCode: PropTypes.func,
+  selectedProject: PropTypes.object,
 };
 
 const mapStateToProps = createStructuredSelector({

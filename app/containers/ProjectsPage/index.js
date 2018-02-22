@@ -13,8 +13,7 @@ import { Helmet } from 'react-helmet';
 import { createStructuredSelector } from 'reselect';
 import { List } from 'immutable';
 import { compose } from 'redux';
-import { RingLoader } from 'react-spinners';
-
+import { RingLoader } from 'react-spinners';  // eslint-disable-line import/no-unresolved
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
 import Modal from 'components/Modal/Loadable';

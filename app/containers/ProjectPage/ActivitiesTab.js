@@ -24,7 +24,6 @@ import {
   makeSelectActivityLoadedIntoNewTaskForm,
   makeSelectProjectLoadedIntoNewTaskForm,
   makeSelectIsNewActivityFormDialogOpened,
-  makeSelectProjectLoadedIntoNewActivityForm,
   makeSelectIsSubmittingNewActivity,
   makeSelectIsSubmittingNewTask,
 } from './selectors';
@@ -64,7 +63,6 @@ const ActivityContainer = styled.div`
 
 const renderActivities = (project, term) => {
   // TODO key must be activitiy ID -> will be fetched from server in the future
-  console.log("Project on renderActivities", project);
   if (!project) {
     return <div></div>;
   }
@@ -75,7 +73,7 @@ const renderActivities = (project, term) => {
       <ActivityContainer key={activity.get('activityId')}>
         <ActivityListItem activity={activity} project={project} />
       </ActivityContainer>
-    ))
+    ));
 };
 
 const Input = styled.input`
@@ -85,7 +83,6 @@ const Input = styled.input`
 
 const ActivitiesTab = (props) => {
   const { project, changedActivitiesTextFilter, activityFilteringText, launchNewActivityDialog } = props;
-  console.log(project);
 
   return (
     <Container className="activitieTabWrapper">
@@ -138,7 +135,6 @@ ActivitiesTab.propTypes = {
   project: PropTypes.any,
   changedActivitiesTextFilter: PropTypes.func,
   activityFilteringText: PropTypes.any,
-  projectLoadedIntoNewTaskForm: PropTypes.func,
   activityLoadedIntoNewTaskForm: PropTypes.func,
   submitNewActivityFormAndCloseIt: PropTypes.func,
   submitNewActivityForm: PropTypes.func,

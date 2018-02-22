@@ -1,4 +1,5 @@
-import React from 'react'
+import React from 'react';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import ProjectPerson from './ProjectPerson';
 
@@ -25,7 +26,7 @@ const ProjectPeopleWrapper = styled.div`
 const ProjectPeopleHeader = styled.h4`
   display: block;
   flex-grow: 0;
-`
+`;
 const ProjectPeopleContent = styled.div`
   flex-grow: 1;
   border-left: 1px solid #dbdbdb;
@@ -46,7 +47,7 @@ const renderPeople = (people) => (
   ))
 );
 
-export default (props) => {
+export default function GeneralTab(props) {
   const { project } = props;
 
   if (!project) {
@@ -72,4 +73,8 @@ export default (props) => {
       </ProjectPeopleWrapper>
     </div>
   );
+}
+
+GeneralTab.propTypes = {
+  project: PropTypes.object,
 };

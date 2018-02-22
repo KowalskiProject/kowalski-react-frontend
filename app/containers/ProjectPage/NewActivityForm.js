@@ -72,14 +72,15 @@ function NewActivityForm(props) {
           validate={[required]}
         />
 
-        { error &&
-            <div className="control" style={{ marginTop: '1rem' }}>
-              <article className="message is-danger">
-                <div className="message-body">
-                  { error }
-                </div>
-              </article>
-            </div>
+        {
+          error &&
+          <div className="control" style={{ marginTop: '1rem' }}>
+            <article className="message is-danger">
+              <div className="message-body">
+                { error }
+              </div>
+            </article>
+          </div>
         }
 
         <FormActions>
@@ -109,6 +110,7 @@ NewActivityForm.propTypes = {
   handleSubmit: PropTypes.func,
   onAdd: PropTypes.func,
   onSaveAndAddNew: PropTypes.func,
+  project: PropTypes.object,
 };
 
 export default reduxForm({

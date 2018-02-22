@@ -4,7 +4,7 @@
  *
  */
 
-import { fromJS, List } from 'immutable';
+import { fromJS } from 'immutable';
 import {
   OPEN_NEW_PROJECT_FORM,
   CLOSE_NEW_PROJECT_FORM,
