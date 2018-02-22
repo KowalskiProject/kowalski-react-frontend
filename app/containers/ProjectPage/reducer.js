@@ -41,12 +41,13 @@ const initialState = fromJS({
 function projectPageReducer(state = initialState, { type, payload }) {
   switch (type) {
     case UPDATE_SELECTED_PROJECT_CODE:
-      return state.set('selectedProjectCode', payload);
+      return state
+        .set('expandedActivityIds', `${state.get('selectedProjectCode')}` === `${payload}` ? state.get('expandedActivityIds') : List())
+        .set('selectedProjectCode', payload);
     case LOADED_SELECTED_PROJECT:
       return state
         .set('loadingProjectError', payload.success ? '' : payload.errorMsg)
-        .set('selectedProject', payload.success ? payload.data : null)
-        .set('expandedActivityIds', List());
+        .set('selectedProject', payload.success ? payload.data : null);
     case END_PROJECT_CODES_LOADING:
       return state
         .set('loadingProjectCodesError', payload.success ? '' : payload.errorMsg)

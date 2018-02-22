@@ -58,26 +58,27 @@ const generatePlusSlotWrapper = (hourSlot, totalSlot) => generateSlotWrapper(hou
   }
 `;
 
-const renderTimeSlots = (timeSlots) => {
-  return (timeSlots || List()).map((timeSlot, index) => {
+const renderTimeSlots = (timeSlots) => (
+  (timeSlots || List()).map((timeSlot, index) => {
     const amountOfHours = parseAmountOfHours(timeSlot.get('duration'));
     const SlotWrapper = generateSlotWrapper(amountOfHours, 8.0);
+    const id = index;
     // TODO put the id of the log instead of index. This is going to be returned by the server,
     // so we must wait until it's integrated
     return (
-      <SlotWrapper key={index}>
+      <SlotWrapper key={id}>
         <p>{ timeSlot.get('duration') }</p>
         <p>{ timeSlot.get('project') } - { timeSlot.get('activity') }</p>
       </SlotWrapper>
     );
   })
-};
+);
 
-const amountOfHoursInTimeSlots = (timeSlots) => {
-  return (timeSlots || List()).reduce((memo, current) => {
-    return memo + parseAmountOfHours(current.get('duration'));
-  }, 0.0);
-}
+const amountOfHoursInTimeSlots = (timeSlots) => (
+  (timeSlots || List()).reduce((memo, current) => (
+    memo + parseAmountOfHours(current.get('duration'))
+  ), 0.0)
+);
 
 const renderPlusButton = (timeSlots, onClickCallback) => {
   const amountOfHours = 8.0 - amountOfHoursInTimeSlots(timeSlots);
@@ -86,7 +87,7 @@ const renderPlusButton = (timeSlots, onClickCallback) => {
   return (
     <SlotWrapper role="button" onClick={onClickCallback} tabIndex={0}>+</SlotWrapper>
   );
-}
+};
 
 function DayColumn({ day, onFreeSlotClick, timeSlots }) {
   return (
