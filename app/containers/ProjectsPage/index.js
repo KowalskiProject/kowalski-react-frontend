@@ -70,6 +70,7 @@ const TitleBar = styled.div`
 const PageTitle = styled.h1`
   display: block;
   font-weight:300px;
+  margin-left:3%;
 `;
 
 const AddProjectButton = styled.button`
