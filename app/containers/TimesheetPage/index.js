@@ -65,7 +65,7 @@ const DayColumnsWrapper = styled.div`
   display: flex !important;
   flex-grow: 1 !important;
   flex-direction: column !important;
-  padding-left:0px;
+  padding-left:0px !important;
   border-left:none;
 `;
 
