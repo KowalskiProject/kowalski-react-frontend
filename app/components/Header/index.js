@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import SaturnoLogo from 'images/saturno-logo.svg';
 import NavBar from './NavBar';
 import messages from './messages';
+const jwtDecode = require('jwt-decode');
 
 const AppNameWrapper = styled.span`
   font-size: 1.5rem;
@@ -19,6 +20,15 @@ const NavMenu = styled.a`
 `;
 
 function Header({ children, onTimesheetClicked, onProjectsClicked }) {
+  const authToken = localStorage.getItem('authToken');
+  let username = null;
+  if (authToken) {
+    const decodedJwt = jwtDecode(authToken);
+    username = decodedJwt.sub;
+  } else {
+    username = 'Undefined';
+  }
+
   return (
     <div className="kowalski-react-basic-container-vertical">
       <NavBar aria-label="main navigation" className="navbar">
@@ -38,7 +48,7 @@ function Header({ children, onTimesheetClicked, onProjectsClicked }) {
             <FormattedMessage {...messages.people} />
           </span>
           <NavBarMenuWrapper className="navbar-item">
-            <FormattedMessage {...messages.usernamePlaceholder} />
+            { username }
           </NavBarMenuWrapper>
         </div>
       </NavBar>
