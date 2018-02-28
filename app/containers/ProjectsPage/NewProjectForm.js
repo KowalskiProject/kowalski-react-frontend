@@ -47,7 +47,7 @@ function NewProjectForm(props) {
     func(formData
       .set('startDate', formatDate(new Date()))
       .set('endDate', formatDate(new Date()))
-      .set('code', 'TEST')
+      .set('code', formData.get('name'))
     )
   );
 
