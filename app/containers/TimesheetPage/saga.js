@@ -10,8 +10,8 @@ export function* handleSubmitLogForm({ payload }) {
   yield call(() => new Promise((resolve) => {
     setTimeout(() => resolve(), 300);
   }));
-  yield put(push('/'));
   yield put(newLogSaved(payload));
+  yield put(push('/'));
 }
 
 export default function* defaultSaga() {
