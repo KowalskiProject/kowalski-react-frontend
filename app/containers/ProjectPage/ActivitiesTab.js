@@ -46,7 +46,7 @@ const ToolbarContainer = styled.div`
 
 const NewActivityButton = styled.button`
   width:226px;
-  height:50px;
+  height:50px!important;
   border-radius:2px;
   border:1px solid #654EA3;
   margin-left: 1rem;
@@ -74,7 +74,7 @@ const renderActivities = (project, term) => (
 );
 
 const Input = styled.input`
-  width: 400px;
+  width: 600px;
   height: 22px;
 `;
 
@@ -82,7 +82,7 @@ const ActivitiesTab = (props) => {
   const { project, changedActivitiesTextFilter, activityFilteringText, launchNewActivityDialog } = props;
 
   return (
-    <Container>
+    <Container className="activitieTabWrapper">
       <ToolbarContainer>
         <div className="field">
           <div className="control has-icons-right">
@@ -102,7 +102,7 @@ const ActivitiesTab = (props) => {
 
         <NewActivityButton className="button" onClick={() => launchNewActivityDialog(project)}>Add activity</NewActivityButton>
       </ToolbarContainer>
-      <ActivityListContainer>
+      <ActivityListContainer className="activitieWrapper">
         { renderActivities(project, activityFilteringText) }
       </ActivityListContainer>
       <Modal active={props.isNewActivityFormDialogOpened} onDismiss={props.dismissNewActivityDialog}>

@@ -124,7 +124,7 @@ select {
 }
 .calendar{
   min-width:18em;
-  min-height:18em;
+  min-height:17em;
   .calendar-nav{
     background:white;
     color: $ultraviolet;
@@ -140,12 +140,17 @@ select {
   }
   .calendar-body{
     padding-bottom: 0;
+    .calendar-date{
+      padding: 0px;
+    }
   }
 }
 
 .projectBox{
   color: #414549;
   padding:2%;
+  box-shadow: 0 3px 3px -2px rgba(0, 0, 0, .2), 0 3px 4px 0 rgba(0, 0, 0, .14), 0 1px 8px 0 rgba(0, 0, 0, .05);
+  border-left: 4px solid #654EA3;
 }
 
 .projectBox:hover{
@@ -159,5 +164,17 @@ select {
 .modal{
   .modal-background{
     background-color:rgba(101,68,173,0.25);
+  }
+}
+.activitieTabWrapper{
+  span{
+    top:12%!important;
+  }
+  .activitieWrapper{
+    &:nth-child(even) {
+      .card {
+        border-left:3px solid #654EA3;
+      }
+    }
   }
 }

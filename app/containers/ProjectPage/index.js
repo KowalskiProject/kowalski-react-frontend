@@ -36,7 +36,7 @@ const Wrapper = styled.div`
 const ProjectSelectorWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  flex-basis: 150px;
+  flex-basis: 200px;
   flex-grow: 0;
   border-right: 0.5px solid #dbdbdb;
   align-items: stretch;
@@ -49,7 +49,7 @@ const OuterWrapper = styled.div`
 
 const ProjectCodeWrapper = styled.a`
   display: block;
-  width: 150px;
+  width: 200px;
   padding: 2rem;
   text-align: center;
   border-bottom: 0.5px solid #dbdbdb;
