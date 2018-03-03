@@ -65,7 +65,6 @@ const AddPersonButton = styled.button`
 const PersonListWrapper = styled.div`
   ${margins}
   display: flex;
-  flex-grow: 1;
   flex-direction: row;
   flex-wrap: wrap;
 `;
@@ -73,7 +72,11 @@ const PersonListWrapper = styled.div`
 const PersonContainer = styled.div`
   display: flex;
   flex-direction: column;
-  width: 200px;
+  width: 230px;
+  height: 230px;
+  align-items: center;
+  text-align: center;
+  margin-botton: -10px;
 `;
 
 const PersonPictureContainer = styled.div`
@@ -82,6 +85,7 @@ const PersonPictureContainer = styled.div`
 `;
 
 const PersonImg = styled.img`
+  margin: 0 auto;
 `;
 
 const PersonNameContainer = styled.span`
@@ -100,21 +104,19 @@ export class PeoplePage extends React.Component { // eslint-disable-line react/p
     } = this.props;
 
     return (people || []).map((person, index) => (
-      <a
+      <PersonContainer
         key={person.get('kUserId')}
         tabIndex={index}
         role="button"
         onClick={() => { personSelected(person.get('kUserId')); }}
       >
-        <PersonContainer >
-          <PersonPictureContainer>
-            <PersonImg src={UnknownAvatar} />
-          </PersonPictureContainer>
-          <PersonNameContainer>
-            { person.get('name') }
-          </PersonNameContainer>
-        </PersonContainer>
-      </a>
+        <PersonPictureContainer>
+          <PersonImg src={UnknownAvatar} />
+        </PersonPictureContainer>
+        <PersonNameContainer>
+          { person.get('name') }
+        </PersonNameContainer>
+      </PersonContainer>
     ));
   }
 
