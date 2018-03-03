@@ -52,7 +52,7 @@ export function* submitPersonForm({ payload }) {
   try {
     yield call(registerPerson, {
       ...genCommonReqConfig(),
-      projectData: payload.toJSON(),
+      personData: payload.toJSON(),
     });
     yield put(stopSubmit(NEW_PERSON_FORM_ID));
     yield put(startPeopleLoading());
@@ -81,7 +81,7 @@ export function* handlePeopleLoading() {
   try {
     const people = yield call(
       getPeople,
-      ...genCommonReqConfig(),
+      genCommonReqConfig(),
     );
     yield put(endPeopleLoading({ success: true, data: fromJS(people) }));
   } catch (e) {

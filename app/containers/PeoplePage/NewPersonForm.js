@@ -4,11 +4,11 @@ import PropType from 'prop-types';
 import { Field, reduxForm } from 'redux-form/immutable';
 
 import InputField from 'components/InputField/Loadable';
-import TextAreaField from 'components/TextAreaField/Loadable';
+import SelectField from 'components/SelectField/Loadable';
+import FaCloudUpload from 'react-icons/lib/fa/cloud-upload';
 
-import { required } from '../../support/forms/validation';
+import { required, email } from '../../support/forms/validation';
 import { NEW_PERSON_FORM_ID } from './constants';
-import { formatDate } from '../../support/backend/formatters';
 
 const Wrapper = styled.div`
   display: flex;
@@ -40,37 +40,115 @@ const FormActionWrapper = styled.div`
   width: 100%;
 `;
 
+const PhotoUploadContainer = styled.div`
+  display: flex;
+  flex-grow: 1;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+`;
+
+const PictureContainer = styled.div`
+  margin-top: 32px;
+  height: 175px;
+  width: 175px;
+  border: 1px solid black;
+`;
+
+const UploadButtonContainer = styled.div`
+  margin-bottom: -32px;
+`;
+
+const HelpUploadPictureInstructions = styled.span`
+  display: block;
+  font-size: 0.7rem;
+`;
+
+const UploadButton = styled.a`
+  width: 100%;
+  display: table;
+`;
+
 function NewPersonForm(props) {
   const { error, isSubmitting, onCancel, handleSubmit, onAdd, onSaveAndAddNew } = props;
-
   const myOnSubmit = (formData, func) => (
-    func(formData
-      .set('startDate', formatDate(new Date()))
-      .set('endDate', formatDate(new Date()))
-      .set('code', formData.get('name'))
-    )
+    func(formData.delete('role')) // TEMP
   );
 
   return (
     <Wrapper className="box">
       <form onSubmit={handleSubmit((formData) => myOnSubmit(formData, onAdd))}>
-        <FormTitle><H1>Create new project</H1></FormTitle>
+        <FormTitle><H1>Add person</H1></FormTitle>
 
-        <Field
-          name="name"
-          id="name"
-          component={InputField}
-          label="Project Name"
-          validate={[required]}
-        />
-
-        <Field
-          name="description"
-          id="description"
-          component={TextAreaField}
-          label="Project Description"
-          validate={[required]}
-        />
+        <div className="tile is-ancestor">
+          <div className="tile is-4 is-vertical is-parent">
+            <div className="tile is-child" style={{ display: 'flex' }}>
+              <PhotoUploadContainer>
+                <PictureContainer>
+                </PictureContainer>
+                <UploadButtonContainer>
+                  <UploadButton className="button">
+                    <FaCloudUpload />
+                    <br />
+                    <span>Choose a file</span>
+                  </UploadButton>
+                  <HelpUploadPictureInstructions>
+                    Your file must be in .jpeg or .png format
+                  </HelpUploadPictureInstructions>
+                </UploadButtonContainer>
+              </PhotoUploadContainer>
+            </div>
+          </div>
+          <div className="tile is-8 is-vertical">
+            <div className="tile is-parent">
+              <div className="tile is-child">
+                <Field
+                  name="username"
+                  id="username"
+                  component={InputField}
+                  label="Username"
+                  validate={[required]}
+                />
+              </div>
+              <div className="tile is-child">
+                <Field
+                  name="role"
+                  id="role"
+                  component={SelectField}
+                  label="Role"
+                >
+                  <option value="">Select a Role</option>
+                  <option value="PM">Project Manager</option>
+                  <option value="DEV">Developer</option>
+                  <option value="AUD">Auditor</option>
+                  <option value="ADMIN">Administrator</option>
+                </Field>
+              </div>
+            </div>
+            <div className="tile is-parent">
+              <div className="tile is-child">
+                <Field
+                  name="name"
+                  id="name"
+                  component={InputField}
+                  label="Name"
+                  validate={[required]}
+                />
+              </div>
+            </div>
+            <div className="tile is-parent">
+              <div className="tile is-child">
+                <Field
+                  name="email"
+                  id="email"
+                  component={InputField}
+                  label="Email"
+                  validate={[required, email]}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
 
         {
           error &&

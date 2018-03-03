@@ -48,7 +48,7 @@ export function newPersonSaved(newPersonData) {
   };
 }
 
-export function projectSelected(projectCode) {
+export function personSelected(projectCode) {
   return {
     type: PERSON_SELECTED,
     payload: projectCode,

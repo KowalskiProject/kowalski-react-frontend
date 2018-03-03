@@ -31,7 +31,7 @@ function peoplePageReducer(state = initialState, { type, payload }) {
       return state
         .set('isLoadingPeople', false)
         .set('loadingPeopleErrorMsg', payload.success ? '' : payload.errorMsg)
-        .set('people', payload.success ? payload.data : state.get('projects'));
+        .set('people', payload.success ? payload.data : state.get('people'));
     default:
       return state;
   }

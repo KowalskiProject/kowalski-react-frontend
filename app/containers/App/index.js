@@ -19,6 +19,7 @@ import ProjectsPage from 'containers/ProjectsPage/Loadable';
 import ProjectPage from 'containers/ProjectPage/Loadable';
 import FeaturePage from 'containers/FeaturePage/Loadable';
 import NotFoundPage from 'containers/NotFoundPage/Loadable';
+import PeoplePage from 'containers/PeoplePage/Loadable';
 import AuthPage from 'containers/AuthPage/Loadable';
 import Header from 'components/Header';
 import injectSaga from 'utils/injectSaga';
@@ -47,10 +48,15 @@ function App(props) {
       </Helmet>
       <Switch>
         <Route path="/auth" component={requireUnAuth(AuthPage)} />
-        <Header onTimesheetClicked={() => navigateTo('/')} onProjectsClicked={() => navigateTo('/projects')}>
+        <Header
+          onTimesheetClicked={() => navigateTo('/')}
+          onProjectsClicked={() => navigateTo('/projects')}
+          onPeopleClicked={() => navigateTo('/people')}
+        >
           <Switch>
             <Route path="/projects/:code" component={requireAuth(ProjectPage)} />
             <Route path="/projects" component={requireAuth(ProjectsPage)} />
+            <Route path="/people" component={requireAuth(PeoplePage)} />
             <Route exact path="" component={requireAuth(TimesheetPage)} />
             <Route path="/features" component={requireAuth(FeaturePage)} />
             <Route path="" component={requireAuth(NotFoundPage)} />

@@ -19,7 +19,7 @@ const NavMenu = styled.a`
   color: inherit;
 `;
 
-function Header({ children, onTimesheetClicked, onProjectsClicked }) {
+function Header({ children, onTimesheetClicked, onProjectsClicked, onPeopleClicked }) {
   const authToken = localStorage.getItem('authToken');
   let username = null;
   if (authToken) {
@@ -45,7 +45,7 @@ function Header({ children, onTimesheetClicked, onProjectsClicked }) {
             <NavMenu onClick={onProjectsClicked}><FormattedMessage {...messages.projects} /></NavMenu>
           </span>
           <span className="navbar-item">
-            <FormattedMessage {...messages.people} />
+            <NavMenu onClick={onPeopleClicked}><FormattedMessage {...messages.people} /></NavMenu>
           </span>
           <NavBarMenuWrapper className="navbar-item">
             { username }
@@ -61,6 +61,7 @@ Header.propTypes = {
   children: PropTypes.object,
   onTimesheetClicked: PropTypes.func.isRequired,
   onProjectsClicked: PropTypes.func.isRequired,
+  onPeopleClicked: PropTypes.func.isRequired,
 };
 
 export default injectIntl(Header);

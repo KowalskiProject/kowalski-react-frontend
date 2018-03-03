@@ -1,10 +1,10 @@
 import { createSelector } from 'reselect';
-import { fromJS } from 'immutable';
+import { fromJS, Map } from 'immutable';
 
 /**
  * Direct selector to the peoplePage state domain
  */
-const selectPeoplePageDomain = (state) => state.get('peoplePage');
+const selectPeoplePageDomain = (state) => state.get('peoplePage') || Map();
 
 /**
  * Other specific selectors
@@ -22,12 +22,12 @@ const makeSelectPeoplePage = () => createSelector(
 
 const makeSelectPeople = () => createSelector(
   selectPeoplePageDomain,
-  (substate) => substate.get('projects') || fromJS([])
+  (substate) => substate.get('people') || fromJS([])
 );
 
 const makeSelectIsNewPersonFormOpen = () => createSelector(
   selectPeoplePageDomain,
-  (substate) => substate.get('projectFormOpen'),
+  (substate) => substate.get('personFormOpen'),
 );
 
 const makeSelectIsSubmittingNewPerson = () => createSelector(
@@ -42,7 +42,7 @@ const makeSelectIsLoadingPeople = () => createSelector(
 
 const makeSelectLoadingPeopleErrorMsg = () => createSelector(
   selectPeoplePageDomain,
-  (substate) => substate.get('makeSelectIsLoadingPeople'),
+  (substate) => substate.get('loadingPeopleErrorMsg'),
 );
 
 const makeSelectNewPersonFormSubmissionError = () => createSelector(
@@ -50,7 +50,6 @@ const makeSelectNewPersonFormSubmissionError = () => createSelector(
   (substate) => substate.get('newPersonFormSubmissionError'),
 );
 
-export default makeSelectPeoplePage;
 export {
   selectPeoplePageDomain,
   makeSelectPeople,
@@ -60,3 +59,5 @@ export {
   makeSelectLoadingPeopleErrorMsg,
   makeSelectNewPersonFormSubmissionError,
 };
+
+export default makeSelectPeoplePage;
