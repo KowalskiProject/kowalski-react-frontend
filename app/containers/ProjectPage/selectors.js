@@ -1,5 +1,5 @@
 import { createSelector } from 'reselect';
-import { fromJS } from 'immutable';
+import { fromJS, List } from 'immutable';
 
 /**
 
@@ -102,6 +102,40 @@ const makeSelectLoadingProjectError = () => createSelector(
   (substate) => substate.get('loadingProjectError'),
 );
 
+const makeSelectIsAddPeopleFormOpen = () => createSelector(
+  selectProjectPageDomain,
+  (substate) => substate.get('isAddPeopleFormOpen'),
+);
+
+const makeSelectUsers = () => createSelector(
+  selectProjectPageDomain,
+  (substate) => substate.get('users'),
+);
+
+const makeSelectUserIdsInProject = () => createSelector(
+  makeSelectSelectedProject(),
+  (selectedProject) => (
+    selectedProject
+       ? selectedProject.get('people').map((person) => person.get('kUserId'))
+       : List()
+  ),
+);
+
+const makeSelectLoadingUsersError = () => createSelector(
+  selectProjectPageDomain,
+  (substate) => substate.get('loadingUsersError'),
+);
+
+const makeSelectUsersInProject = () => createSelector(
+  [makeSelectUserIdsInProject(), makeSelectUsers()],
+  (userIdsInProject, users) => users.filter((user) => userIdsInProject.includes(user.get('kUserId'))),
+);
+
+const makeSelectUsersNotInProject = () => createSelector(
+  [makeSelectUserIdsInProject(), makeSelectUsers()],
+  (userIdsInProject, users) => users.filter((user) => !userIdsInProject.includes(user.get('kUserId'))),
+);
+
 export default makeSelectProjectPage;
 
 export {
@@ -121,5 +155,9 @@ export {
   makeSelectProjectLoadedIntoNewTaskForm,
   makeSelectLoadingProjectCodesError,
   makeSelectLoadingProjectError,
+  makeSelectIsAddPeopleFormOpen,
+  makeSelectUsersInProject,
+  makeSelectUsersNotInProject,
+  makeSelectLoadingUsersError,
 };
 

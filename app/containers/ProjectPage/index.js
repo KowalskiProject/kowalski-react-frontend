@@ -22,6 +22,9 @@ import {
   makeSelectSelectedTab,
   makeSelectLoadingProjectCodesError,
   makeSelectLoadingProjectError,
+  makeSelectIsAddPeopleFormOpen,
+  makeSelectUsersNotInProject,
+  makeSelectLoadingUsersError,
 } from './selectors';
 import reducer from './reducer';
 import saga from './saga';
@@ -82,6 +85,7 @@ const TabContentWrapper = styled.div`
 class ProjectPage extends React.PureComponent {
   componentDidMount() {
     this.props.loadProjectCodes();
+    this.props.loadUsers();
     this.props.updateSelectedProjectCode(this.selectedProjectCode());
   }
 
@@ -125,15 +129,36 @@ class ProjectPage extends React.PureComponent {
   }
 
   renderProjectPane() {
-    const { loadingProjectError, selectedTab, selectedTabChanged, selectedProject } = this.props;
+    const {
+      loadingProjectError,
+      loadingUsersError,
+      selectedTab,
+      selectedTabChanged,
+      selectedProject,
+      isAddPeopleFormOpen,
+      closeAddPeopleForm,
+      openAddPeopleForm,
+      submitAddPeopleFormAndCloseIt,
+      usersNotInProject,
+    } = this.props;
 
-    if (loadingProjectError) {
+    const generalTabProps = {
+      project: selectedProject,
+      isAddPeopleFormOpen,
+      closeAddPeopleForm,
+      openAddPeopleForm,
+      submitAddPeopleFormAndCloseIt,
+      usersNotInProject,
+    };
+
+    const loadingError = loadingProjectError || loadingUsersError;
+    if (loadingError) {
       return (
         <ProjectPaneWrapper>
           <div className="control" style={{ marginTop: '1rem' }}>
             <article className="message is-danger">
               <div className="message-body">
-                { loadingProjectError }
+                { loadingError }
               </div>
             </article>
           </div>
@@ -154,7 +179,7 @@ class ProjectPage extends React.PureComponent {
           </ul>
         </TabsWrapper>
         <TabContentWrapper>
-          {selectedTab === 0 && <GeneralTab project={selectedProject} />}
+          {selectedTab === 0 && <GeneralTab {...generalTabProps} />}
           {selectedTab === 1 && <ActivitiesTab project={selectedProject} />}
         </TabContentWrapper>
       </ProjectPaneWrapper>
@@ -184,13 +209,20 @@ ProjectPage.propTypes = {
   match: PropTypes.object,
   updateSelectedProjectCode: PropTypes.func,
   loadProjectCodes: PropTypes.func,
+  loadUsers: PropTypes.func.isRequired,
   selectedTab: PropTypes.number,
   selectedTabChanged: PropTypes.func,
   otherProjectClicked: PropTypes.func,
   loadingProjectCodesError: PropTypes.string,
   loadingProjectError: PropTypes.string,
-  selectedProjectCode: PropTypes.func,
+  loadingUsersError: PropTypes.string.isRequired,
+  selectedProjectCode: PropTypes.string,
   selectedProject: PropTypes.object,
+  isAddPeopleFormOpen: PropTypes.bool.isRequired,
+  closeAddPeopleForm: PropTypes.func.isRequired,
+  openAddPeopleForm: PropTypes.func.isRequired,
+  submitAddPeopleFormAndCloseIt: PropTypes.func.isRequired,
+  usersNotInProject: PropTypes.instanceOf(List).isRequired,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -200,6 +232,9 @@ const mapStateToProps = createStructuredSelector({
   selectedTab: makeSelectSelectedTab(),
   loadingProjectCodesError: makeSelectLoadingProjectCodesError(),
   loadingProjectError: makeSelectLoadingProjectError(),
+  loadingUsersError: makeSelectLoadingUsersError(),
+  isAddPeopleFormOpen: makeSelectIsAddPeopleFormOpen(),
+  usersNotInProject: makeSelectUsersNotInProject(),
 });
 
 const withConnect = connect(mapStateToProps, actions);

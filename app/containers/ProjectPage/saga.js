@@ -14,6 +14,9 @@ import {
   NEW_TASK_FORM_ID,
   NEW_ACTIVITY_FORM_ID,
   EXPAND_TASK_LIST_ITEM,
+  LOAD_USERS,
+  SUBMIT_ADD_PEOPLE_FORM_AND_CLOSE_IT,
+  ADD_PEOPLE_FORM_ID,
 } from './constants';
 
 import {
@@ -23,6 +26,7 @@ import {
   dismissNewActivityDialog,
   updateSelectedProjectCode,
   tasksLoaded,
+  endedUsersLoading,
 } from './actions';
 
 import {
@@ -33,6 +37,7 @@ import {
   getProjectActivities,
   createActivity,
   getActivityTasks,
+  getPeople,
 } from '../../support/backend/KowalskiBackendClient';
 
 import { requestErrorReceived } from '../App/actions';
@@ -188,10 +193,58 @@ export function* handleFetchTaskList({ payload: { activityId, projectId } }) {
   }
 }
 
+export function* handleLoadUsers() {
+  try {
+    const users = yield call(
+      getPeople,
+      genCommonReqConfig(),
+    );
+    yield put(endedUsersLoading({ success: true, data: fromJS(users) }));
+  } catch (e) {
+    yield put(requestErrorReceived({
+      error: e,
+      dispatchOnAuthError: [
+        endedUsersLoading({ success: false, errorMsg: '' }),
+      ],
+      dispatchOnOtherErrors: [
+        endedUsersLoading({ success: false, errorMsg: 'There was an error while trying to communicate with the server =(' }),
+      ],
+    }));
+  }
+}
+
+export function* handleSubmitAddPeopleForm({ payload }) {
+  yield put(startSubmit(ADD_PEOPLE_FORM_ID));
+  try {
+    const updatedMemberList = yield call(
+      addPeopleToProject, {
+        ...genCommonReqConfig(),
+        peopleData: payload.toJSON(),
+      }
+    );
+    yield put(stopSubmit(ADD_PEOPLE_FORM_ID));
+    // yield put(updateMemberList(updatedMemberList));
+  } catch (e) {
+    yield put(requestErrorReceived({
+      error: e,
+      dispatchOnAuthError: [stopSubmit(ADD_PEOPLE_FORM_ID)],
+      dispatchOnOtherErrors: [
+        stopSubmit(
+          ADD_PEOPLE_FORM_ID,
+          { _error: 'There was an error while trying to communicate with the server =(' },
+        ),
+      ],
+    }));
+  }
+
+  return false;
+}
+
 // Individual exports for testing
 export default function* defaultSaga() {
   yield takeEvery(UPDATE_SELECTED_PROJECT_CODE, handleSelectedProjectCode);
   yield takeEvery(LOAD_PROJECT_CODES, handleLoadProjectCodes);
+  yield takeEvery(LOAD_USERS, handleLoadUsers);
   yield takeEvery(OTHER_PROJECT_CLICKED, handleProjectSelected);
   yield takeEvery(SUBMIT_NEW_TASK_FORM, handleSubmitNewTaskForm);
   yield takeEvery(SUBMIT_NEW_TASK_FORM_AND_CLOSE_IT, handleSubmitNewTaskFormAndCloseIt);
@@ -200,4 +253,5 @@ export default function* defaultSaga() {
   yield takeEvery(DISMISS_NEW_ACTIVITY_DIALOG, clearActivityForm);
   yield takeEvery(DISMISS_NEW_TASK_DIALOG, clearTaskForm);
   yield takeEvery(EXPAND_TASK_LIST_ITEM, handleFetchTaskList);
+  yield takeEvery(SUBMIT_ADD_PEOPLE_FORM_AND_CLOSE_IT, handleSubmitAddPeopleForm);
 }

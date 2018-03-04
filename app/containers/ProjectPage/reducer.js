@@ -18,12 +18,16 @@ import {
   LAUNCH_NEW_TASK_DIALOG,
   DISMISS_NEW_TASK_DIALOG,
   TASKS_LOADED,
+  CLOSE_ADD_PEOPLE_FORM,
+  OPEN_ADD_PEOPLE_FORM,
+  ENDED_LOAD_USERS,
 } from './constants';
 
 const initialState = fromJS({
   projectCodes: [],
   selectedProjectCode: null,
   selectedProject: null,
+  users: [],
   selectedTab: 0,
   activityFilteringText: '',
   expandedActivityIds: [],
@@ -36,6 +40,8 @@ const initialState = fromJS({
   isSubmittingNewActivity: false,
   loadingProjectCodesError: '',
   loadingProjectError: '',
+  loadingUsersError: '',
+  isAddPeopleFormOpen: false,
 });
 
 function projectPageReducer(state = initialState, { type, payload }) {
@@ -52,6 +58,10 @@ function projectPageReducer(state = initialState, { type, payload }) {
       return state
         .set('loadingProjectCodesError', payload.success ? '' : payload.errorMsg)
         .set('projectCodes', payload.success ? payload.data : List());
+    case ENDED_LOAD_USERS:
+      return state
+        .set('loadingUsersError', payload.success ? '' : payload.errorMsg)
+        .set('users', payload.success ? payload.data : List());
     case SELECTED_TAB_CHANGED:
       return state.set('selectedTab', payload);
     case CHANGED_ACTIVITIES_TEXT_FILTER:
@@ -63,6 +73,10 @@ function projectPageReducer(state = initialState, { type, payload }) {
         'expandedActivityIds',
         state.get('expandedActivityIds').filter((taskId) => taskId !== payload)
       );
+    case CLOSE_ADD_PEOPLE_FORM:
+      return state.set('isAddPeopleFormOpen', false);
+    case OPEN_ADD_PEOPLE_FORM:
+      return state.set('isAddPeopleFormOpen', true);
     case LAUNCH_NEW_ACTIVITY_DIALOG:
       return state
         .set('isNewActivityFormDialogOpened', true)

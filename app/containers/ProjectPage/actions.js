@@ -26,6 +26,11 @@ import {
   ENDED_SUBMIT_NEW_TASK,
   ENDED_SUBMIT_NEW_ACTIVITY,
   TASKS_LOADED,
+  CLOSE_ADD_PEOPLE_FORM,
+  OPEN_ADD_PEOPLE_FORM,
+  SUBMIT_ADD_PEOPLE_FORM_AND_CLOSE_IT,
+  LOAD_USERS,
+  ENDED_LOAD_USERS,
 } from './constants';
 
 export function defaultAction() {
@@ -58,6 +63,12 @@ export function loadedSelectedProject(projectData) {
 export function loadProjectCodes() {
   return {
     type: LOAD_PROJECT_CODES,
+  };
+}
+
+export function loadUsers() {
+  return {
+    type: LOAD_USERS,
   };
 }
 
@@ -168,5 +179,30 @@ export function tasksLoaded({ activityId, taskList }) {
   return {
     type: TASKS_LOADED,
     payload: { activityId, taskList },
+  };
+}
+
+export function closeAddPeopleForm() {
+  return {
+    type: CLOSE_ADD_PEOPLE_FORM,
+  };
+}
+
+export function openAddPeopleForm() {
+  return {
+    type: OPEN_ADD_PEOPLE_FORM,
+  };
+}
+
+export function submitAddPeopleFormAndCloseIt() {
+  return {
+    type: SUBMIT_ADD_PEOPLE_FORM_AND_CLOSE_IT,
+  };
+}
+
+export function endedUsersLoading(payload) {
+  return {
+    type: ENDED_LOAD_USERS,
+    payload,
   };
 }
