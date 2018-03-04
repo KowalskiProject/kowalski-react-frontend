@@ -47,7 +47,6 @@ function NewProjectForm(props) {
     func(formData
       .set('startDate', formatDate(new Date()))
       .set('endDate', formatDate(new Date()))
-      .set('code', formData.get('name'))
     )
   );
 
@@ -55,6 +54,18 @@ function NewProjectForm(props) {
     <Wrapper className="box">
       <form onSubmit={handleSubmit((formData) => myOnSubmit(formData, onAdd))}>
         <FormTitle><H1>Create new project</H1></FormTitle>
+
+        <div
+          style={{ width: '200px' }}
+        >
+          <Field
+            name="code"
+            id="code"
+            component={InputField}
+            label="Project Code"
+            validate={[required]}
+          />
+        </div>
 
         <Field
           name="name"

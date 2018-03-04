@@ -24,7 +24,7 @@ import {
   endProjectCodesLoading,
   dismissNewTaskDialog,
   dismissNewActivityDialog,
-  updateSelectedProjectCode,
+  updateSelectedProjectId,
   tasksLoaded,
   endedUsersLoading,
 } from './actions';
@@ -45,7 +45,7 @@ import { requestErrorReceived } from '../App/actions';
 import { handleProjectSelected } from '../ProjectsPage/saga';
 import { genCommonReqConfig } from '../../support/backend/utils';
 
-export function* handleSelectedProjectCode({ payload }) {
+export function* handleSelectedProjectId({ payload }) {
   const commonConfig = {
     ...genCommonReqConfig(),
     projectId: payload,
@@ -81,7 +81,7 @@ export function* handleLoadProjectCodes() {
       getProjects,
       genCommonReqConfig(),
     );
-    const projectCodes = projects.map((project) => project.projectId);
+    const projectCodes = projects.map((project) => ({ id: project.projectId, code: project.code }));
     yield put(endProjectCodesLoading({ success: true, data: fromJS(projectCodes) }));
   } catch (e) {
     yield put(requestErrorReceived({
@@ -138,7 +138,7 @@ export function* handleSubmitNewActivityForm({ payload }) {
       activityData: payload.toJSON(),
     });
     yield put(stopSubmit(NEW_ACTIVITY_FORM_ID));
-    yield put(updateSelectedProjectCode(payload.get('projectId')));
+    yield put(updateSelectedProjectId(payload.get('projectId')));
     return true;
   } catch (e) {
     yield put(requestErrorReceived({
@@ -242,7 +242,7 @@ export function* handleSubmitAddPeopleForm({ payload }) {
 
 // Individual exports for testing
 export default function* defaultSaga() {
-  yield takeEvery(UPDATE_SELECTED_PROJECT_CODE, handleSelectedProjectCode);
+  yield takeEvery(UPDATE_SELECTED_PROJECT_CODE, handleSelectedProjectId);
   yield takeEvery(LOAD_PROJECT_CODES, handleLoadProjectCodes);
   yield takeEvery(LOAD_USERS, handleLoadUsers);
   yield takeEvery(OTHER_PROJECT_CLICKED, handleProjectSelected);

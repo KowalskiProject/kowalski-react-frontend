@@ -39,7 +39,7 @@ export function defaultAction() {
   };
 }
 
-export function updateSelectedProjectCode(projectCode) {
+export function updateSelectedProjectId(projectCode) {
   return {
     type: UPDATE_SELECTED_PROJECT_CODE,
     payload: projectCode,
@@ -86,7 +86,7 @@ export function selectedTabChanged(index) {
   };
 }
 
-export function changedActivitiesTextFilter(newText) {
+export function changedActivitiesTextFilCodeter(newText) {
   return {
     type: CHANGED_ACTIVITIES_TEXT_FILTER,
     payload: newText,

@@ -32,9 +32,9 @@ const makeSelectProjectPage = () => createSelector(
   (substate) => substate.toJS()
 );
 
-const makeSelectSelectedProjectCode = () => createSelector(
+const makeSelectSelectedProjectId = () => createSelector(
   selectProjectPageDomain,
-  (substate) => substate.get('selectedProjectCode'),
+  (substate) => substate.get('selectedProjectId'),
 );
 
 const makeSelectSelectedProject = () => createSelector(
@@ -141,7 +141,7 @@ export default makeSelectProjectPage;
 export {
   selectProjectPageDomain,
   makeSelectProjectCodes,
-  makeSelectSelectedProjectCode,
+  makeSelectSelectedProjectId,
   makeSelectSelectedProject,
   makeSelectSelectedTab,
   makeSelectActivityFilteringText,

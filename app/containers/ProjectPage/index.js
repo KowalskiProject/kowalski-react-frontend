@@ -18,7 +18,7 @@ import { List } from 'immutable';
 import {
   makeSelectProjectCodes,
   makeSelectSelectedProject,
-  makeSelectSelectedProjectCode,
+  makeSelectSelectedProjectId,
   makeSelectSelectedTab,
   makeSelectLoadingProjectCodesError,
   makeSelectLoadingProjectError,
@@ -86,16 +86,16 @@ class ProjectPage extends React.PureComponent {
   componentDidMount() {
     this.props.loadProjectCodes();
     this.props.loadUsers();
-    this.props.updateSelectedProjectCode(this.selectedProjectCode());
+    this.props.updateSelectedProjectId(this.selectedProjectId());
   }
 
   componentDidUpdate() {
-    if (this.selectedProjectCode() !== this.props.selectedProjectCode) {
-      this.props.updateSelectedProjectCode(this.selectedProjectCode());
+    if (this.selectedProjectId() !== this.props.selectedProjectId) {
+      this.props.updateSelectedProjectId(this.selectedProjectId());
     }
   }
 
-  selectedProjectCode() {
+  selectedProjectId() {
     return this.props.match.params.code;
   }
 
@@ -103,7 +103,7 @@ class ProjectPage extends React.PureComponent {
     const {
       projectCodes,
       otherProjectClicked,
-      selectedProjectCode,
+      selectedProjectId,
       loadingProjectCodesError,
     } = this.props;
 
@@ -117,13 +117,13 @@ class ProjectPage extends React.PureComponent {
       );
     }
 
-    return (projectCodes).map((code) => (
+    return (projectCodes).map((group) => (
       <ProjectCodeWrapper
-        selected={code === selectedProjectCode}
-        key={code}
-        onClick={() => otherProjectClicked(code)}
+        selected={group.get('id') === selectedProjectId}
+        key={group.get('id')}
+        onClick={() => otherProjectClicked(group.get('id'))}
       >
-        { code }
+        { group.get('code') }
       </ProjectCodeWrapper>
     ));
   }
@@ -207,7 +207,7 @@ class ProjectPage extends React.PureComponent {
 ProjectPage.propTypes = {
   projectCodes: PropTypes.objectOf(List).isRequired,
   match: PropTypes.object,
-  updateSelectedProjectCode: PropTypes.func,
+  updateSelectedProjectId: PropTypes.func,
   loadProjectCodes: PropTypes.func,
   loadUsers: PropTypes.func.isRequired,
   selectedTab: PropTypes.number,
@@ -216,7 +216,7 @@ ProjectPage.propTypes = {
   loadingProjectCodesError: PropTypes.string,
   loadingProjectError: PropTypes.string,
   loadingUsersError: PropTypes.string.isRequired,
-  selectedProjectCode: PropTypes.string,
+  selectedProjectId: PropTypes.string,
   selectedProject: PropTypes.object,
   isAddPeopleFormOpen: PropTypes.bool.isRequired,
   closeAddPeopleForm: PropTypes.func.isRequired,
@@ -227,7 +227,7 @@ ProjectPage.propTypes = {
 
 const mapStateToProps = createStructuredSelector({
   projectCodes: makeSelectProjectCodes(),
-  selectedProjectCode: makeSelectSelectedProjectCode(),
+  selectedProjectId: makeSelectSelectedProjectId(),
   selectedProject: makeSelectSelectedProject(),
   selectedTab: makeSelectSelectedTab(),
   loadingProjectCodesError: makeSelectLoadingProjectCodesError(),
