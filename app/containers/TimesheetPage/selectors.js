@@ -34,6 +34,11 @@ const makeTimeSlotEntriesSelector = createSelector(
   (substate) => substate.get('timeSlotEntries') || List(),
 );
 
+const makeIsTaskOverlaySelectOpened = () => createSelector(
+  selectTimesheetPageDomain,
+  (substate) => substate.get('isTaskOverlaySelectOpened'),
+);
+
 const makeTimeSlotDayMapSelector = createSelector(
   makeTimeSlotEntriesSelector,
   (timeSlotEntries) => {
@@ -55,4 +60,5 @@ export {
   makeSelectIsSubmitting,
   makeTimeSlotEntriesSelector,
   makeTimeSlotDayMapSelector,
+  makeIsTaskOverlaySelectOpened,
 };

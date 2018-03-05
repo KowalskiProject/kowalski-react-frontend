@@ -11,3 +11,5 @@ export const PREVIOUS_MONTH_CLICKED = 'app/TimesheetPage/PREVIOUS_MONTH_CLICKED'
 export const SUBMIT_LOG_FORM = 'app/TimesheetPage/SUBMIT_LOG_FORM';
 export const NEW_LOG_SAVED = 'app/TimesheetPage/NEW_LOG_SAVED';
 export const DATE_DAY_FORMAT = 'D-M-YYYY';
+export const CLOSE_TASK_OVERLAY_SELECT = 'app/TimesheetPage/CLOSE_TASK_OVERLAY_SELECT';
+export const OPEN_TASK_OVERLAY_SELECT = 'app/TimesheetPage/OPEN_TASK_OVERLAY_SELECT';

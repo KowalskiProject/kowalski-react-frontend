@@ -86,7 +86,7 @@ export function selectedTabChanged(index) {
   };
 }
 
-export function changedActivitiesTextFilCodeter(newText) {
+export function changedActivitiesTextFilter(newText) {
   return {
     type: CHANGED_ACTIVITIES_TEXT_FILTER,
     payload: newText,

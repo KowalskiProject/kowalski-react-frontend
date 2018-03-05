@@ -28,6 +28,7 @@ import {
   makeSelectSelectedRange,
   makeSelectIsSubmitting,
   makeTimeSlotDayMapSelector,
+  makeIsTaskOverlaySelectOpened,
 } from './selectors';
 import reducer from './reducer';
 import saga from './saga';
@@ -155,6 +156,9 @@ class TimesheetPage extends React.Component {
                   {...myProps}
                   onSubmit={this.props.submitLogForm}
                   isSubmitting={this.props.isSubmitting}
+                  isTaskOverlaySelectOpened={this.props.isTaskOverlaySelectOpened}
+                  onDismissTaskOverlaySelect={this.props.closeTaskOverlaySelect}
+                  onSelectTaskClicked={this.props.openTaskOverlaySelect}
                 />
               )}
             />
@@ -184,6 +188,9 @@ TimesheetPage.propTypes = {
   isSubmitting: PropTypes.bool,
   timeSlotDayMap: PropTypes.object,
   unauthorizedAccessDetected: PropTypes.func,
+  isTaskOverlaySelectOpened: PropTypes.bool,
+  closeTaskOverlaySelect: PropTypes.func.isRequired,
+  openTaskOverlaySelect: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -191,6 +198,7 @@ const mapStateToProps = createStructuredSelector({
   selectedRange: makeSelectSelectedRange,
   isSubmitting: makeSelectIsSubmitting,
   timeSlotDayMap: makeTimeSlotDayMapSelector,
+  isTaskOverlaySelectOpened: makeIsTaskOverlaySelectOpened(),
 });
 
 const withConnect = connect(mapStateToProps, { ...actions, unauthorizedAccessDetected });

@@ -12,12 +12,15 @@ import {
   PREVIOUS_MONTH_CLICKED,
   SUBMIT_LOG_FORM,
   NEW_LOG_SAVED,
+  OPEN_TASK_OVERLAY_SELECT,
+  CLOSE_TASK_OVERLAY_SELECT,
 } from './constants';
 
 const initialState = fromJS({
   selectedDate: new Date(),
   timeSlotEntries: [],
   isSubmitting: false,
+  isTaskOverlaySelectOpened: false,
 });
 
 function timesheetPageReducer(state = initialState, { type, payload }) {
@@ -34,6 +37,10 @@ function timesheetPageReducer(state = initialState, { type, payload }) {
       return state.set('selectedDate', addMonths(state.get('selectedDate'), 1));
     case PREVIOUS_MONTH_CLICKED:
       return state.set('selectedDate', addMonths(state.get('selectedDate'), -1));
+    case OPEN_TASK_OVERLAY_SELECT:
+      return state.set('isTaskOverlaySelectOpened', true);
+    case CLOSE_TASK_OVERLAY_SELECT:
+      return state.set('isTaskOverlaySelectOpened', false);
     default:
       return state;
   }

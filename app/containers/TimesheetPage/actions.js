@@ -11,6 +11,8 @@ import {
   PREVIOUS_MONTH_CLICKED,
   SUBMIT_LOG_FORM,
   NEW_LOG_SAVED,
+  CLOSE_TASK_OVERLAY_SELECT,
+  OPEN_TASK_OVERLAY_SELECT,
 } from './constants';
 
 export function defaultAction() {
@@ -51,5 +53,17 @@ export function newLogSaved(newLogForm) {
   return {
     type: NEW_LOG_SAVED,
     payload: newLogForm,
+  };
+}
+
+export function closeTaskOverlaySelect() {
+  return {
+    type: CLOSE_TASK_OVERLAY_SELECT,
+  };
+}
+
+export function openTaskOverlaySelect() {
+  return {
+    type: OPEN_TASK_OVERLAY_SELECT,
   };
 }
