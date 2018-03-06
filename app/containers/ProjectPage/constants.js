@@ -33,3 +33,4 @@ export const OPEN_ADD_PEOPLE_FORM = 'app/ProjectPage/OPEN_ADD_PEOPLE_FORM';
 export const SUBMIT_ADD_PEOPLE_FORM_AND_CLOSE_IT = 'app/ProjectPage/SUBMIT_ADD_PEOPLE_FORM_AND_CLOSE_IT';
 export const LOAD_USERS = 'app/ProjectPage/LOAD_USERS';
 export const ENDED_LOAD_USERS = 'app/ProjectPage/ENDED_LOAD_USERS';
+export const UPDATE_MEMBER_LIST = 'app/ProjectPage/UPDATE_MEMBER_LIST';

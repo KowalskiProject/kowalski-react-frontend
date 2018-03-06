@@ -21,6 +21,7 @@ import {
   CLOSE_ADD_PEOPLE_FORM,
   OPEN_ADD_PEOPLE_FORM,
   ENDED_LOAD_USERS,
+  UPDATE_MEMBER_LIST,
 } from './constants';
 
 const initialState = fromJS({
@@ -95,6 +96,9 @@ function projectPageReducer(state = initialState, { type, payload }) {
         .set('isNewTaskFormDialogOpened', false)
         .set('activityLoadedIntoNewTaskForm', null)
         .set('projectLoadedIntoNewTaskForm', null);
+    case UPDATE_MEMBER_LIST:
+      return state
+        .setIn(['selectedProject', 'members'], payload);
     case TASKS_LOADED:
       return state.setIn([
         'selectedProject', 'activities',

@@ -104,6 +104,7 @@ export default function GeneralTab(props) {
             availableUsers={usersNotInProject}
             onAdd={props.submitAddPeopleFormAndCloseIt}
             onCancel={closeAddPeopleForm}
+            project={props.project}
           />
         </Modal>
       </ProjectPeopleWrapper>

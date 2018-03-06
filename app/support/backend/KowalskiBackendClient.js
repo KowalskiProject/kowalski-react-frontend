@@ -40,6 +40,15 @@ export function createActivity({ config: { baseUrl }, token, projectId, activity
   });
 }
 
+export function addPeopleToProject({ config: { baseUrl }, token, projectId, peopleIds }) {
+  return request(`${baseUrl}/projects/${projectId}/members`, {
+    method: 'POST',
+    body: JSON.stringify(peopleIds),
+    headers: generateCommonHeaders(token),
+    parseResponse: false,
+  });
+}
+
 export function getProjectMembers({ config: { baseUrl }, token, projectId }) {
   return request(`${baseUrl}/projects/${projectId}/members`, {
     method: 'GET',

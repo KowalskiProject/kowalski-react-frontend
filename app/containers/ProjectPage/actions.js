@@ -31,6 +31,7 @@ import {
   SUBMIT_ADD_PEOPLE_FORM_AND_CLOSE_IT,
   LOAD_USERS,
   ENDED_LOAD_USERS,
+  UPDATE_MEMBER_LIST,
 } from './constants';
 
 export function defaultAction() {
@@ -194,15 +195,23 @@ export function openAddPeopleForm() {
   };
 }
 
-export function submitAddPeopleFormAndCloseIt() {
+export function submitAddPeopleFormAndCloseIt(payload) {
   return {
     type: SUBMIT_ADD_PEOPLE_FORM_AND_CLOSE_IT,
+    payload,
   };
 }
 
 export function endedUsersLoading(payload) {
   return {
     type: ENDED_LOAD_USERS,
+    payload,
+  };
+}
+
+export function updateMemberList(payload) {
+  return {
+    type: UPDATE_MEMBER_LIST,
     payload,
   };
 }

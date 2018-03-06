@@ -70,7 +70,7 @@ function AddPeopleForm(props) {
     func(
       formData
         .delete('role') // Temporary -> role has still to be added in the backend
-        .set('project', project)
+        .set('projectId', project.get('projectId'))
     )
   );
 
@@ -110,7 +110,7 @@ function AddPeopleForm(props) {
 }
 
 AddPeopleForm.propTypes = {
-  project: PropTypes.any,
+  project: PropTypes.any.isRequired,
   error: PropTypes.any,
   isSubmitting: PropTypes.any,
   onCancel: PropTypes.func,

@@ -27,6 +27,7 @@ import {
   updateSelectedProjectId,
   tasksLoaded,
   endedUsersLoading,
+  updateMemberList,
 } from './actions';
 
 import {
@@ -38,6 +39,7 @@ import {
   createActivity,
   getActivityTasks,
   getPeople,
+  addPeopleToProject,
 } from '../../support/backend/KowalskiBackendClient';
 
 import { requestErrorReceived } from '../App/actions';
@@ -214,16 +216,15 @@ export function* handleLoadUsers() {
 }
 
 export function* handleSubmitAddPeopleForm({ payload }) {
+  const projectId = payload.get('projectId');
+  const peopleIds = payload.get('people');
   yield put(startSubmit(ADD_PEOPLE_FORM_ID));
   try {
     const updatedMemberList = yield call(
-      addPeopleToProject, {
-        ...genCommonReqConfig(),
-        peopleData: payload.toJSON(),
-      }
+      addPeopleToProject, { ...genCommonReqConfig(), projectId, peopleIds }
     );
     yield put(stopSubmit(ADD_PEOPLE_FORM_ID));
-    // yield put(updateMemberList(updatedMemberList));
+    yield put(updateMemberList(updatedMemberList));
   } catch (e) {
     yield put(requestErrorReceived({
       error: e,
