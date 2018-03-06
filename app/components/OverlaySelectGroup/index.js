@@ -12,10 +12,14 @@ const OverlaySelectGroupContainer = styled.div`
   margin-top: 15px;
 `;
 
-function OverlaySelectGroup({ children, ...other }) {
+function OverlaySelectGroup({ children, onOptionSelect, ...other }) {
   return (
     <OverlaySelectGroupContainer>
-      {React.Children.map(children, ((child) => React.cloneElement(child, other)))}
+      {React.Children.map(children, ((child) => {
+        // Preserve onOptionSelect of individual element if it's present
+        const finalOnOptionSelect = child.props.onOptionSelect || onOptionSelect;
+        return React.cloneElement(child, { onOptionSelect: finalOnOptionSelect, ...other });
+      }))}
     </OverlaySelectGroupContainer>
   );
 }

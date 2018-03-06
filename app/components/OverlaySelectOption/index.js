@@ -19,7 +19,7 @@ const SelectedOption = styled.a`
 
 function OverlaySelectOption({ onOptionSelect, selectedOption, children, value }) {
   const OptionElement = selectedOption ? SelectedOption : Option;
-  const finalValue = value ? value : children;
+  const finalValue = value || children;
 
   return (
     <OptionElement onClick={() => onOptionSelect(finalValue)}>

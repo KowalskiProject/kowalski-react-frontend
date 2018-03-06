@@ -15,19 +15,25 @@ import OverlaySelectOption from '../../components/OverlaySelectOption';
 const SelectButton = styled.button`
   width: 100%;
   height: 50px !important;
+  ${(props) => props.hasError ? 'border-color: red !important;' : ''}
 `;
 
-const renderOptions = (options) => (
-  options.map(({label, value}) => (
-    <OverlaySelectOption value={value} key={value}>{label}</OverlaySelectOption>
-  ))
+const renderOptions = (options, groupValue) => (
+  [
+    ...options.map(({ label, value }) => (
+      <OverlaySelectOption value={value} key={value}>{label}</OverlaySelectOption>
+    )),
+    <OverlaySelectOption key={`${groupValue}-new`} value={`${groupValue}-new`} onOptionSelect={(selectedValue) => console.log(selectedValue)}>
+      New task...
+    </OverlaySelectOption>,
+  ]
 );
 
 const renderGroupOptions = (optionGroups) => (
-  optionGroups.map(({label, options}) => (
-    <OverlaySelectGroup key={label}>
+  optionGroups.map(({ label, value, options }) => (
+    <OverlaySelectGroup key={value}>
       <OverlaySelectGroupHeader>{label}</OverlaySelectGroupHeader>
-      { renderOptions(options) }
+      { renderOptions(options, value) }
     </OverlaySelectGroup>
   ))
 );
@@ -44,24 +50,28 @@ function TaskSelectionField(props) {
     optionGroups,
   } = props;
 
-  const errorInputClasses = touched && error ? 'is-danger' : '';
-
   const labelHtml = label ? <label htmlFor={id} className="label">{label}</label> : '';
-  let buttonLabel = "Select a Task";
+  let buttonLabel = 'Select a Task';
 
   if (value) {
-    const group = optionGroups.find((group) => group.options
+    const foundGroup = optionGroups.find((group) => group.options
       .find((option) => option.value === value)
     );
-    const option = group.options.find((option) => option.value === value);
-    buttonLabel = `${group.label} - ${option.label}`;
+    const foundOption = foundGroup.options.find((option) => option.value === value);
+    buttonLabel = `${foundGroup.label} - ${foundOption.label}`;
   }
 
   return (
     <div className="field">
       {labelHtml}
       <div className="control">
-        <SelectButton {...meta} onClick={onSelectTaskClicked} onBlur={() => onBlur(value)} className={`button ${errorInputClasses}`}>
+        <SelectButton
+          {...meta}
+          hasError={touched && error}
+          onClick={onSelectTaskClicked}
+          onBlur={() => onBlur(value)}
+          className="button"
+        >
           {buttonLabel}
         </SelectButton>
         {touched && error && <p className="help is-danger">{error}</p>}
@@ -69,7 +79,7 @@ function TaskSelectionField(props) {
           title="Select a Task"
           opened={isTaskOverlaySelectOpened}
           onDismiss={onDismissTaskOverlaySelect}
-          onOptionSelect={(value) => onBlur(value) && onChange(value)}
+          onOptionSelect={(selectedValue) => onBlur(selectedValue) && onChange(selectedValue)}
         >
           { renderGroupOptions(optionGroups) }
         </OverlaySelect>
@@ -87,11 +97,12 @@ TaskSelectionField.propTypes = {
   label: PropTypes.any,
   optionGroups: PropTypes.arrayOf(PropTypes.shape({
     label: PropTypes.string.isRequired,
+    value: PropTypes.any.isRequired,
     options: PropTypes.arrayOf(PropTypes.shape({
       label: PropTypes.string.isRequired,
       value: PropTypes.any.isRequired,
-    }))
-  }))
+    })),
+  })),
 };
 
 export default TaskSelectionField;

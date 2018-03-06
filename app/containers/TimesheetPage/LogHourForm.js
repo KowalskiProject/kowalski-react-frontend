@@ -64,6 +64,7 @@ function LogHourForm(props) {
   const optionGroups = [
     {
       label: 'Group 1',
+      value: 1,
       options: [
         { label: 'Option 11', value: 'Option 11' },
         { label: 'Option 12', value: 'Option 12' },
@@ -72,6 +73,7 @@ function LogHourForm(props) {
     },
     {
       label: 'Group 2',
+      value: 2,
       options: [
         { label: 'Option 21', value: 'Option 21' },
         { label: 'Option 22', value: 'Option 22' },
@@ -80,6 +82,7 @@ function LogHourForm(props) {
     },
     {
       label: 'Group 3',
+      value: 3,
       options: [
         { label: 'Option 31', value: 'Option 31' },
         { label: 'Option 32', value: 'Option 32' },
