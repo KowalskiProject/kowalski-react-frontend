@@ -20,11 +20,13 @@ const Overlay = styled.div`
   padding-left: 30px;
   padding-right: 30px;
   opacity: 0.95;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `;
 
 const OverlaySelectInnerContentContainer = styled.div`
   margin-top: 1rem;
-  margin-left: 2rem;
 `;
 
 class OverlaySelect extends React.Component { // eslint-disable-line react/prefer-stateless-function
