@@ -55,17 +55,14 @@ function NewProjectForm(props) {
       <form onSubmit={handleSubmit((formData) => myOnSubmit(formData, onAdd))}>
         <FormTitle><H1>Create new project</H1></FormTitle>
 
-        <div
-          style={{ width: '200px' }}
-        >
-          <Field
-            name="code"
-            id="code"
-            component={InputField}
-            label="Project Code"
-            validate={[required]}
-          />
-        </div>
+        <Field
+          name="code"
+          id="code"
+          component={InputField}
+          label="Project Code"
+          validate={[required]}
+          fieldStyle={{ width: '200px' }}
+        />
 
         <Field
           name="name"
