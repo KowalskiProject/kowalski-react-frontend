@@ -5,6 +5,7 @@ import Modal from 'components/Modal/Loadable';
 import ProjectPerson from './ProjectPerson';
 import AddPeopleForm from './AddPeopleForm';
 import { List } from 'immutable';
+import PeopleFlexGrid from '../../components/PeopleFlexGrid';
 
 const ProjectNameWrapper = styled.h3`
 `;
@@ -40,12 +41,8 @@ const ProjectPeopleContent = styled.div`
   border-right: 1px solid #dbdbdb;
   margin-top: 0.8rem;
   margin-right: 2rem;
-  padding-left: 3rem;
   padding-right: 3rem;
   padding-top: 1rem;
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
 `;
 
 const AddPeopleButton = styled.button`
@@ -97,7 +94,7 @@ export default function GeneralTab(props) {
           </AddPeopleButton>
         </ProjectPeopleHeader>
         <ProjectPeopleContent>
-          { renderPeople(project.get('people')) }
+          <PeopleFlexGrid people={project.get('people')} />
         </ProjectPeopleContent>
         <Modal active={isAddPeopleFormOpen} onDismiss={closeAddPeopleForm}>
           <AddPeopleForm

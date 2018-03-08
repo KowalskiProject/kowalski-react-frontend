@@ -98,7 +98,7 @@ function projectPageReducer(state = initialState, { type, payload }) {
         .set('projectLoadedIntoNewTaskForm', null);
     case UPDATE_MEMBER_LIST:
       return state
-        .setIn(['selectedProject', 'members'], payload);
+        .setIn(['selectedProject', 'people'], payload);
     case TASKS_LOADED:
       return state.setIn([
         'selectedProject', 'activities',

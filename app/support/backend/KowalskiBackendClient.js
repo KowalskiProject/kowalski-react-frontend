@@ -45,7 +45,6 @@ export function addPeopleToProject({ config: { baseUrl }, token, projectId, peop
     method: 'POST',
     body: JSON.stringify(peopleIds),
     headers: generateCommonHeaders(token),
-    parseResponse: false,
   });
 }
 

@@ -6,6 +6,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import ImmutablePropTypes from 'react-immutable-proptypes';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 import { Helmet } from 'react-helmet';
@@ -18,7 +19,6 @@ import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
 import Modal from 'components/Modal/Loadable';
 import NewPersonForm from './NewPersonForm';
-import * as UnknownAvatar from '../../images/unknown_person-202x202.png';
 
 import {
   makeSelectPeople,
@@ -29,6 +29,7 @@ import {
 import reducer from './reducer';
 import saga from './saga';
 import * as actions from './actions';
+import PeopleFlexGrid from '../../components/PeopleFlexGrid';
 
 const MainContainerWrapper = styled.div`
   display: flex;
@@ -64,32 +65,6 @@ const AddPersonButton = styled.button`
 
 const PersonListWrapper = styled.div`
   ${margins}
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-`;
-
-const PersonContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 230px;
-  height: 230px;
-  align-items: center;
-  text-align: center;
-  margin-botton: -10px;
-`;
-
-const PersonPictureContainer = styled.div`
-  width: 160px;
-  height: 160px;
-`;
-
-const PersonImg = styled.img`
-  margin: 0 auto;
-`;
-
-const PersonNameContainer = styled.span`
-  display: block;
 `;
 
 export class PeoplePage extends React.Component { // eslint-disable-line react/prefer-stateless-function
@@ -97,33 +72,12 @@ export class PeoplePage extends React.Component { // eslint-disable-line react/p
     this.props.startPeopleLoading();
   }
 
-  renderPeople() {
-    const {
-      people,
-      personSelected,
-    } = this.props;
-
-    return (people || []).map((person, index) => (
-      <PersonContainer
-        key={person.get('kUserId')}
-        tabIndex={index}
-        role="button"
-        onClick={() => { personSelected(person.get('kUserId')); }}
-      >
-        <PersonPictureContainer>
-          <PersonImg src={UnknownAvatar} />
-        </PersonPictureContainer>
-        <PersonNameContainer>
-          { person.get('name') }
-        </PersonNameContainer>
-      </PersonContainer>
-    ));
-  }
-
   renderPeoplePanel() {
     const {
       isLoadingPeople,
       loadingPeopleErrorMsg,
+      people,
+      personSelected,
     } = this.props;
 
     if (isLoadingPeople) {
@@ -138,7 +92,9 @@ export class PeoplePage extends React.Component { // eslint-disable-line react/p
       );
     }
 
-    return this.renderPeople();
+    return (
+      <PeopleFlexGrid {... {people, personSelected}} />
+    );
   }
 
 
@@ -181,7 +137,10 @@ PeoplePage.propTypes = {
   submitNewPersonFormAndCloseIt: PropTypes.func.isRequired,
   submitNewPersonForm: PropTypes.func.isRequired,
   startPeopleLoading: PropTypes.func.isRequired,
-  people: PropTypes.instanceOf(List).isRequired,
+  people: ImmutablePropTypes.listOf(ImmutablePropTypes.contains({
+    kUserId: PropTypes.number.isRequired,
+    name: PropTypes.string.isRequired,
+  })).isRequired,
   isLoadingPeople: PropTypes.bool.isRequired,
   personSelected: PropTypes.func.isRequired,
   loadingPeopleErrorMsg: PropTypes.string.isRequired,

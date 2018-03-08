@@ -28,6 +28,7 @@ import {
   tasksLoaded,
   endedUsersLoading,
   updateMemberList,
+  closeAddPeopleForm,
 } from './actions';
 
 import {
@@ -224,7 +225,8 @@ export function* handleSubmitAddPeopleForm({ payload }) {
       addPeopleToProject, { ...genCommonReqConfig(), projectId, peopleIds }
     );
     yield put(stopSubmit(ADD_PEOPLE_FORM_ID));
-    yield put(updateMemberList(updatedMemberList));
+    yield put(updateMemberList(fromJS(updatedMemberList)));
+    yield put(closeAddPeopleForm());
   } catch (e) {
     yield put(requestErrorReceived({
       error: e,
