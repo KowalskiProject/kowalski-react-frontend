@@ -49,7 +49,6 @@ function projectPageReducer(state = initialState, { type, payload }) {
   switch (type) {
     case UPDATE_SELECTED_PROJECT_CODE:
       return state
-        .set('expandedActivityIds', `${state.get('selectedProjectId')}` === `${payload}` ? state.get('expandedActivityIds') : List())
         .set('selectedProjectId', payload);
     case LOADED_SELECTED_PROJECT:
       return state
@@ -89,8 +88,7 @@ function projectPageReducer(state = initialState, { type, payload }) {
     case LAUNCH_NEW_TASK_DIALOG:
       return state
         .set('isNewTaskFormDialogOpened', true)
-        .set('activityLoadedIntoNewTaskForm', payload.activity)
-        .set('projectLoadedIntoNewTaskForm', payload.project);
+        .set('activityLoadedIntoNewTaskForm', payload.activity);
     case DISMISS_NEW_TASK_DIALOG:
       return state
         .set('isNewTaskFormDialogOpened', false)

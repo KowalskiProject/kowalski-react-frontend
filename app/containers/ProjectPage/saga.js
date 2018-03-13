@@ -38,6 +38,7 @@ import {
   getProjectMembers,
   getProjectActivities,
   createActivity,
+  createTask,
   getActivityTasks,
   getPeople,
   addPeopleToProject,
@@ -100,16 +101,22 @@ export function* handleLoadProjectCodes() {
 }
 
 export function* handleSubmitNewTaskForm({ payload }) {
+  const project = payload.get('project');
+  const people = project.get('people');
+  const projectId = project.get('projectId');
+  const activityId = payload.get('activityId');
   yield put(startSubmit(NEW_TASK_FORM_ID));
   try {
     yield call(
-      createActivity, {
+      createTask, {
         ...genCommonReqConfig(),
-        activityData: payload.toJSON(),
+        activityId,
+        taskData: payload.delete('activityId').delete('project').toJSON(),
       }
     );
+    yield handleFetchTaskList({ payload: { activityId, projectId, people } });
+    yield put(reset(NEW_TASK_FORM_ID));
     yield put(stopSubmit(NEW_TASK_FORM_ID));
-    // yield put(startProjectLoading());
     return true;
   } catch (e) {
     yield put(requestErrorReceived({
@@ -127,9 +134,11 @@ export function* handleSubmitNewTaskForm({ payload }) {
   return false;
 }
 
-export function* handleSubmitNewTaskFormAndCloseIt({ payload: { taskData, activity, project } }) {
-  yield handleSubmitNewTaskForm({ payload: { taskData, activity, project } });
-  yield put(dismissNewTaskDialog());
+export function* handleSubmitNewTaskFormAndCloseIt({ payload }) {
+  const success = yield handleSubmitNewTaskForm({ payload });
+  if (success) {
+    yield put(dismissNewTaskDialog());
+  }
 }
 
 export function* handleSubmitNewActivityForm({ payload }) {
@@ -142,6 +151,7 @@ export function* handleSubmitNewActivityForm({ payload }) {
     });
     yield put(stopSubmit(NEW_ACTIVITY_FORM_ID));
     yield put(updateSelectedProjectId(payload.get('projectId')));
+    yield put(reset(NEW_ACTIVITY_FORM_ID));
     return true;
   } catch (e) {
     yield put(requestErrorReceived({
@@ -174,13 +184,17 @@ export function* clearActivityForm() {
   yield put(reset(NEW_ACTIVITY_FORM_ID));
 }
 
-export function* handleFetchTaskList({ payload: { activityId, projectId } }) {
+export function* handleFetchTaskList({ payload: { activityId, projectId, people } }) {
+  console.log("Saga values", activityId, projectId, people);
   try {
     const tasks = yield call(getActivityTasks, {
       ...genCommonReqConfig(),
       activityId,
       projectId,
     });
+    tasks.forEach((task) => (
+      task.accountable = people.find((person) => person.get('kUserId') === task.accountableId)
+    ));
     yield put(tasksLoaded({ activityId, taskList: fromJS(tasks) }));
   } catch (e) {
     yield put(requestErrorReceived({

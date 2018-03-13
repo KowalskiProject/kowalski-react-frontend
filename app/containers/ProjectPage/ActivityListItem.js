@@ -14,15 +14,15 @@ import { makeSelectExpandedTaskIds } from './selectors';
 
 const renderTasks = (tasks) => (
   (tasks || List()).map((task) => (
-    <tr>
+    <tr key={task.get('taskId')}>
       <td>{task.get('name')}</td>
       <td>{task.get('accountable') ? task.get('accountable').get('name') : 'Undefined'}</td>
-      <td>{task.description}</td>
+      <td>{task.get('description')}</td>
     </tr>
   ))
 );
 
-const renderActivityCardContent = ({ activity, onCreateNewTaskClicked, project }) => (
+const renderActivityCardContent = ({ activity, onCreateNewTaskClicked }) => (
   <div className="card-content">
     <div className="content">
       <table className="table">
@@ -36,7 +36,7 @@ const renderActivityCardContent = ({ activity, onCreateNewTaskClicked, project }
         <tbody>
           { renderTasks(activity.get('tasks')) }
           <tr>
-            <td colSpan={3}><a tabIndex={0} role="button" onClick={() => onCreateNewTaskClicked(activity, project)}>+ Create new task</a></td>
+            <td colSpan={3}><a tabIndex={0} role="button" onClick={() => onCreateNewTaskClicked(activity)}>+ Create new task</a></td>
           </tr>
         </tbody>
       </table>
@@ -47,7 +47,6 @@ const renderActivityCardContent = ({ activity, onCreateNewTaskClicked, project }
 renderActivityCardContent.propTypes = {
   activity: PropTypes.any,
   onCreateNewTaskClicked: PropTypes.func,
-  project: PropTypes.any,
 };
 
 const ActivityListItem = (props) => {
@@ -66,7 +65,7 @@ const ActivityListItem = (props) => {
           onClick={
             () => isExpanded
               ? collapseTaskListItem(activity.get('activityId'))
-              : expandTaskListItem(activity.get('activityId'), activity.get('projectId'))
+              : expandTaskListItem(activity.get('activityId'), activity.get('projectId'), project.get('people'))
           }
         >
           <span className="icon">

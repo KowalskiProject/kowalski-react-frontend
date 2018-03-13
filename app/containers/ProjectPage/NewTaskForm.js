@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
+import ImmutablePropTypes from 'react-immutable-proptypes';
 import InputField from 'components/InputField/Loadable';
 import SelectField from 'components/SelectField/Loadable';
 import TextAreaField from 'components/TextAreaField/Loadable';
@@ -41,32 +42,41 @@ const FormActionWrapper = styled.div`
 
 function NewTaskForm(props) {
   const { error, isSubmitting, onCancel, handleSubmit, onAdd, onSaveAndAddNew } = props;
-  const { project } = props;
+  const { activity, project } = props;
+
+  const myOnSubmit = (formData, func) => (
+    func(formData
+      .set('project', project)
+      .set('activityId', activity.get('activityId'))
+    )
+  );
+
+  const people = project.get('people');
 
   return (
     <Wrapper className="box">
-      <form onSubmit={handleSubmit(onAdd)}>
+      <form onSubmit={handleSubmit((formData) => myOnSubmit(formData, onAdd))}>
         <FormTitle><H1>Create new task</H1></FormTitle>
 
         <Field
-          name="title"
-          id="title"
+          name="name"
+          id="name"
           component={InputField}
-          label="Task Title"
+          label="Task Name"
           validate={[required]}
         />
 
         <Field
-          name="owner"
-          id="owner"
+          name="accountableId"
+          id="accountableId"
           component={SelectField}
           label="Project Members"
           validate={[required]}
         >
           <option value="">Select a person</option>
-          { project &&
-            project.get('people').map((person) => (
-              <option value={person.get('name')}>{person.get('name')}</option>
+          {
+            people.map((person) => (
+              <option key={person.get('kUserId')} value={person.get('kUserId')}>{person.get('name')}</option>
             ))
           }
         </Field>
@@ -79,11 +89,20 @@ function NewTaskForm(props) {
           validate={[required]}
         />
 
-        {error && <strong>{error}</strong>}
+        {
+          error &&
+          <div className="control" style={{ marginTop: '1rem' }}>
+            <article className="message is-danger">
+              <div className="message-body">
+                { error }
+              </div>
+            </article>
+          </div>
+        }
 
         <FormActions>
           <FormActionWrapper className="control">
-            <FormAction className="button" type="button" disabled={isSubmitting} onClick={handleSubmit(onSaveAndAddNew)}>
+            <FormAction className="button" type="button" disabled={isSubmitting} onClick={handleSubmit((formData) => myOnSubmit(formData, onSaveAndAddNew))}>
               Save and add new
             </FormAction>
           </FormActionWrapper>
@@ -102,13 +121,19 @@ function NewTaskForm(props) {
 }
 
 NewTaskForm.propTypes = {
-  project: PropTypes.any,
+  project: ImmutablePropTypes.mapContains({
+    projectId: PropTypes.number,
+    people: ImmutablePropTypes.listOf(ImmutablePropTypes.contains({
+      kUserId: PropTypes.number,
+    })),
+  }),
+  activity: PropTypes.any,
   error: PropTypes.any,
-  isSubmitting: PropTypes.any,
   onCancel: PropTypes.func,
   handleSubmit: PropTypes.func,
   onAdd: PropTypes.func,
   onSaveAndAddNew: PropTypes.func,
+  isSubmitting: PropTypes.bool,
 };
 
 export default reduxForm({

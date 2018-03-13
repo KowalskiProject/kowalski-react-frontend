@@ -94,10 +94,10 @@ export function changedActivitiesTextFilter(newText) {
   };
 }
 
-export function expandTaskListItem(activityId, projectId) {
+export function expandTaskListItem(activityId, projectId, people) {
   return {
     type: EXPAND_TASK_LIST_ITEM,
-    payload: { activityId, projectId },
+    payload: { activityId, projectId, people },
   };
 }
 
@@ -108,10 +108,10 @@ export function collapseTaskListItem(taskId) {
   };
 }
 
-export function launchNewTaskDialog(activity, project) {
+export function launchNewTaskDialog(activity) {
   return {
     type: LAUNCH_NEW_TASK_DIALOG,
-    payload: { activity, project },
+    payload: { activity },
   };
 }
 
@@ -121,17 +121,17 @@ export function dismissNewTaskDialog() {
   };
 }
 
-export function submitNewTaskForm({ taskData, activity, project }) {
+export function submitNewTaskForm(payload) {
   return {
     type: SUBMIT_NEW_TASK_FORM,
-    payload: { taskData, activity, project },
+    payload,
   };
 }
 
-export function submitNewTaskFormAndCloseIt({ taskData, activity, project }) {
+export function submitNewTaskFormAndCloseIt(payload) {
   return {
     type: SUBMIT_NEW_TASK_FORM_AND_CLOSE_IT,
-    payload: { taskData, activity, project },
+    payload,
   };
 }
 

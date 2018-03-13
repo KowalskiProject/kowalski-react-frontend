@@ -96,7 +96,7 @@ class ProjectPage extends React.PureComponent {
   }
 
   selectedProjectId() {
-    return this.props.match.params.code;
+    return parseInt(this.props.match.params.code);
   }
 
   renderProjectMenuItems() {
@@ -216,7 +216,7 @@ ProjectPage.propTypes = {
   loadingProjectCodesError: PropTypes.string,
   loadingProjectError: PropTypes.string,
   loadingUsersError: PropTypes.string.isRequired,
-  selectedProjectId: PropTypes.string,
+  selectedProjectId: PropTypes.number,
   selectedProject: PropTypes.object,
   isAddPeopleFormOpen: PropTypes.bool.isRequired,
   closeAddPeopleForm: PropTypes.func.isRequired,

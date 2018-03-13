@@ -83,7 +83,6 @@ const Input = styled.input`
 
 const ActivitiesTab = (props) => {
   const { project, changedActivitiesTextFilter, activityFilteringText, launchNewActivityDialog } = props;
-
   return (
     <Container className="activitieTabWrapper">
       <ToolbarContainer>
@@ -113,17 +112,15 @@ const ActivitiesTab = (props) => {
           project={project}
           onAdd={props.submitNewActivityFormAndCloseIt}
           onSaveAndAddNew={props.submitNewActivityForm}
-          isSubmitting={props.isSubmittingNewActivity}
           onCancel={props.dismissNewActivityDialog}
         />
       </Modal>
       <Modal active={props.isNewTaskFormDialogOpened} onDismiss={props.dismissNewTaskDialog}>
         <NewTaskForm
           project={project}
-          selectedActivity={props.activityLoadedIntoNewTaskForm}
-          onAdd={props.submitNewActivityFormAndCloseIt}
-          onSaveAndAddNew={props.submitNewActivityForm}
-          isSubmitting={props.isSubmittingNewActivity}
+          activity={props.activityLoadedIntoNewTaskForm}
+          onAdd={props.submitNewTaskFormAndCloseIt}
+          onSaveAndAddNew={props.submitNewTaskForm}
           onCancel={props.dismissNewTaskDialog}
         />
       </Modal>
@@ -135,8 +132,10 @@ ActivitiesTab.propTypes = {
   project: PropTypes.any,
   changedActivitiesTextFilter: PropTypes.func,
   activityFilteringText: PropTypes.any,
-  activityLoadedIntoNewTaskForm: PropTypes.func,
+  activityLoadedIntoNewTaskForm: PropTypes.object,
   submitNewActivityFormAndCloseIt: PropTypes.func,
+  submitNewTaskForm: PropTypes.func,
+  submitNewTaskFormAndCloseIt: PropTypes.func,
   submitNewActivityForm: PropTypes.func,
   isSubmittingNewActivity: PropTypes.bool,
   dismissNewActivityDialog: PropTypes.func,
