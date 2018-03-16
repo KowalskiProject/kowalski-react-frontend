@@ -16,6 +16,8 @@ import {
   CLOSE_TASK_OVERLAY_SELECT,
   LOAD_TIME_RECORDS_FOR_WEEK_DATE,
   ENDED_LOADING_TIME_RECORDS,
+  END_LOADING_FORM_PROJECTS,
+  END_LOADING_FORM_ACTIVITIES,
 } from './constants';
 
 const initialState = fromJS({
@@ -24,10 +26,18 @@ const initialState = fromJS({
   isSubmitting: false,
   isLoadingTimeRecords: false,
   isTaskOverlaySelectOpened: false,
+  formProjects: [],
+  formActivities: [],
 });
 
 function timesheetPageReducer(state = initialState, { type, payload }) {
   switch (type) {
+    case END_LOADING_FORM_ACTIVITIES:
+      return state
+        .set('formActivities', payload.success ? payload.data : null);
+    case END_LOADING_FORM_PROJECTS:
+      return state
+        .set('formProjects', payload.success ? payload.data : null);
     case ENDED_LOADING_TIME_RECORDS:
       return state
         .set('isLoadingTimeRecords', false)

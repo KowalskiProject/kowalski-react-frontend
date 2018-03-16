@@ -16,12 +16,20 @@ import {
 
 import { SERVER_BASE_URL } from '../../utils/constants';
 
+const jwtDecode = require('jwt-decode');
+
 export function* handleSubmission({ payload: { username, password, pageBeforeAuthError } }) {
   try {
     const serverResponse = yield call(authenticate, { config: { baseUrl: SERVER_BASE_URL }, username, password });
     const token = serverResponse.headers.get('Authorization').match(/Bearer (.*)/)[1];
     localStorage.setItem('authToken', token);
+    const userId = jwtDecode(token).kUserId;
+    if (!userId) {
+      yield put(serverResponded({ success: false, errorMsg: 'You have not been authorized to use this system. Please contact the Administrator.' }));
+      return;
+    }
     yield put(serverResponded({ success: true }));
+    localStorage.setItem('currentUserId', userId);
     if (pageBeforeAuthError) {
       yield put(savePageBeforeAuthError(null));
       yield put(push(pageBeforeAuthError));

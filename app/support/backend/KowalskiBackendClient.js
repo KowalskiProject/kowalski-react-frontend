@@ -1,4 +1,5 @@
 import request from '../../utils/request';
+import { queryString } from '../serializers/utils';
 
 export function authenticate({ config: { baseUrl }, username, password }) {
   return request(`${baseUrl}/login`, {
@@ -8,8 +9,8 @@ export function authenticate({ config: { baseUrl }, username, password }) {
   });
 }
 
-export function getProjects({ config: { baseUrl }, token }) {
-  return request(`${baseUrl}/projects`, {
+export function getProjects({ config: { baseUrl }, token, params: { userId } = {} }) {
+  return request(`${baseUrl}/projects${userId ? `?userId=${userId}` : ''}`, {
     method: 'GET',
     headers: generateCommonHeaders(token),
   });
@@ -78,8 +79,8 @@ export function getProjectAccountable({ config: { baseUrl }, token, projectId })
   });
 }
 
-export function getProjectActivities({ config: { baseUrl }, token, projectId }) {
-  return request(`${baseUrl}/projects/${projectId}/activities`, {
+export function getProjectActivities({ config: { baseUrl }, token, projectId, params }) {
+  return request(`${baseUrl}/projects/${projectId}/activities?${queryString(params)}`, {
     method: 'GET',
     headers: generateCommonHeaders(token),
   });

@@ -44,23 +44,23 @@ function PeopleFlexGrid(props) {
 
   return (
     <Container>
-    {
-      people.map((person, index) => (
-        <PersonContainer
-          key={person.get('kUserId')}
-          tabIndex={index}
-          role="button"
-          onClick={() => { personSelected(person.get('kUserId')); }}
-        >
-          <PersonPictureContainer>
-            <PersonImg src={UnknownAvatar} />
-          </PersonPictureContainer>
-          <PersonNameContainer>
-            {person.get('name')}
-          </PersonNameContainer>
-        </PersonContainer>
-      ))
-    }
+      {
+        people.map((person, index) => (
+          <PersonContainer
+            key={person.get('kUserId')}
+            tabIndex={index}
+            role="button"
+            onClick={() => { personSelected(person.get('kUserId')); }}
+          >
+            <PersonPictureContainer>
+              <PersonImg src={UnknownAvatar} />
+            </PersonPictureContainer>
+            <PersonNameContainer>
+              {person.get('name')}
+            </PersonNameContainer>
+          </PersonContainer>
+        ))
+      }
     </Container>
   );
 }

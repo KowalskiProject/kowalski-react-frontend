@@ -15,6 +15,10 @@ import {
   OPEN_TASK_OVERLAY_SELECT,
   LOAD_TIME_RECORDS_FOR_WEEK_DATE,
   ENDED_LOADING_TIME_RECORDS,
+  LOAD_FORM_PROJECTS,
+  END_LOADING_FORM_PROJECTS,
+  LOAD_FORM_ACTIVITIES,
+  END_LOADING_FORM_ACTIVITIES,
 } from './constants';
 
 export function defaultAction() {
@@ -81,5 +85,32 @@ export function endedLoadingTimeRecords(timeSlots) {
   return {
     type: ENDED_LOADING_TIME_RECORDS,
     payload: timeSlots,
+  };
+}
+
+export function loadFormProjects() {
+  return {
+    type: LOAD_FORM_PROJECTS,
+  };
+}
+
+export function endLoadingFormProjects(payload) {
+  return {
+    type: END_LOADING_FORM_PROJECTS,
+    payload,
+  };
+}
+
+export function loadFormActivities(projectId) {
+  return {
+    type: LOAD_FORM_ACTIVITIES,
+    payload: projectId,
+  };
+}
+
+export function endLoadingFormActivities(payload) {
+  return {
+    type: END_LOADING_FORM_ACTIVITIES,
+    payload,
   };
 }

@@ -9,7 +9,7 @@ import {
 } from './constants';
 
 import {
-  expiredSectionDetected,
+  expiredSessionDetected,
   savePageBeforeAuthError,
 } from './actions';
 import { isAuthError } from '../../support/backend/utils';
@@ -32,12 +32,12 @@ export function* handleReauthAtemptDetected() {
   yield put(push('/'));
 }
 
-export function* handleRequestErrorReceived({ payload: { error, dispatchOnAuthError, dispatchOnOtherErrors } }) {
+export function* handleRequestErrorReceived({ payload: { error, dispatchOnAuthError = [], dispatchOnOtherErrors = [], dispatchOnAnyError = [] } }) {
   if (isAuthError(error)) {
     const { pathname, search } = yield select(makeSelectLocation());
     const location = pathname + search;
     yield put(savePageBeforeAuthError(location));
-    yield put(expiredSectionDetected());
+    yield put(expiredSessionDetected());
     for (let i = 0; i < dispatchOnAuthError.length; i += 1) {
       yield put(dispatchOnAuthError[i]);
     }
@@ -45,6 +45,10 @@ export function* handleRequestErrorReceived({ payload: { error, dispatchOnAuthEr
     for (let i = 0; i < dispatchOnOtherErrors.length; i += 1) {
       yield put(dispatchOnOtherErrors[i]);
     }
+  }
+
+  for (let i = 0; i < dispatchOnAnyError.length; i += 1) {
+    yield put(dispatchOnAnyError[i]);
   }
 }
 

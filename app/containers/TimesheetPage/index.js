@@ -16,6 +16,7 @@ import isBefore from 'date-fns/is_before';
 import addDays from 'date-fns/add_days';
 import format from 'date-fns/format';
 import { List } from 'immutable';
+import ImmutablePropTypes from 'react-immutable-proptypes';
 
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
@@ -30,6 +31,8 @@ import {
   makeTimeSlotDayMapSelector,
   makeIsTaskOverlaySelectOpened,
   makeSelectIsLoadingTimeRecords,
+  makeSelectFormProjects,
+  makeSelectFormActivitiesAsOverlaySelectOptions,
 } from './selectors';
 import reducer from './reducer';
 import saga from './saga';
@@ -158,11 +161,15 @@ class TimesheetPage extends React.Component {
               render={(myProps) => (
                 <LogHourForm
                   {...myProps}
+                  loadFormProjects={this.props.loadFormProjects}
                   onSubmit={this.props.submitLogForm}
                   isSubmitting={this.props.isSubmitting}
                   isTaskOverlaySelectOpened={this.props.isTaskOverlaySelectOpened}
                   onDismissTaskOverlaySelect={this.props.closeTaskOverlaySelect}
                   onSelectTaskClicked={this.props.openTaskOverlaySelect}
+                  formProjects={this.props.formProjects}
+                  taskOverlaySelectOptions={this.props.formActivitiesAsOverlaySelectOptions}
+                  loadFormActivities={this.props.loadFormActivities}
                 />
               )}
             />
@@ -196,6 +203,17 @@ TimesheetPage.propTypes = {
   openTaskOverlaySelect: PropTypes.func.isRequired,
   loadTimeRecordsForWeekDate: PropTypes.func.isRequired,
   isLoadingTimeRecords: PropTypes.bool.isRequired,
+  loadFormProjects: PropTypes.func.isRequired,
+  formProjects: PropTypes.object.isRequired,
+  formActivitiesAsOverlaySelectOptions: ImmutablePropTypes.listOf(ImmutablePropTypes.contains({
+    label: PropTypes.string.isRequired,
+    value: PropTypes.any.isRequired,
+    options: ImmutablePropTypes.listOf(ImmutablePropTypes.contains({
+      label: PropTypes.string.isRequired,
+      value: PropTypes.any.isRequired,
+    })),
+  })),
+  loadFormActivities: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -205,6 +223,8 @@ const mapStateToProps = createStructuredSelector({
   timeSlotDayMap: makeTimeSlotDayMapSelector,
   isTaskOverlaySelectOpened: makeIsTaskOverlaySelectOpened(),
   isLoadingTimeRecords: makeSelectIsLoadingTimeRecords(),
+  formProjects: makeSelectFormProjects(),
+  formActivitiesAsOverlaySelectOptions: makeSelectFormActivitiesAsOverlaySelectOptions(),
 });
 
 const withConnect = connect(mapStateToProps, { ...actions, unauthorizedAccessDetected });

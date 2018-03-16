@@ -45,7 +45,7 @@ export function navigateTo(path) {
   };
 }
 
-export function expiredSectionDetected() {
+export function expiredSessionDetected() {
   return {
     type: EXPIRED_SECTION_DETECTED,
   };

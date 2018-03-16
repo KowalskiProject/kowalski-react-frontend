@@ -13,7 +13,7 @@ import {
 } from './actions';
 
 import {
-  expiredSectionDetected,
+  expiredSessionDetected,
 } from '../App/actions';
 
 import {
@@ -78,10 +78,11 @@ export function* handleProjectLoading() {
     );
     yield put(endProjectLoading({ success: true, data: fromJS(projects) }));
   } catch (e) {
+    console.log(e);
     if (e.response && e.response.status) {
       if (e.response.status === 403) {
         yield put(endProjectLoading({ success: false, errorMsg: null }));
-        yield put(expiredSectionDetected());
+        yield put(expiredSessionDetected());
         return;
       }
     }

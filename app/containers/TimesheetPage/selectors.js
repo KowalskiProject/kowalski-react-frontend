@@ -39,6 +39,28 @@ const makeIsTaskOverlaySelectOpened = () => createSelector(
   (substate) => substate.get('isTaskOverlaySelectOpened'),
 );
 
+const makeSelectFormProjects = () => createSelector(
+  selectTimesheetPageDomain,
+  (substate) => substate.get('formProjects'),
+);
+
+const makeSelectFormActivities = () => createSelector(
+  selectTimesheetPageDomain,
+  (substate) => substate.get('formActivities'),
+);
+
+const makeSelectFormActivitiesAsOverlaySelectOptions = () => createSelector(
+  makeSelectFormActivities(),
+  (activities) => activities.map((activity) => ({
+    label: activity.get('name'),
+    value: activity.get('activityId'),
+    options: activity.get('tasks').map((task) => ({
+      label: task.get('name'),
+      value: task.get('taskId'),
+    })),
+  })),
+);
+
 const makeTimeSlotDayMapSelector = createSelector(
   makeTimeSlotEntriesSelector,
   (timeSlotEntries) => {
@@ -67,4 +89,7 @@ export {
   makeTimeSlotDayMapSelector,
   makeIsTaskOverlaySelectOpened,
   makeSelectIsLoadingTimeRecords,
+  makeSelectFormProjects,
+  makeSelectFormActivities,
+  makeSelectFormActivitiesAsOverlaySelectOptions,
 };
