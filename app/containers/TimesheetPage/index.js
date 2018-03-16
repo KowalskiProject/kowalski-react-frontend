@@ -29,6 +29,7 @@ import {
   makeSelectIsSubmitting,
   makeTimeSlotDayMapSelector,
   makeIsTaskOverlaySelectOpened,
+  makeSelectIsLoadingTimeRecords,
 } from './selectors';
 import reducer from './reducer';
 import saga from './saga';
@@ -36,6 +37,7 @@ import messages from './messages';
 import LogHourForm from './LogHourForm';
 import { DATE_DAY_FORMAT } from './constants';
 import { unauthorizedAccessDetected } from '../App/actions';
+import LoadingCentralDiv from '../../components/LoadingCentralDiv';
 
 const MainContainerWrapper = styled.div`
   display: flex;
@@ -84,9 +86,13 @@ const DaysArea = styled.div`
   flex-direction: row;
 `;
 
-const renderDays = ([rangeStart, rangeEnd], history, timeSlotDayMap) => {
+const renderDays = ([rangeStart, rangeEnd], history, timeSlotDayMap, isLoadingTimeRecords) => {
   const dayColumns = [];
   let currentDate = rangeStart;
+
+  if (isLoadingTimeRecords) {
+    return <LoadingCentralDiv />;
+  }
 
   const goToHourForm = (date) => () => {
     history.push({
@@ -110,9 +116,7 @@ const renderDays = ([rangeStart, rangeEnd], history, timeSlotDayMap) => {
 
 class TimesheetPage extends React.Component {
   componentWillMount() {
-    if (!localStorage.getItem('authToken')) {
-      this.props.unauthorizedAccessDetected();
-    }
+    this.props.loadTimeRecordsForWeekDate(new Date());
   }
 
   render() {
@@ -166,7 +170,7 @@ class TimesheetPage extends React.Component {
               <AboveDaysArea>
               </AboveDaysArea>
               <DaysArea>
-                { renderDays(this.props.selectedRange, this.props.history, this.props.timeSlotDayMap) }
+                { renderDays(this.props.selectedRange, this.props.history, this.props.timeSlotDayMap, this.props.isLoadingTimeRecords) }
               </DaysArea>
             </DayColumnsWrapper>
           </Switch>
@@ -187,10 +191,11 @@ TimesheetPage.propTypes = {
   submitLogForm: PropTypes.func,
   isSubmitting: PropTypes.bool,
   timeSlotDayMap: PropTypes.object,
-  unauthorizedAccessDetected: PropTypes.func,
   isTaskOverlaySelectOpened: PropTypes.bool,
   closeTaskOverlaySelect: PropTypes.func.isRequired,
   openTaskOverlaySelect: PropTypes.func.isRequired,
+  loadTimeRecordsForWeekDate: PropTypes.func.isRequired,
+  isLoadingTimeRecords: PropTypes.bool.isRequired,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -199,6 +204,7 @@ const mapStateToProps = createStructuredSelector({
   isSubmitting: makeSelectIsSubmitting,
   timeSlotDayMap: makeTimeSlotDayMapSelector,
   isTaskOverlaySelectOpened: makeIsTaskOverlaySelectOpened(),
+  isLoadingTimeRecords: makeSelectIsLoadingTimeRecords(),
 });
 
 const withConnect = connect(mapStateToProps, { ...actions, unauthorizedAccessDetected });

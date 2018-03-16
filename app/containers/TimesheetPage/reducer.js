@@ -14,17 +14,26 @@ import {
   NEW_LOG_SAVED,
   OPEN_TASK_OVERLAY_SELECT,
   CLOSE_TASK_OVERLAY_SELECT,
+  LOAD_TIME_RECORDS_FOR_WEEK_DATE,
+  ENDED_LOADING_TIME_RECORDS,
 } from './constants';
 
 const initialState = fromJS({
   selectedDate: new Date(),
   timeSlotEntries: [],
   isSubmitting: false,
+  isLoadingTimeRecords: false,
   isTaskOverlaySelectOpened: false,
 });
 
 function timesheetPageReducer(state = initialState, { type, payload }) {
   switch (type) {
+    case ENDED_LOADING_TIME_RECORDS:
+      return state
+        .set('isLoadingTimeRecords', false)
+        .set('timeSlotEntries', payload);
+    case LOAD_TIME_RECORDS_FOR_WEEK_DATE:
+      return state.set('isLoadingTimeRecords', true);
     case SUBMIT_LOG_FORM:
       return state.set('isSubmitting', true);
     case NEW_LOG_SAVED:

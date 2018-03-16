@@ -13,3 +13,5 @@ export const NEW_LOG_SAVED = 'app/TimesheetPage/NEW_LOG_SAVED';
 export const DATE_DAY_FORMAT = 'D-M-YYYY';
 export const CLOSE_TASK_OVERLAY_SELECT = 'app/TimesheetPage/CLOSE_TASK_OVERLAY_SELECT';
 export const OPEN_TASK_OVERLAY_SELECT = 'app/TimesheetPage/OPEN_TASK_OVERLAY_SELECT';
+export const LOAD_TIME_RECORDS_FOR_WEEK_DATE = 'app/TimesheetPage/LOAD_TIME_RECORDS_FOR_WEEK_DATE';
+export const ENDED_LOADING_TIME_RECORDS = 'app/TimesheetPage/ENDED_LOADING_TIME_RECORDS';

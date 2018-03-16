@@ -13,6 +13,8 @@ import {
   NEW_LOG_SAVED,
   CLOSE_TASK_OVERLAY_SELECT,
   OPEN_TASK_OVERLAY_SELECT,
+  LOAD_TIME_RECORDS_FOR_WEEK_DATE,
+  ENDED_LOADING_TIME_RECORDS,
 } from './constants';
 
 export function defaultAction() {
@@ -62,8 +64,22 @@ export function closeTaskOverlaySelect() {
   };
 }
 
+export function loadTimeRecordsForWeekDate(date) {
+  return {
+    type: LOAD_TIME_RECORDS_FOR_WEEK_DATE,
+    payload: date,
+  };
+}
+
 export function openTaskOverlaySelect() {
   return {
     type: OPEN_TASK_OVERLAY_SELECT,
+  };
+}
+
+export function endedLoadingTimeRecords(timeSlots) {
+  return {
+    type: ENDED_LOADING_TIME_RECORDS,
+    payload: timeSlots,
   };
 }

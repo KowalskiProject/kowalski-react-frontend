@@ -53,6 +53,11 @@ const makeTimeSlotDayMapSelector = createSelector(
   },
 );
 
+const makeSelectIsLoadingTimeRecords = () => createSelector(
+  selectTimesheetPageDomain,
+  (substate) => substate.get('isLoadingTimeRecords'),
+);
+
 export {
   selectTimesheetPageDomain,
   makeSelectSelectedDate,
@@ -61,4 +66,5 @@ export {
   makeTimeSlotEntriesSelector,
   makeTimeSlotDayMapSelector,
   makeIsTaskOverlaySelectOpened,
+  makeSelectIsLoadingTimeRecords,
 };
