@@ -46,7 +46,7 @@ export function createTask({ config: { baseUrl }, token, activityId, taskData })
     method: 'POST',
     body: JSON.stringify(taskData),
     headers: generateCommonHeaders(token),
-    parseResponse: false,
+    parseResponse: true,
   });
 }
 
@@ -80,7 +80,7 @@ export function getProjectAccountable({ config: { baseUrl }, token, projectId })
 }
 
 export function getProjectActivities({ config: { baseUrl }, token, projectId, params }) {
-  return request(`${baseUrl}/projects/${projectId}/activities?${queryString(params)}`, {
+  return request(`${baseUrl}/projects/${projectId}/activities?${params ? queryString(params) : ''}`, {
     method: 'GET',
     headers: generateCommonHeaders(token),
   });

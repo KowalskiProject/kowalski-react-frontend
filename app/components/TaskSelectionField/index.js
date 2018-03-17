@@ -18,22 +18,22 @@ const SelectButton = styled.button`
   ${(props) => props.hasError ? 'border-color: red !important;' : ''}
 `;
 
-const renderOptions = (options, groupValue) => (
+const renderOptions = (options, groupValue, onNewTaskSelected) => (
   [
     ...options.map(({ label, value }) => (
       <OverlaySelectOption value={value} key={value}>{label}</OverlaySelectOption>
     )),
-    <OverlaySelectOption key={`${groupValue}-new`} value={`${groupValue}-new`} onOptionSelect={(selectedValue) => console.log(selectedValue)}>
+    <OverlaySelectOption key={`${groupValue}-new`} value={`${groupValue}-new`} onOptionSelect={onNewTaskSelected}>
       New task...
     </OverlaySelectOption>,
   ]
 );
 
-const renderGroupOptions = (optionGroups) => (
+const renderGroupOptions = (optionGroups, onNewTaskSelected) => (
   optionGroups.map(({ label, value, options }) => (
     <OverlaySelectGroup key={value}>
       <OverlaySelectGroupHeader>{label}</OverlaySelectGroupHeader>
-      { renderOptions(options, value) }
+      { renderOptions(options, value, onNewTaskSelected) }
     </OverlaySelectGroup>
   ))
 );
@@ -48,6 +48,7 @@ function TaskSelectionField(props) {
     onDismissTaskOverlaySelect,
     onSelectTaskClicked,
     optionGroups,
+    onNewTaskSelected,
   } = props;
 
   const labelHtml = label ? <label htmlFor={id} className="label">{label}</label> : '';
@@ -81,7 +82,7 @@ function TaskSelectionField(props) {
           onDismiss={onDismissTaskOverlaySelect}
           onOptionSelect={(selectedValue) => onBlur(selectedValue) && onChange(selectedValue)}
         >
-          { renderGroupOptions(optionGroups) }
+          { renderGroupOptions(optionGroups, onNewTaskSelected) }
         </OverlaySelect>
       </div>
     </div>
@@ -95,6 +96,7 @@ TaskSelectionField.propTypes = {
   onDismissTaskOverlaySelect: PropTypes.func,
   onSelectTaskClicked: PropTypes.func.isRequired,
   label: PropTypes.any,
+  onNewTaskSelected: PropTypes.func.isRequired,
   optionGroups: PropTypes.arrayOf(PropTypes.shape({
     label: PropTypes.string.isRequired,
     value: PropTypes.any.isRequired,

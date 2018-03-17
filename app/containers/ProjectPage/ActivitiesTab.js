@@ -116,13 +116,16 @@ const ActivitiesTab = (props) => {
         />
       </Modal>
       <Modal active={props.isNewTaskFormDialogOpened} onDismiss={props.dismissNewTaskDialog}>
-        <NewTaskForm
-          project={project}
-          activity={props.activityLoadedIntoNewTaskForm}
-          onAdd={props.submitNewTaskFormAndCloseIt}
-          onSaveAndAddNew={props.submitNewTaskForm}
-          onCancel={props.dismissNewTaskDialog}
-        />
+        {
+          props.isNewTaskFormDialogOpened &&
+          <NewTaskForm
+            project={project}
+            activity={props.activityLoadedIntoNewTaskForm}
+            onAdd={props.submitNewTaskFormAndCloseIt}
+            onSaveAndAddNew={props.submitNewTaskForm}
+            onCancel={props.dismissNewTaskDialog}
+          />
+        }
       </Modal>
     </Container>
   );

@@ -42,14 +42,18 @@ const FormActionWrapper = styled.div`
 
 function NewTaskForm(props) {
   const { error, isSubmitting, onCancel, handleSubmit, onAdd, onSaveAndAddNew } = props;
-  const { activity, project } = props;
+  const { activity, project, predefinedAccountableId } = props;
 
-  const myOnSubmit = (formData, func) => (
-    func(formData
+  const myOnSubmit = (formData, func) => {
+    if (predefinedAccountableId) {
+      formData = formData.set('accountableId', predefinedAccountableId);
+    }
+
+    return func(formData
       .set('project', project)
       .set('activityId', activity.get('activityId'))
-    )
-  );
+    );
+  };
 
   const people = project.get('people');
 
@@ -66,20 +70,24 @@ function NewTaskForm(props) {
           validate={[required]}
         />
 
-        <Field
-          name="accountableId"
-          id="accountableId"
-          component={SelectField}
-          label="Project Members"
-          validate={[required]}
-        >
-          <option value="">Select a person</option>
-          {
-            people.map((person) => (
-              <option key={person.get('kUserId')} value={person.get('kUserId')}>{person.get('name')}</option>
-            ))
-          }
-        </Field>
+        {
+          !predefinedAccountableId &&
+            <Field
+              name="accountableId"
+              id="accountableId"
+              component={SelectField}
+              label="Project Members"
+              validate={[required]}
+            >
+              <option value="">Select a person</option>
+              {
+                people.map((person) => (
+                  <option key={person.get('kUserId')} value={person.get('kUserId')}>{person.get('name')}</option>
+                ))
+              }
+            </Field>
+        }
+
 
         <Field
           name="description"
@@ -101,14 +109,17 @@ function NewTaskForm(props) {
         }
 
         <FormActions>
-          <FormActionWrapper className="control">
-            <FormAction className="button" type="button" disabled={isSubmitting} onClick={handleSubmit((formData) => myOnSubmit(formData, onSaveAndAddNew))}>
-              Save and add new
-            </FormAction>
-          </FormActionWrapper>
+          {
+            onSaveAndAddNew &&
+              <FormActionWrapper className="control">
+                <FormAction className="button" type="button" disabled={isSubmitting} onClick={handleSubmit((formData) => myOnSubmit(formData, onSaveAndAddNew))}>
+                  Save and add new
+                </FormAction>
+              </FormActionWrapper>
+          }
           <FormActionWrapper className="control">
             <FormAction type="submit" className={`button is-primary ${isSubmitting ? 'is-loading' : ''}`} disabled={isSubmitting}>
-              Add
+              { props.onAddText || 'Add' }
             </FormAction>
           </FormActionWrapper>
           <FormActionWrapper className="control">
@@ -122,18 +133,22 @@ function NewTaskForm(props) {
 
 NewTaskForm.propTypes = {
   project: ImmutablePropTypes.mapContains({
-    projectId: PropTypes.number,
+    projectId: PropTypes.number.isRequired,
     people: ImmutablePropTypes.listOf(ImmutablePropTypes.contains({
-      kUserId: PropTypes.number,
+      kUserId: PropTypes.number.isRequired,
     })),
-  }),
-  activity: PropTypes.any,
+  }).isRequired,
+  activity: ImmutablePropTypes.mapContains({
+    activityId: PropTypes.number.isRequired,
+  }).isRequired,
   error: PropTypes.any,
+  predefinedAccountableId: PropTypes.number,
   onCancel: PropTypes.func,
   handleSubmit: PropTypes.func,
   onAdd: PropTypes.func,
   onSaveAndAddNew: PropTypes.func,
   isSubmitting: PropTypes.bool,
+  onAddText: PropTypes.string,
 };
 
 export default reduxForm({

@@ -67,6 +67,7 @@ export function* handleSelectedProjectId({ payload }) {
       data: fromJS({ ...project, people: members, activities }),
     }));
   } catch (e) {
+    console.log(e);
     yield put(requestErrorReceived({
       error: e,
       dispatchOnAuthError: [
@@ -185,7 +186,6 @@ export function* clearActivityForm() {
 }
 
 export function* handleFetchTaskList({ payload: { activityId, projectId, people } }) {
-  console.log("Saga values", activityId, projectId, people);
   try {
     const tasks = yield call(getActivityTasks, {
       ...genCommonReqConfig(),

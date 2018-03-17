@@ -17,6 +17,7 @@ import addDays from 'date-fns/add_days';
 import format from 'date-fns/format';
 import { List } from 'immutable';
 import ImmutablePropTypes from 'react-immutable-proptypes';
+import Modal from 'components/Modal/Loadable';
 
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
@@ -33,6 +34,9 @@ import {
   makeSelectIsLoadingTimeRecords,
   makeSelectFormProjects,
   makeSelectFormActivitiesAsOverlaySelectOptions,
+  makeSelectIsTaskDialogOpen,
+  makeSelectNewTaskFormSelectedProjectSelector,
+  makeSelectNewTaskFormSelectedActivity,
 } from './selectors';
 import reducer from './reducer';
 import saga from './saga';
@@ -41,6 +45,7 @@ import LogHourForm from './LogHourForm';
 import { DATE_DAY_FORMAT } from './constants';
 import { unauthorizedAccessDetected } from '../App/actions';
 import LoadingCentralDiv from '../../components/LoadingCentralDiv';
+import NewTaskForm from '../ProjectPage/NewTaskForm';
 
 const MainContainerWrapper = styled.div`
   display: flex;
@@ -122,6 +127,24 @@ class TimesheetPage extends React.Component {
     this.props.loadTimeRecordsForWeekDate(new Date());
   }
 
+  renderNewTaskModal() {
+    return (
+      <Modal active={this.props.isTaskDialogOpen} onDismiss={this.props.dismissNewTaskDialog}>
+        {
+          this.props.isTaskDialogOpen &&
+            <NewTaskForm
+              project={this.props.newTaskFormSelectedProject}
+              activity={this.props.newTaskFormSelectedActivity}
+              predefinedAccountableId={parseInt(localStorage.getItem('currentUserId'))}
+              onAdd={this.props.submitNewTaskFormAndCloseIt}
+              onAddText="Create and Select"
+              onCancel={this.props.dismissNewTaskDialog}
+            />
+        }
+      </Modal>
+    );
+  }
+
   render() {
     return (
       <MainContainerWrapper className="kowalski-react-basic-container">
@@ -155,6 +178,8 @@ class TimesheetPage extends React.Component {
             </TimeSheetLabelWrapper>
           </CalendarColumn>
 
+          { this.renderNewTaskModal() }
+
           <Switch>
             <Route
               path={`${this.props.match.url}log`}
@@ -170,6 +195,7 @@ class TimesheetPage extends React.Component {
                   formProjects={this.props.formProjects}
                   taskOverlaySelectOptions={this.props.formActivitiesAsOverlaySelectOptions}
                   loadFormActivities={this.props.loadFormActivities}
+                  onNewTaskSelected={this.props.launchNewTaskDialog}
                 />
               )}
             />
@@ -214,6 +240,13 @@ TimesheetPage.propTypes = {
     })),
   })),
   loadFormActivities: PropTypes.func.isRequired,
+  launchNewTaskDialog: PropTypes.func.isRequired,
+  dismissNewTaskDialog: PropTypes.func.isRequired,
+  isTaskDialogOpen: PropTypes.bool.isRequired,
+  newTaskFormSelectedActivity: PropTypes.object,
+  newTaskFormSelectedProject: PropTypes.object,
+  submitNewTaskFormAndCloseIt: PropTypes.func.isRequired,
+  submitNewTaskForm: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -225,6 +258,9 @@ const mapStateToProps = createStructuredSelector({
   isLoadingTimeRecords: makeSelectIsLoadingTimeRecords(),
   formProjects: makeSelectFormProjects(),
   formActivitiesAsOverlaySelectOptions: makeSelectFormActivitiesAsOverlaySelectOptions(),
+  isTaskDialogOpen: makeSelectIsTaskDialogOpen(),
+  newTaskFormSelectedActivity: makeSelectNewTaskFormSelectedActivity(),
+  newTaskFormSelectedProject: makeSelectNewTaskFormSelectedProjectSelector(),
 });
 
 const withConnect = connect(mapStateToProps, { ...actions, unauthorizedAccessDetected });

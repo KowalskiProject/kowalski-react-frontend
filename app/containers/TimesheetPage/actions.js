@@ -19,6 +19,11 @@ import {
   END_LOADING_FORM_PROJECTS,
   LOAD_FORM_ACTIVITIES,
   END_LOADING_FORM_ACTIVITIES,
+  LAUNCH_NEW_TASK_DIALOG,
+  DISMISS_NEW_TASK_DIALOG,
+  SUBMIT_NEW_TASK_FORM,
+  SUBMIT_NEW_TASK_FORM_AND_CLOSE_IT,
+  NEW_TASK_CREATED_IN_LOG_HOUR_FORM,
 } from './constants';
 
 export function defaultAction() {
@@ -112,5 +117,39 @@ export function endLoadingFormActivities(payload) {
   return {
     type: END_LOADING_FORM_ACTIVITIES,
     payload,
+  };
+}
+
+export function launchNewTaskDialog(activityId) {
+  return {
+    type: LAUNCH_NEW_TASK_DIALOG,
+    payload: activityId,
+  };
+}
+
+export function dismissNewTaskDialog() {
+  return {
+    type: DISMISS_NEW_TASK_DIALOG,
+  };
+}
+
+export function submitNewTaskFormAndCloseIt(payload) {
+  return {
+    type: SUBMIT_NEW_TASK_FORM_AND_CLOSE_IT,
+    payload,
+  };
+}
+
+export function submitNewTaskForm(payload) {
+  return {
+    type: SUBMIT_NEW_TASK_FORM,
+    payload,
+  };
+}
+
+export function newTaskCreatedInLogHourForm(newTask) {
+  return {
+    type: NEW_TASK_CREATED_IN_LOG_HOUR_FORM,
+    payload: newTask,
   };
 }

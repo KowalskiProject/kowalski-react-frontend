@@ -20,3 +20,9 @@ export const END_LOADING_FORM_PROJECTS = 'app/TimesheetPage/END_LOADING_FORM_PRO
 export const LOG_HOUR_FORM = 'app/TimesheetPage/LOG_HOUR_FORM';
 export const END_LOADING_FORM_ACTIVITIES = 'app/TimesheetPage/END_LOADING_FORM_ACTIVITIES';
 export const LOAD_FORM_ACTIVITIES = 'app/TimesheetPage/LOAD_FORM_ACTIVITIES';
+export const LAUNCH_NEW_TASK_DIALOG = 'app/TimesheetPage/LAUNCH_NEW_TASK_DIALOG';
+export const DISMISS_NEW_TASK_DIALOG = 'app/TimesheetPage/DISMISS_NEW_TASK_DIALOG';
+export const SUBMIT_NEW_TASK_FORM = 'app/TimesheetPage/SUBMIT_NEW_TASK_FORM';
+export const SUBMIT_NEW_TASK_FORM_AND_CLOSE_IT = 'app/TimesheetPage/SUBMIT_NEW_TASK_FORM_AND_CLOSE_IT';
+export const NEW_TASK_CREATED_IN_LOG_HOUR_FORM = 'app/TimesheetPage/NEW_TASK_CREATED_IN_LOG_HOUR_FORM';
+

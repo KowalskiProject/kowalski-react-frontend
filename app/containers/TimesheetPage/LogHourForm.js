@@ -88,6 +88,7 @@ class LogHourForm extends React.Component { // eslint-disable-line react/prefer-
       isTaskOverlaySelectOpened,
       onDismissTaskOverlaySelect,
       onSelectTaskClicked,
+      onNewTaskSelected,
       formProjects,
     } = this.props;
 
@@ -111,11 +112,11 @@ class LogHourForm extends React.Component { // eslint-disable-line react/prefer-
           </Field>
 
           <Field
-            name="task"
-            id="task"
+            name="taskId"
+            id="taskId"
             label="Your Tasks"
             component={TaskSelectionField}
-            {...{ isTaskOverlaySelectOpened, onDismissTaskOverlaySelect, onSelectTaskClicked }}
+            {...{ isTaskOverlaySelectOpened, onDismissTaskOverlaySelect, onSelectTaskClicked, onNewTaskSelected }}
             validate={[required]}
             optionGroups={this.props.taskOverlaySelectOptions.toJSON()}
           />
@@ -172,6 +173,7 @@ LogHourForm.propTypes = {
   })).isRequired,
   loadFormActivities: PropType.func.isRequired,
   taskOverlaySelectOptions: PropType.object.isRequired,
+  onNewTaskSelected: PropType.func.isRequired,
 };
 
 export default reduxForm({

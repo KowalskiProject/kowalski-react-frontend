@@ -18,6 +18,9 @@ import {
   ENDED_LOADING_TIME_RECORDS,
   END_LOADING_FORM_PROJECTS,
   END_LOADING_FORM_ACTIVITIES,
+  LAUNCH_NEW_TASK_DIALOG,
+  DISMISS_NEW_TASK_DIALOG,
+  NEW_TASK_CREATED_IN_LOG_HOUR_FORM,
 } from './constants';
 
 const initialState = fromJS({
@@ -28,16 +31,40 @@ const initialState = fromJS({
   isTaskOverlaySelectOpened: false,
   formProjects: [],
   formActivities: [],
+  isTaskDialogOpen: false,
+  activityIdLoadedIntoTaskDialog: null,
 });
 
-function timesheetPageReducer(state = initialState, { type, payload }) {
+function timesheetPageReducer(state, { type, payload }) {
+  // Very weird bug in my local env if I do state = initialState in function signature
+  if (!state) {
+    state = initialState;
+  }
+
   switch (type) {
+    case NEW_TASK_CREATED_IN_LOG_HOUR_FORM:
+      return state.set('isTaskOverlaySelectOpened', false).updateIn(
+        [
+          'formActivities',
+          state.get('formActivities').findIndex((activity) => activity.get('activityId') === payload.get('activityId')),
+          'tasks',
+        ],
+        (list) => list.push(payload),
+      );
+    case LAUNCH_NEW_TASK_DIALOG:
+      return state
+        .set('isTaskDialogOpen', true)
+        .set('activityIdLoadedIntoTaskDialog', payload);
+    case DISMISS_NEW_TASK_DIALOG:
+      return state
+        .set('isTaskDialogOpen', false)
+        .set('activityIdLoadedIntoTaskDialog', null);
     case END_LOADING_FORM_ACTIVITIES:
       return state
-        .set('formActivities', payload.success ? payload.data : null);
+        .set('formActivities', payload.success ? payload.data : []);
     case END_LOADING_FORM_PROJECTS:
       return state
-        .set('formProjects', payload.success ? payload.data : null);
+        .set('formProjects', payload.success ? payload.data : []);
     case ENDED_LOADING_TIME_RECORDS:
       return state
         .set('isLoadingTimeRecords', false)

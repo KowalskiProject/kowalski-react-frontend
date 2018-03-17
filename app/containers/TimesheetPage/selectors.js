@@ -3,12 +3,24 @@ import { Map, List } from 'immutable';
 import startOfWeek from 'date-fns/start_of_week';
 import endOfWeek from 'date-fns/end_of_week';
 import format from 'date-fns/format';
-import { DATE_DAY_FORMAT } from './constants';
+import { formValueSelector } from 'redux-form/immutable';
+import { DATE_DAY_FORMAT, LOG_HOUR_FORM } from './constants';
 
 /**
  * Direct selector to the timesheetPage state domain
  */
 const selectTimesheetPageDomain = (state) => state.get('timesheetpage') || Map();
+
+/**
+ * New Task Form selectors
+ */
+const makeNewTaskFormSelectedProjectIdSelector = (state) => {
+  const value = formValueSelector(LOG_HOUR_FORM)(state, 'projectId');
+  if (value) {
+    return parseInt(value);
+  }
+  return value;
+}
 
 const makeSelectSelectedDate = createSelector(
   [selectTimesheetPageDomain],
@@ -36,12 +48,32 @@ const makeTimeSlotEntriesSelector = createSelector(
 
 const makeIsTaskOverlaySelectOpened = () => createSelector(
   selectTimesheetPageDomain,
-  (substate) => substate.get('isTaskOverlaySelectOpened'),
+  (substate) => {
+    return substate.get('isTaskOverlaySelectOpened');
+  },
 );
 
 const makeSelectFormProjects = () => createSelector(
   selectTimesheetPageDomain,
-  (substate) => substate.get('formProjects'),
+  (substate) => {
+    return substate.get('formProjects')
+  },
+);
+
+const makeSelectIsTaskDialogOpen = () => createSelector(
+  selectTimesheetPageDomain,
+  (substate) => substate.get('isTaskDialogOpen'),
+);
+
+const makeSelectActivityIdLoadedIntoTaskDialog = () => createSelector(
+  selectTimesheetPageDomain,
+  (substate) => {
+    let value = substate.get('activityIdLoadedIntoTaskDialog');
+    if (value) {
+      return parseInt(value.split('-')[0]);
+    }
+    return null;
+  },
 );
 
 const makeSelectFormActivities = () => createSelector(
@@ -80,6 +112,22 @@ const makeSelectIsLoadingTimeRecords = () => createSelector(
   (substate) => substate.get('isLoadingTimeRecords'),
 );
 
+const makeSelectNewTaskFormSelectedProjectSelector = () => createSelector(
+  [makeSelectFormProjects(), makeNewTaskFormSelectedProjectIdSelector],
+  (formProjects, selectedProjectId) => formProjects.find(
+    (project) => project.get('projectId') === selectedProjectId
+  ),
+);
+
+const makeSelectNewTaskFormSelectedActivity = () => createSelector(
+  [makeSelectFormActivities(), makeSelectActivityIdLoadedIntoTaskDialog()],
+  (formActivities, selectedActivityId) => {
+    return formActivities.find(
+      (activity) => activity.get('activityId') === selectedActivityId
+    );
+  },
+);
+
 export {
   selectTimesheetPageDomain,
   makeSelectSelectedDate,
@@ -92,4 +140,9 @@ export {
   makeSelectFormProjects,
   makeSelectFormActivities,
   makeSelectFormActivitiesAsOverlaySelectOptions,
+  makeSelectIsTaskDialogOpen,
+  makeSelectActivityIdLoadedIntoTaskDialog,
+  makeNewTaskFormSelectedProjectIdSelector,
+  makeSelectNewTaskFormSelectedProjectSelector,
+  makeSelectNewTaskFormSelectedActivity,
 };
