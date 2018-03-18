@@ -24,6 +24,8 @@ import {
   SUBMIT_NEW_TASK_FORM,
   SUBMIT_NEW_TASK_FORM_AND_CLOSE_IT,
   NEW_TASK_CREATED_IN_LOG_HOUR_FORM,
+  UPDATE_SELECTED_DATE,
+  UPDATE_CACHED_SELECT_DATE,
 } from './constants';
 
 export function defaultAction() {
@@ -86,10 +88,10 @@ export function openTaskOverlaySelect() {
   };
 }
 
-export function endedLoadingTimeRecords(timeSlots) {
+export function endedLoadingTimeRecords(timeRecords) {
   return {
     type: ENDED_LOADING_TIME_RECORDS,
-    payload: timeSlots,
+    payload: timeRecords,
   };
 }
 
@@ -151,5 +153,19 @@ export function newTaskCreatedInLogHourForm(newTask) {
   return {
     type: NEW_TASK_CREATED_IN_LOG_HOUR_FORM,
     payload: newTask,
+  };
+}
+
+export function updateSelectedDate(payload) {
+  return {
+    type: UPDATE_SELECTED_DATE,
+    payload,
+  };
+}
+
+export function updateCachedSelectDate(newDate) {
+  return {
+    type: UPDATE_CACHED_SELECT_DATE,
+    payload: newDate,
   };
 }

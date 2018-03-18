@@ -2,8 +2,6 @@ import React from 'react';
 import styled from 'styled-components';
 import PropType from 'prop-types';
 import { Field, reduxForm } from 'redux-form/immutable';
-import { parse as parseQueryParam } from 'query-string';
-import parse from 'date-fns/parse';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 
 import InputField from 'components/InputField/Loadable';
@@ -47,8 +45,10 @@ const FormActionWrapper = styled.div`
   width: 100%;
 `;
 
-const submissionHook = (onSubmit, day) => (values) => {
-  const newValues = values.set('day', day);
+const submissionHook = (onSubmit, reportedDay) => (values) => {
+  const newValues = values
+    .delete('projectId')
+    .set('reportedDay', reportedDay);
   onSubmit(newValues);
 };
 
@@ -80,7 +80,6 @@ class LogHourForm extends React.Component { // eslint-disable-line react/prefer-
 
   render() {
     const {
-      history,
       error,
       onSubmit,
       handleSubmit,
@@ -90,14 +89,21 @@ class LogHourForm extends React.Component { // eslint-disable-line react/prefer-
       onSelectTaskClicked,
       onNewTaskSelected,
       formProjects,
+      onDismissForm,
+      date,
+      timeRecordForEdition,
     } = this.props;
 
-    const date = parse(parseQueryParam(history.location.search).date);
+    const isEdition = !!timeRecordForEdition;
+
+    if (!date) {
+      onDismissForm();
+    }
 
     return (
       <Wrapper>
         <form onSubmit={handleSubmit(submissionHook(onSubmit, date))}>
-          <FormTitle><H1>Add Time</H1></FormTitle>
+          <FormTitle><H1>{`${isEdition ? 'Edit Time' : 'Add Time'}`}</H1></FormTitle>
 
           <Field
             name="projectId"
@@ -122,23 +128,32 @@ class LogHourForm extends React.Component { // eslint-disable-line react/prefer-
           />
 
           <Field
-            name="duration"
-            id="duration"
+            name="reportedTime"
+            id="reportedTime"
             component={InputField}
             validate={[required, timeEntryFormat]}
             label="How Long it last?"
-            placeholder="blabla"
+            placeholder="Ex: 02:00, 1:20 etc."
           />
 
           <Field
-            name="description"
-            id="description"
+            name="comment"
+            id="comment"
             component={TextAreaField}
             validate={[required]}
-            label="Description"
+            label="comment"
           />
 
-          {error && <strong>{error}</strong>}
+          {
+            error &&
+            <div className="control" style={{ marginTop: '1rem', marginBottom: '1rem' }}>
+              <article className="message is-danger">
+                <div className="message-body">
+                  { error }
+                </div>
+              </article>
+            </div>
+          }
 
           <FormActions>
             <FormActionWrapper className="control">
@@ -146,8 +161,14 @@ class LogHourForm extends React.Component { // eslint-disable-line react/prefer-
                 Submit
               </FormAction>
             </FormActionWrapper>
+            {
+              isEdition &&
+                <FormAction type="submit" className="button is-danger" disabled={isSubmitting}>
+                  Delete
+                </FormAction>
+            }
             <FormActionWrapper className="control">
-              <FormAction className="button" type="button" onClick={() => history.push('/')}>Cancel</FormAction>
+              <FormAction className="button" type="button" onClick={onDismissForm}>Cancel</FormAction>
             </FormActionWrapper>
           </FormActions>
         </form>
@@ -157,7 +178,6 @@ class LogHourForm extends React.Component { // eslint-disable-line react/prefer-
 }
 
 LogHourForm.propTypes = {
-  history: PropType.object,
   error: PropType.any,
   handleSubmit: PropType.func,
   isSubmitting: PropType.any,
@@ -174,6 +194,15 @@ LogHourForm.propTypes = {
   loadFormActivities: PropType.func.isRequired,
   taskOverlaySelectOptions: PropType.object.isRequired,
   onNewTaskSelected: PropType.func.isRequired,
+  onDismissForm: PropType.func.isRequired,
+  date: PropType.objectOf(Date).isRequired,
+  timeRecordForEdition: ImmutablePropTypes.contains({
+    trId: PropType.number.isRequired,
+    taskId: PropType.number.isRequired,
+    projectId: PropType.number.isRequired,
+    comment: PropType.string.isRequired,
+    reportedTime: PropType.string.isRequired,
+  }),
 };
 
 export default reduxForm({

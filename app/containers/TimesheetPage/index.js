@@ -1,5 +1,4 @@
 /**
- *
  * TimesheetPage
  *
  */
@@ -15,6 +14,7 @@ import styled from 'styled-components';
 import isBefore from 'date-fns/is_before';
 import addDays from 'date-fns/add_days';
 import format from 'date-fns/format';
+import isSameWeek from 'date-fns/is_same_week';
 import { List } from 'immutable';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import Modal from 'components/Modal/Loadable';
@@ -28,8 +28,7 @@ import * as actions from './actions';
 import {
   makeSelectSelectedDate,
   makeSelectSelectedRange,
-  makeSelectIsSubmitting,
-  makeTimeSlotDayMapSelector,
+  makeTimeRecordDayMapSelector,
   makeIsTaskOverlaySelectOpened,
   makeSelectIsLoadingTimeRecords,
   makeSelectFormProjects,
@@ -37,13 +36,15 @@ import {
   makeSelectIsTaskDialogOpen,
   makeSelectNewTaskFormSelectedProjectSelector,
   makeSelectNewTaskFormSelectedActivity,
+  makeSelectCachedSelectedDate,
+  makeSelectSelectedTimeRecordForEdition,
 } from './selectors';
 import reducer from './reducer';
 import saga from './saga';
 import messages from './messages';
 import LogHourForm from './LogHourForm';
-import { DATE_DAY_FORMAT } from './constants';
-import { unauthorizedAccessDetected } from '../App/actions';
+import { DATE_DAY_FORMAT, NEXT_MONTH, PREVIOUS_MONTH } from './constants';
+import { unauthorizedAccessDetected, navigateTo } from '../App/actions';
 import LoadingCentralDiv from '../../components/LoadingCentralDiv';
 import NewTaskForm from '../ProjectPage/NewTaskForm';
 
@@ -94,7 +95,13 @@ const DaysArea = styled.div`
   flex-direction: row;
 `;
 
-const renderDays = ([rangeStart, rangeEnd], history, timeSlotDayMap, isLoadingTimeRecords) => {
+function renderDays(
+  [rangeStart, rangeEnd],
+  timeRecordDayMap,
+  isLoadingTimeRecords,
+  onFreeSlotSelect,
+  onSelectTimeRecordForEdition,
+) {
   const dayColumns = [];
   let currentDate = rangeStart;
 
@@ -102,12 +109,7 @@ const renderDays = ([rangeStart, rangeEnd], history, timeSlotDayMap, isLoadingTi
     return <LoadingCentralDiv />;
   }
 
-  const goToHourForm = (date) => () => {
-    history.push({
-      pathname: '/log',
-      search: `?date=${format(date)}`,
-    });
-  };
+  const goToHourForm = (date) => () => onFreeSlotSelect(date);
 
   while (isBefore(currentDate, rangeEnd)) {
     const formattedDate = format(currentDate, DATE_DAY_FORMAT);
@@ -115,16 +117,67 @@ const renderDays = ([rangeStart, rangeEnd], history, timeSlotDayMap, isLoadingTi
       key={formattedDate}
       day={currentDate}
       onFreeSlotClick={goToHourForm(currentDate)}
-      timeSlots={timeSlotDayMap.get(formattedDate) || List()}
+      onSlotClicked={onSelectTimeRecordForEdition}
+      timeRecords={timeRecordDayMap.get(formattedDate) || List()}
     />);
     currentDate = addDays(currentDate, 1);
   }
   return dayColumns;
-};
+}
 
 class TimesheetPage extends React.Component {
+  constructor(props) {
+    super(props);
+    this.forwardOneMonth = this.forwardOneMonth.bind(this);
+    this.backwardOneMonth = this.backwardOneMonth.bind(this);
+    this.selectNewDate = this.selectNewDate.bind(this);
+    this.dismissLogHourForm = this.dismissLogHourForm.bind(this);
+    this.selectFreeTimeSlot = this.selectFreeTimeSlot.bind(this);
+    this.selectTimeRecordForEdition = this.selectTimeRecordForEdition.bind(this);
+  }
+
   componentWillMount() {
-    this.props.loadTimeRecordsForWeekDate(new Date());
+    if (!isSameWeek(this.props.selectedDate, this.props.cachedSelectedDate)) {
+      this.props.loadTimeRecordsForWeekDate(this.props.selectedDate);
+      this.props.updateCachedSelectDate(this.props.selectedDate);
+    }
+  }
+
+  forwardOneMonth() {
+    this.props.updateSelectedDate({
+      currentDate: this.props.selectedDate,
+      operation: NEXT_MONTH,
+    });
+  }
+
+  selectNewDate(newDate) {
+    this.props.updateSelectedDate({
+      currentDate: this.props.selectedDate,
+      newDate,
+    });
+  }
+
+  backwardOneMonth() {
+    this.props.updateSelectedDate({
+      currentDate: this.props.selectedDate,
+      operation: PREVIOUS_MONTH,
+    });
+  }
+
+  dismissLogHourForm() {
+    this.props.navigateTo(`/?date=${format(this.props.selectedDate)}`);
+  }
+
+  selectTimeRecordForEdition(trId) {
+    this.props.navigateTo(`/log?date=${format(this.props.selectedDate)}&trId=${trId}`);
+  }
+
+  selectFreeTimeSlot(date) {
+    this.props.updateSelectedDate({
+      currentDate: this.props.selectedDate,
+      newDate: date,
+    });
+    this.props.navigateTo(`/log?date=${format(date)}`);
   }
 
   renderNewTaskModal() {
@@ -135,7 +188,7 @@ class TimesheetPage extends React.Component {
             <NewTaskForm
               project={this.props.newTaskFormSelectedProject}
               activity={this.props.newTaskFormSelectedActivity}
-              predefinedAccountableId={parseInt(localStorage.getItem('currentUserId'))}
+              predefinedAccountableId={parseInt(localStorage.getItem('currentUserId'), 10)}
               onAdd={this.props.submitNewTaskFormAndCloseIt}
               onAddText="Create and Select"
               onCancel={this.props.dismissNewTaskDialog}
@@ -166,9 +219,9 @@ class TimesheetPage extends React.Component {
             </TimeSheetLabelWrapper>
             <AppCalendar
               selectedDate={this.props.selectedDate}
-              onNextMonthClicked={this.props.onNextMonthClicked}
-              onPreviousMonthClicked={this.props.onPreviousMonthClicked}
-              onDateClicked={this.props.onDateChanged}
+              onNextMonthClicked={this.forwardOneMonth}
+              onPreviousMonthClicked={this.backwardOneMonth}
+              onDateClicked={this.selectNewDate}
               options={{ highlightedRanges: [this.props.selectedRange] }}
             />
             <TimeSheetLabelWrapper>
@@ -186,9 +239,9 @@ class TimesheetPage extends React.Component {
               render={(myProps) => (
                 <LogHourForm
                   {...myProps}
+                  date={this.props.selectedDate}
                   loadFormProjects={this.props.loadFormProjects}
                   onSubmit={this.props.submitLogForm}
-                  isSubmitting={this.props.isSubmitting}
                   isTaskOverlaySelectOpened={this.props.isTaskOverlaySelectOpened}
                   onDismissTaskOverlaySelect={this.props.closeTaskOverlaySelect}
                   onSelectTaskClicked={this.props.openTaskOverlaySelect}
@@ -196,6 +249,8 @@ class TimesheetPage extends React.Component {
                   taskOverlaySelectOptions={this.props.formActivitiesAsOverlaySelectOptions}
                   loadFormActivities={this.props.loadFormActivities}
                   onNewTaskSelected={this.props.launchNewTaskDialog}
+                  onDismissForm={this.dismissLogHourForm}
+                  timeRecordForEdition={this.props.timeRecordOnEdition}
                 />
               )}
             />
@@ -203,7 +258,15 @@ class TimesheetPage extends React.Component {
               <AboveDaysArea>
               </AboveDaysArea>
               <DaysArea>
-                { renderDays(this.props.selectedRange, this.props.history, this.props.timeSlotDayMap, this.props.isLoadingTimeRecords) }
+                {
+                  renderDays(
+                    this.props.selectedRange,
+                    this.props.timeRecordDayMap,
+                    this.props.isLoadingTimeRecords,
+                    this.selectFreeTimeSlot,
+                    this.selectTimeRecordForEdition,
+                  )
+                }
               </DaysArea>
             </DayColumnsWrapper>
           </Switch>
@@ -215,18 +278,15 @@ class TimesheetPage extends React.Component {
 
 TimesheetPage.propTypes = {
   selectedDate: PropTypes.objectOf(Date).isRequired,
+  cachedSelectedDate: PropTypes.objectOf(Date),
   selectedRange: PropTypes.arrayOf(Date).isRequired,
-  onNextMonthClicked: PropTypes.func,
-  onPreviousMonthClicked: PropTypes.func,
-  onDateChanged: PropTypes.func,
   match: PropTypes.object,
-  history: PropTypes.any,
   submitLogForm: PropTypes.func,
-  isSubmitting: PropTypes.bool,
-  timeSlotDayMap: PropTypes.object,
+  timeRecordDayMap: PropTypes.object,
   isTaskOverlaySelectOpened: PropTypes.bool,
   closeTaskOverlaySelect: PropTypes.func.isRequired,
   openTaskOverlaySelect: PropTypes.func.isRequired,
+  updateCachedSelectDate: PropTypes.func.isRequired,
   loadTimeRecordsForWeekDate: PropTypes.func.isRequired,
   isLoadingTimeRecords: PropTypes.bool.isRequired,
   loadFormProjects: PropTypes.func.isRequired,
@@ -246,14 +306,16 @@ TimesheetPage.propTypes = {
   newTaskFormSelectedActivity: PropTypes.object,
   newTaskFormSelectedProject: PropTypes.object,
   submitNewTaskFormAndCloseIt: PropTypes.func.isRequired,
-  submitNewTaskForm: PropTypes.func.isRequired,
+  updateSelectedDate: PropTypes.func.isRequired,
+  navigateTo: PropTypes.func.isRequired,
+  timeRecordOnEdition: PropTypes.object,
 };
 
 const mapStateToProps = createStructuredSelector({
   selectedDate: makeSelectSelectedDate,
+  cachedSelectedDate: makeSelectCachedSelectedDate(),
   selectedRange: makeSelectSelectedRange,
-  isSubmitting: makeSelectIsSubmitting,
-  timeSlotDayMap: makeTimeSlotDayMapSelector,
+  timeRecordDayMap: makeTimeRecordDayMapSelector,
   isTaskOverlaySelectOpened: makeIsTaskOverlaySelectOpened(),
   isLoadingTimeRecords: makeSelectIsLoadingTimeRecords(),
   formProjects: makeSelectFormProjects(),
@@ -261,9 +323,10 @@ const mapStateToProps = createStructuredSelector({
   isTaskDialogOpen: makeSelectIsTaskDialogOpen(),
   newTaskFormSelectedActivity: makeSelectNewTaskFormSelectedActivity(),
   newTaskFormSelectedProject: makeSelectNewTaskFormSelectedProjectSelector(),
+  timeRecordOnEdition: makeSelectSelectedTimeRecordForEdition(),
 });
 
-const withConnect = connect(mapStateToProps, { ...actions, unauthorizedAccessDetected });
+const withConnect = connect(mapStateToProps, { ...actions, unauthorizedAccessDetected, navigateTo });
 
 const withReducer = injectReducer({ key: 'timesheetpage', reducer });
 const withSaga = injectSaga({ key: 'timesheetpage', saga });

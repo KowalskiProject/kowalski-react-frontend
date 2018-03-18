@@ -8,7 +8,7 @@ import React from 'react';
 import styled from 'styled-components';
 import format from 'date-fns/format';
 import PropTypes from 'prop-types';
-import { List } from 'immutable';
+import ImmutablePropTypes from 'react-immutable-proptypes';
 import parseAmountOfHours from '../../support/parsers/duration';
 
 const wrapperFlexBasis = 14.286;
@@ -58,30 +58,33 @@ const generatePlusSlotWrapper = (hourSlot, totalSlot) => generateSlotWrapper(hou
   }
 `;
 
-const renderTimeSlots = (timeSlots) => (
-  (timeSlots || List()).map((timeSlot, index) => {
-    const amountOfHours = parseAmountOfHours(timeSlot.get('duration'));
+const renderTimeRecords = (timeRecords, onSlotClicked) => (
+  timeRecords.map((timeRecord) => {
+    const amountOfHours = parseAmountOfHours(timeRecord.get('reportedTime'));
     const SlotWrapper = generateSlotWrapper(amountOfHours, 8.0);
-    const id = index;
-    // TODO put the id of the log instead of index. This is going to be returned by the server,
-    // so we must wait until it's integrated
+    const id = timeRecord.get('trId');
     return (
-      <SlotWrapper key={id}>
-        <p>{ timeSlot.get('duration') }</p>
-        <p>{ timeSlot.get('project') } - { timeSlot.get('activity') }</p>
+      <SlotWrapper key={id} onClick={() => onSlotClicked(id)}>
+        <p>{ timeRecord.get('reportedTime') }</p>
+        <p>
+          {
+            `${(timeRecord.get('projectCode') || '[PROJ]')} - ` +
+            `${(timeRecord.get('activityName') || 'Activity Name -')}` +
+            `${(timeRecord.get('taskName') || 'Task Name')}`
+          }
+        </p>
       </SlotWrapper>
     );
   })
 );
 
-const amountOfHoursInTimeSlots = (timeSlots) => (
-  (timeSlots || List()).reduce((memo, current) => (
-    memo + parseAmountOfHours(current.get('duration'))
-  ), 0.0)
+const amountOfHoursInTimeRecords = (timeRecords) => timeRecords.reduce(
+  (memo, current) => memo + parseAmountOfHours(current.get('reportedTime')),
+  0.0
 );
 
-const renderPlusButton = (timeSlots, onClickCallback) => {
-  const amountOfHours = 8.0 - amountOfHoursInTimeSlots(timeSlots);
+const renderPlusButton = (timeRecords, onClickCallback) => {
+  const amountOfHours = 8.0 - amountOfHoursInTimeRecords(timeRecords);
   const SlotWrapper = generatePlusSlotWrapper(amountOfHours, 8.0);
 
   return (
@@ -89,7 +92,7 @@ const renderPlusButton = (timeSlots, onClickCallback) => {
   );
 };
 
-function DayColumn({ day, onFreeSlotClick, timeSlots }) {
+function DayColumn({ day, onFreeSlotClick, timeRecords, onSlotClicked }) {
   return (
     <Wrapper>
       <DayLabelWrapper>
@@ -97,8 +100,8 @@ function DayColumn({ day, onFreeSlotClick, timeSlots }) {
         <p>{ format(day, 'D') }</p>
       </DayLabelWrapper>
       <SlotsContainer>
-        { renderTimeSlots(timeSlots) }
-        { renderPlusButton(timeSlots, onFreeSlotClick) }
+        { renderTimeRecords(timeRecords, onSlotClicked) }
+        { renderPlusButton(timeRecords, onFreeSlotClick) }
       </SlotsContainer>
     </Wrapper>
   );
@@ -106,8 +109,9 @@ function DayColumn({ day, onFreeSlotClick, timeSlots }) {
 
 DayColumn.propTypes = {
   day: PropTypes.instanceOf(Date).isRequired,
-  onFreeSlotClick: PropTypes.func,
-  timeSlots: PropTypes.instanceOf(List),
+  onFreeSlotClick: PropTypes.func.isRequired,
+  onSlotClicked: PropTypes.func.isRequired,
+  timeRecords: ImmutablePropTypes.list.isRequired,
 };
 
 export default DayColumn;

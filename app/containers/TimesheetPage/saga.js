@@ -1,7 +1,14 @@
-import { takeEvery, call, put, select } from 'redux-saga/effects';
+import { takeEvery, call, put } from 'redux-saga/effects';
 import { push } from 'react-router-redux';
-import { List, fromJS } from 'immutable';
+import { fromJS } from 'immutable';
 import { stopSubmit, change, startSubmit, reset } from 'redux-form/immutable';
+import startOfWeek from 'date-fns/start_of_week';
+import endOfWeek from 'date-fns/end_of_week';
+import addMonths from 'date-fns/add_months';
+import isSameWeek from 'date-fns/is_same_week';
+import format from 'date-fns/format';
+
+
 import {
   newLogSaved,
   endedLoadingTimeRecords,
@@ -19,36 +26,82 @@ import {
   LOAD_FORM_ACTIVITIES,
   NEW_TASK_CREATED_IN_LOG_HOUR_FORM,
   SUBMIT_NEW_TASK_FORM_AND_CLOSE_IT,
+  UPDATE_SELECTED_DATE,
+  NEXT_MONTH,
+  PREVIOUS_MONTH,
 } from './constants';
 
 import { NEW_TASK_FORM_ID } from '../ProjectPage/constants';
 
 import {
-  getProjects, getProjectActivities, createTask,
+  getProjects, getProjectActivities, createTask, saveTimeRecord, fetchTimeRecords,
 } from '../../support/backend/KowalskiBackendClient';
 
 import { expiredSessionDetected, requestErrorReceived } from '../App/actions';
 import { genCommonReqConfig } from '../../support/backend/utils';
-import { makeSelectFormActivities } from './selectors';
+import { formatDate } from '../../support/backend/formatters';
 
 export function* handleSubmitLogForm({ payload }) {
-  yield call(() => new Promise((resolve) => {
-    setTimeout(() => resolve(), 300);
-  }));
-  yield put(newLogSaved(payload));
-  yield put(push('/'));
+  const currentUserId = localStorage.getItem('currentUserId');
+
+  if (!currentUserId) {
+    yield put(expiredSessionDetected());
+    return;
+  }
+
+  const timeRecordData = payload
+    .set('userId', parseInt(currentUserId, 10))
+    .updateIn(['reportedDay'], (dateObject) => formatDate(dateObject));
+
+  try {
+    yield put(startSubmit(LOG_HOUR_FORM));
+    const savedTimeRecord = yield call(saveTimeRecord, { timeRecordData, ...genCommonReqConfig() });
+    yield put(stopSubmit(LOG_HOUR_FORM));
+    yield put(newLogSaved(fromJS(savedTimeRecord)));
+    yield put(push('/'));
+  } catch (error) {
+    yield put(requestErrorReceived({
+      error,
+      dispatchOnAuthError: [stopSubmit(LOG_HOUR_FORM)],
+      dispatchOnOtherErrors: [
+        stopSubmit(
+          LOG_HOUR_FORM,
+          { _error: 'There was an error while trying to communicate with the server =(' },
+        ),
+      ],
+    }));
+  }
 }
 
 export function* handleTimeRecordsLoading({ payload }) {
-  const weekDate = payload;
+  const userId = localStorage.getItem('currentUserId');
 
-  yield call(() => new Promise((resolve) => {
-    setTimeout(() => resolve(weekDate), 300);
-  }));
+  if (!userId) {
+    yield put(expiredSessionDetected());
+    return;
+  }
 
-  const timeRecords = List(); // TODO parse it to be in the format of our timeSlotEntries array
+  const from = formatDate(startOfWeek(payload));
+  const to = formatDate(endOfWeek(payload));
 
-  yield put(endedLoadingTimeRecords(timeRecords));
+  try {
+    const timeRecords = yield call(fetchTimeRecords, {
+      params: { from, to },
+      userId,
+      ...genCommonReqConfig(),
+    });
+
+    yield put(endedLoadingTimeRecords({ success: true, data: fromJS(timeRecords) }));
+  } catch (error) {
+    yield put(requestErrorReceived({
+      error,
+      dispatchOnAuthError: [endedLoadingTimeRecords({ success: false })],
+      dispatchOnOtherErrors: [endedLoadingTimeRecords({
+        success: false,
+        errorMsg: 'There was a server related error while trying to load the form options. Please try again later.',
+      })],
+    }));
+  }
 }
 
 export function* handleLoadFormProjects() {
@@ -117,8 +170,6 @@ export function* handleLoadFormActivities({ payload }) {
 }
 
 export function* handleSubmitNewTaskForm({ payload }) {
-  const project = payload.get('project');
-  const projectId = project.get('projectId');
   const activityId = payload.get('activityId');
   yield put(startSubmit(NEW_TASK_FORM_ID));
   try {
@@ -129,7 +180,6 @@ export function* handleSubmitNewTaskForm({ payload }) {
         taskData: payload.delete('activityId').delete('project').toJSON(),
       }
     );
-    debugger;
     yield put(reset(NEW_TASK_FORM_ID));
     yield put(stopSubmit(NEW_TASK_FORM_ID));
 
@@ -138,7 +188,6 @@ export function* handleSubmitNewTaskForm({ payload }) {
     yield put(newTaskCreatedInLogHourForm(newTask));
     return newTask;
   } catch (e) {
-    console.log(e);
     yield put(requestErrorReceived({
       error: e,
       dispatchOnAuthError: [stopSubmit(NEW_TASK_FORM_ID)],
@@ -165,6 +214,25 @@ export function* handleNewTaskCreatedInLogHourForm({ payload }) {
   yield put(change(LOG_HOUR_FORM, 'taskId', payload.get('taskId')));
 }
 
+export function* handleUpdateSelectedDate({ payload: { currentDate, operation, newDate } }) {
+  let resolvedNewDate = newDate;
+
+  if (!resolvedNewDate) {
+    switch (operation) {
+      case NEXT_MONTH:
+        resolvedNewDate = addMonths(currentDate, 1);
+        break;
+      case PREVIOUS_MONTH:
+        resolvedNewDate = addMonths(currentDate, -1);
+        break;
+      default:
+        throw new Error(`Unknown operation: ${operation}`);
+    }
+  }
+
+  yield put(push(`?date=${format(resolvedNewDate)}`));
+}
+
 export default function* defaultSaga() {
   yield takeEvery(SUBMIT_LOG_FORM, handleSubmitLogForm);
   yield takeEvery(LOAD_TIME_RECORDS_FOR_WEEK_DATE, handleTimeRecordsLoading);
@@ -172,6 +240,7 @@ export default function* defaultSaga() {
   yield takeEvery(LOAD_FORM_ACTIVITIES, handleLoadFormActivities);
   yield takeEvery(SUBMIT_NEW_TASK_FORM_AND_CLOSE_IT, handleSubmitNewTaskFormAndCloseIt);
   yield takeEvery(NEW_TASK_CREATED_IN_LOG_HOUR_FORM, handleNewTaskCreatedInLogHourForm);
+  yield takeEvery(UPDATE_SELECTED_DATE, handleUpdateSelectedDate);
 }
 
 // See example in containers/HomePage/saga.js

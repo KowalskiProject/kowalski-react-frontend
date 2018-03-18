@@ -21,6 +21,7 @@ export function* handleNavigateTo({ payload }) {
 
 export function* handleExpiredSection() {
   localStorage.removeItem('authToken');
+  localStorage.removeItem('currentUserId');
   yield put(push('/auth'));
 }
 

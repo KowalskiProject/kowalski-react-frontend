@@ -86,6 +86,34 @@ export function getProjectActivities({ config: { baseUrl }, token, projectId, pa
   });
 }
 
+export function saveTimeRecord({ config, token, timeRecordData }) {
+  const trId = timeRecordData.get('trId')
+  if (trId) {
+    return updateTimeRecord({
+      config, token, trId,
+      timeRecordData: timeRecordData.delete('trId')
+    });
+  }
+
+  return createTimeRecord({ config, token, timeRecordData });
+}
+
+export function createTimeRecord({ config: { baseUrl }, token, timeRecordData }) {
+  return request(`${baseUrl}/timerecords`, {
+    method: 'POST',
+    body: JSON.stringify(timeRecordData),
+    headers: generateCommonHeaders(token),
+  });
+}
+
+export function updateTimeRecord({ config: { baseUrl }, token, trId, timeRecordData }) {
+  return request(`${baseUrl}/timerecords/${trId}`, {
+    method: 'PUT',
+    body: JSON.stringify(timeRecordData),
+    headers: generateCommonHeaders(token),
+  });
+}
+
 export function getPeople({ config: { baseUrl }, token }) {
   return request(`${baseUrl}/users`, {
     method: 'GET',
@@ -99,6 +127,13 @@ export function registerPerson({ config: { baseUrl }, token, personData }) {
     body: JSON.stringify(personData),
     headers: generateCommonHeaders(token),
     parseResponse: false,
+  });
+}
+
+export function fetchTimeRecords({ config: { baseUrl }, token, userId, params }) {
+  return request(`${baseUrl}/users/${userId}/timerecords?${params ? queryString(params) : ''}`, {
+    method: 'GET',
+    headers: generateCommonHeaders(token),
   });
 }
 

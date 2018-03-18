@@ -23,13 +23,14 @@ export function* handleSubmission({ payload: { username, password, pageBeforeAut
     const serverResponse = yield call(authenticate, { config: { baseUrl: SERVER_BASE_URL }, username, password });
     const token = serverResponse.headers.get('Authorization').match(/Bearer (.*)/)[1];
     localStorage.setItem('authToken', token);
-    const userId = jwtDecode(token).kUserId;
-    if (!userId) {
+    const decodedToken = jwtDecode(token);
+    const { kUserId, authorities } = decodedToken;
+    if (!authorities || authorities.length === 0) {
       yield put(serverResponded({ success: false, errorMsg: 'You have not been authorized to use this system. Please contact the Administrator.' }));
       return;
     }
     yield put(serverResponded({ success: true }));
-    localStorage.setItem('currentUserId', userId);
+    localStorage.setItem('currentUserId', kUserId);
     if (pageBeforeAuthError) {
       yield put(savePageBeforeAuthError(null));
       yield put(push(pageBeforeAuthError));
