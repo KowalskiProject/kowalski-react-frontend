@@ -36,7 +36,7 @@ const AppWrapper = styled.div`
 `;
 
 function App(props) {
-  const { navigateTo } = props;
+  const { navigateTo, logout } = props;
 
   return (
     <AppWrapper>
@@ -52,6 +52,7 @@ function App(props) {
           onTimesheetClicked={() => navigateTo('/')}
           onProjectsClicked={() => navigateTo('/projects')}
           onPeopleClicked={() => navigateTo('/people')}
+          onLogoutClicked={() => logout()}
         >
           <Switch>
             <Route path="/projects/:code" component={requireAuth(ProjectPage)} />
@@ -68,7 +69,8 @@ function App(props) {
 }
 
 App.propTypes = {
-  navigateTo: PropTypes.func,
+  navigateTo: PropTypes.func.isRequired,
+  logout: PropTypes.func.isRequired,
 };
 
 const withSaga = injectSaga({ key: 'global', saga });

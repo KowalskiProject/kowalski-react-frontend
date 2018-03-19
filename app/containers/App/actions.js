@@ -24,6 +24,7 @@ import {
   REAUTH_ATTEMPT_DETECTED,
   REQUEST_ERROR_RECEIVED,
   SAVE_PAGE_BEFORE_AUTH_ERROR,
+  LOGOUT,
 } from './constants';
 
 export function startLoadingResource() {
@@ -74,5 +75,11 @@ export function savePageBeforeAuthError(payload) {
   return {
     type: SAVE_PAGE_BEFORE_AUTH_ERROR,
     payload,
+  };
+}
+
+export function logout() {
+  return {
+    type: LOGOUT,
   };
 }

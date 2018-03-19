@@ -6,6 +6,7 @@ import {
   UNAUTHORIZED_ACCESS_DETECTED,
   REAUTH_ATTEMPT_DETECTED,
   REQUEST_ERROR_RECEIVED,
+  LOGOUT,
 } from './constants';
 
 import {
@@ -53,10 +54,15 @@ export function* handleRequestErrorReceived({ payload: { error, dispatchOnAuthEr
   }
 }
 
+export function* handleLogout() {
+  yield handleExpiredSection();
+}
+
 export default function* defaultSaga() {
   yield takeEvery(NAVIGATE_TO, handleNavigateTo);
   yield takeEvery(EXPIRED_SECTION_DETECTED, handleExpiredSection);
   yield takeEvery(UNAUTHORIZED_ACCESS_DETECTED, handleUnauthorizedAccess);
   yield takeEvery(REAUTH_ATTEMPT_DETECTED, handleReauthAtemptDetected);
   yield takeEvery(REQUEST_ERROR_RECEIVED, handleRequestErrorReceived);
+  yield takeEvery(LOGOUT, handleLogout);
 }
