@@ -250,7 +250,8 @@ class TimesheetPage extends React.Component {
                   loadFormActivities={this.props.loadFormActivities}
                   onNewTaskSelected={this.props.launchNewTaskDialog}
                   onDismissForm={this.dismissLogHourForm}
-                  timeRecordForEdition={this.props.timeRecordOnEdition}
+                  initialValues={this.props.timeRecordOnEdition}
+                  onDeleteRecord={this.props.deleteTimeRecord}
                 />
               )}
             />
@@ -309,6 +310,7 @@ TimesheetPage.propTypes = {
   updateSelectedDate: PropTypes.func.isRequired,
   navigateTo: PropTypes.func.isRequired,
   timeRecordOnEdition: PropTypes.object,
+  deleteTimeRecord: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = createStructuredSelector({

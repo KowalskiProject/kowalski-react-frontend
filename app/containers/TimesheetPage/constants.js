@@ -27,6 +27,9 @@ export const SUBMIT_NEW_TASK_FORM_AND_CLOSE_IT = 'app/TimesheetPage/SUBMIT_NEW_T
 export const NEW_TASK_CREATED_IN_LOG_HOUR_FORM = 'app/TimesheetPage/NEW_TASK_CREATED_IN_LOG_HOUR_FORM';
 export const UPDATE_SELECTED_DATE = 'app/TimesheetPage/UPDATE_SELECTED_DATE';
 export const UPDATE_CACHED_SELECT_DATE = 'app/TimesheetPage/UPDATE_CACHED_SELECT_DATE';
+export const DELETE_TIME_RECORD = 'app/TimesheetPage/DELETE_TIME_RECORD';
+export const START_DELETING_TIME_RECORD = 'app/TimesheetPage/START_DELETING_TIME_RECORD';
+export const END_DELETING_TIME_RECORD = 'app/TimesheetPage/END_DELETING_TIME_RECORD';
 
 export const PREVIOUS_MONTH = 'PREVIOUS_MONTH';
 export const NEXT_MONTH = 'NEXT_MONTH';

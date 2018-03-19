@@ -5,7 +5,6 @@ import { stopSubmit, change, startSubmit, reset } from 'redux-form/immutable';
 import startOfWeek from 'date-fns/start_of_week';
 import endOfWeek from 'date-fns/end_of_week';
 import addMonths from 'date-fns/add_months';
-import isSameWeek from 'date-fns/is_same_week';
 import format from 'date-fns/format';
 
 
@@ -16,6 +15,8 @@ import {
   endLoadingFormActivities,
   newTaskCreatedInLogHourForm,
   dismissNewTaskDialog,
+  startDeletingTimeRecord,
+  endDeletingTimeRecord,
 } from './actions';
 
 import {
@@ -29,12 +30,13 @@ import {
   UPDATE_SELECTED_DATE,
   NEXT_MONTH,
   PREVIOUS_MONTH,
+  DELETE_TIME_RECORD,
 } from './constants';
 
 import { NEW_TASK_FORM_ID } from '../ProjectPage/constants';
 
 import {
-  getProjects, getProjectActivities, createTask, saveTimeRecord, fetchTimeRecords,
+  getProjects, getProjectActivities, createTask, saveTimeRecord, fetchTimeRecords, deleteTimeRecord,
 } from '../../support/backend/KowalskiBackendClient';
 
 import { expiredSessionDetected, requestErrorReceived } from '../App/actions';
@@ -233,6 +235,27 @@ export function* handleUpdateSelectedDate({ payload: { currentDate, operation, n
   yield put(push(`?date=${format(resolvedNewDate)}`));
 }
 
+export function* handleDeleteTimeRecord({ payload: { trId } }) {
+  yield put(startDeletingTimeRecord());
+  try {
+    yield call(deleteTimeRecord, { trId, ...genCommonReqConfig() });
+    yield put(endDeletingTimeRecord({ success: true, trId }));
+  } catch (error) {
+    yield put(requestErrorReceived({
+      error,
+      dispatchOnAnyError: [
+        endDeletingTimeRecord({ success: false }),
+      ],
+      dispatchOnOtherErrors: [
+        stopSubmit(
+          LOG_HOUR_FORM,
+          { _error: 'There was an error in the server while trying to delete this record =(' },
+        ),
+      ],
+    }));
+  }
+}
+
 export default function* defaultSaga() {
   yield takeEvery(SUBMIT_LOG_FORM, handleSubmitLogForm);
   yield takeEvery(LOAD_TIME_RECORDS_FOR_WEEK_DATE, handleTimeRecordsLoading);
@@ -241,6 +264,7 @@ export default function* defaultSaga() {
   yield takeEvery(SUBMIT_NEW_TASK_FORM_AND_CLOSE_IT, handleSubmitNewTaskFormAndCloseIt);
   yield takeEvery(NEW_TASK_CREATED_IN_LOG_HOUR_FORM, handleNewTaskCreatedInLogHourForm);
   yield takeEvery(UPDATE_SELECTED_DATE, handleUpdateSelectedDate);
+  yield takeEvery(DELETE_TIME_RECORD, handleDeleteTimeRecord);
 }
 
 // See example in containers/HomePage/saga.js

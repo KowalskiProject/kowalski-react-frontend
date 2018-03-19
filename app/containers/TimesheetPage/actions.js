@@ -26,6 +26,9 @@ import {
   NEW_TASK_CREATED_IN_LOG_HOUR_FORM,
   UPDATE_SELECTED_DATE,
   UPDATE_CACHED_SELECT_DATE,
+  DELETE_TIME_RECORD,
+  START_DELETING_TIME_RECORD,
+  END_DELETING_TIME_RECORD,
 } from './constants';
 
 export function defaultAction() {
@@ -167,5 +170,24 @@ export function updateCachedSelectDate(newDate) {
   return {
     type: UPDATE_CACHED_SELECT_DATE,
     payload: newDate,
+  };
+}
+
+export function deleteTimeRecord(trId) {
+  return {
+    type: DELETE_TIME_RECORD,
+    payload: { trId },
+  };
+}
+
+export function startDeletingTimeRecord() {
+  return {
+    type: START_DELETING_TIME_RECORD,
+  };
+}
+
+export function endDeletingTimeRecord() {
+  return {
+    type: END_DELETING_TIME_RECORD,
   };
 }

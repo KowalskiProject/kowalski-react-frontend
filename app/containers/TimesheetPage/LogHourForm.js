@@ -73,6 +73,13 @@ class LogHourForm extends React.Component { // eslint-disable-line react/prefer-
     this.props.loadFormProjects();
   }
 
+  componentDidMount() {
+    if (this.props.initialValues) {
+      // Project is already selected. Load activities now
+      this.props.loadFormActivities(this.props.initialValues.get('projectId'));
+    }
+  }
+
   handleProjectChange(e) {
     const selectedProjectId = e.target.value;
     this.props.loadFormActivities(selectedProjectId);
@@ -83,6 +90,7 @@ class LogHourForm extends React.Component { // eslint-disable-line react/prefer-
       error,
       onSubmit,
       handleSubmit,
+      onDeleteRecord,
       isSubmitting,
       isTaskOverlaySelectOpened,
       onDismissTaskOverlaySelect,
@@ -91,10 +99,10 @@ class LogHourForm extends React.Component { // eslint-disable-line react/prefer-
       formProjects,
       onDismissForm,
       date,
-      timeRecordForEdition,
+      initialValues,
     } = this.props;
 
-    const isEdition = !!timeRecordForEdition;
+    const isEdition = !!initialValues;
 
     if (!date) {
       onDismissForm();
@@ -163,7 +171,7 @@ class LogHourForm extends React.Component { // eslint-disable-line react/prefer-
             </FormActionWrapper>
             {
               isEdition &&
-                <FormAction type="submit" className="button is-danger" disabled={isSubmitting}>
+                <FormAction type="button" className="button is-danger" disabled={isSubmitting} onClick={() => onDeleteRecord(initialValues.get('trId'))}>
                   Delete
                 </FormAction>
             }
@@ -196,13 +204,14 @@ LogHourForm.propTypes = {
   onNewTaskSelected: PropType.func.isRequired,
   onDismissForm: PropType.func.isRequired,
   date: PropType.objectOf(Date).isRequired,
-  timeRecordForEdition: ImmutablePropTypes.contains({
+  initialValues: ImmutablePropTypes.contains({
     trId: PropType.number.isRequired,
     taskId: PropType.number.isRequired,
     projectId: PropType.number.isRequired,
     comment: PropType.string.isRequired,
     reportedTime: PropType.string.isRequired,
   }),
+  onDeleteRecord: PropType.func.isRequired,
 };
 
 export default reduxForm({

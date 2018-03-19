@@ -23,6 +23,13 @@ export function getProject({ config: { baseUrl }, token, projectId }) {
   });
 }
 
+export function deleteTimeRecord({ config: { baseUrl }, token, trId }) {
+  return request(`${baseUrl}/timerecords/${trId}`, {
+    method: 'DELETE',
+    headers: generateCommonHeaders(token),
+  });
+}
+
 export function createProject({ config: { baseUrl }, token, projectData }) {
   return request(`${baseUrl}/projects`, {
     method: 'POST',

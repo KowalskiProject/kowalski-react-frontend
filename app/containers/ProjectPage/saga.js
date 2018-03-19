@@ -67,7 +67,6 @@ export function* handleSelectedProjectId({ payload }) {
       data: fromJS({ ...project, people: members, activities }),
     }));
   } catch (e) {
-    console.log(e);
     yield put(requestErrorReceived({
       error: e,
       dispatchOnAuthError: [

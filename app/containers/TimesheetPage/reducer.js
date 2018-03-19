@@ -17,6 +17,8 @@ import {
   DISMISS_NEW_TASK_DIALOG,
   NEW_TASK_CREATED_IN_LOG_HOUR_FORM,
   UPDATE_CACHED_SELECT_DATE,
+  START_DELETING_TIME_RECORD,
+  END_DELETING_TIME_RECORD,
 } from './constants';
 
 const initialState = fromJS({
@@ -29,10 +31,24 @@ const initialState = fromJS({
   isTaskDialogOpen: false,
   activityIdLoadedIntoTaskDialog: null,
   cachedSelectedDate: null, // The last date for which we have time records
+  isDeletingRecord: false,
 });
 
 function timesheetPageReducer(state = initialState, { type, payload }) {
   switch (type) {
+    case START_DELETING_TIME_RECORD:
+      return state.set('isDeletingRecord', true);
+    case END_DELETING_TIME_RECORD:
+      return state
+        .updateIn(
+          ['timeRecords'],
+          (timeRecords) => (
+            payload.success
+              ? timeRecords.delete(timeRecords.findIndex((tr) => tr.get('trId') === payload.trId))
+              : timeRecords
+          )
+        )
+        .set('isDeletingRecord', false);
     case UPDATE_CACHED_SELECT_DATE:
       return state.set('cachedSelectedDate', payload);
     case NEW_TASK_CREATED_IN_LOG_HOUR_FORM:

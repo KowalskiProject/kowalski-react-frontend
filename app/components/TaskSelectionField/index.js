@@ -58,8 +58,10 @@ function TaskSelectionField(props) {
     const foundGroup = optionGroups.find((group) => group.options
       .find((option) => option.value === value)
     );
-    const foundOption = foundGroup.options.find((option) => option.value === value);
-    buttonLabel = `${foundGroup.label} - ${foundOption.label}`;
+    if (foundGroup) {
+      const foundOption = foundGroup.options.find((option) => option.value === value);
+      buttonLabel = `${foundGroup.label} - ${foundOption.label}`;
+    }
   }
 
   return (
