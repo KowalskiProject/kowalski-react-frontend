@@ -13,6 +13,8 @@ import TaskSelectionField from '../../components/TaskSelectionField';
 import {
   LOG_HOUR_FORM,
 } from './constants';
+import ConfirmationDialog from '../../components/ConfirmationDialog';
+import { CLOSE, OPEN } from '../../utils/constants';
 
 const Wrapper = styled.div`
   display: flex;
@@ -67,6 +69,9 @@ class LogHourForm extends React.Component { // eslint-disable-line react/prefer-
   constructor(props) {
     super(props);
     this.handleProjectChange = this.handleProjectChange.bind(this);
+    this.closeDeleteRecordConfirmDialog = this.closeDeleteRecordConfirmDialog.bind(this);
+    this.deleteTimeRecord = this.deleteTimeRecord.bind(this);
+    this.confirmTimeRecordDeletion = this.confirmTimeRecordDeletion.bind(this);
   }
 
   componentWillMount() {
@@ -83,6 +88,19 @@ class LogHourForm extends React.Component { // eslint-disable-line react/prefer-
   handleProjectChange(e) {
     const selectedProjectId = e.target.value;
     this.props.loadFormActivities(selectedProjectId);
+  }
+
+  closeDeleteRecordConfirmDialog() {
+    this.props.deleteConfirmationDialogCallback(CLOSE);
+  }
+
+  deleteTimeRecord() {
+    this.props.onDeleteRecord(this.props.initialValues.get('trId'));
+    this.props.deleteConfirmationDialogCallback(CLOSE);
+  }
+
+  confirmTimeRecordDeletion() {
+    this.props.deleteConfirmationDialogCallback(OPEN);
   }
 
   render() {
@@ -110,6 +128,13 @@ class LogHourForm extends React.Component { // eslint-disable-line react/prefer-
 
     return (
       <Wrapper>
+        <ConfirmationDialog
+          message="Are you sure you want to delete this record?"
+          onCancel={this.closeDeleteRecordConfirmDialog}
+          onConfirm={this.deleteTimeRecord}
+          isActive={this.props.isDeleteConfirmationDialogOpened}
+        />
+
         <form onSubmit={handleSubmit(submissionHook(onSubmit, date))}>
           <FormTitle><H1>{`${isEdition ? 'Edit Time' : 'Add Time'}`}</H1></FormTitle>
 
@@ -149,7 +174,7 @@ class LogHourForm extends React.Component { // eslint-disable-line react/prefer-
             id="comment"
             component={TextAreaField}
             validate={[required]}
-            label="comment"
+            label="Comment"
           />
 
           {
@@ -171,7 +196,7 @@ class LogHourForm extends React.Component { // eslint-disable-line react/prefer-
             </FormActionWrapper>
             {
               isEdition &&
-                <FormAction type="button" className="button is-danger" disabled={isSubmitting} onClick={() => onDeleteRecord(initialValues.get('trId'))}>
+                <FormAction type="button" className="button is-danger" disabled={isSubmitting} onClick={this.confirmTimeRecordDeletion}>
                   Delete
                 </FormAction>
             }
@@ -212,6 +237,8 @@ LogHourForm.propTypes = {
     reportedTime: PropType.string.isRequired,
   }),
   onDeleteRecord: PropType.func.isRequired,
+  isDeleteConfirmationDialogOpened: PropType.bool.isRequired,
+  deleteConfirmationDialogCallback: PropType.func.isRequired,
 };
 
 export default reduxForm({

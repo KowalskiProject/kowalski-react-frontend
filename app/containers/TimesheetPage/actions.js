@@ -29,6 +29,7 @@ import {
   DELETE_TIME_RECORD,
   START_DELETING_TIME_RECORD,
   END_DELETING_TIME_RECORD,
+  CHANGE_TIME_RECORD_DELETE_CONFIRM_DIALOG_OPENESS,
 } from './constants';
 
 export function defaultAction() {
@@ -186,8 +187,16 @@ export function startDeletingTimeRecord() {
   };
 }
 
-export function endDeletingTimeRecord() {
+export function endDeletingTimeRecord(payload) {
   return {
     type: END_DELETING_TIME_RECORD,
+    payload,
+  };
+}
+
+export function changeTimeRecordDeleteConfirmDialogOpeness(operation) {
+  return {
+    type: CHANGE_TIME_RECORD_DELETE_CONFIRM_DIALOG_OPENESS,
+    payload: { operation },
   };
 }

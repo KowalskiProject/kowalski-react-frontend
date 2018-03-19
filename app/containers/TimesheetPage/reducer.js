@@ -19,7 +19,9 @@ import {
   UPDATE_CACHED_SELECT_DATE,
   START_DELETING_TIME_RECORD,
   END_DELETING_TIME_RECORD,
+  CHANGE_TIME_RECORD_DELETE_CONFIRM_DIALOG_OPENESS,
 } from './constants';
+import { OPEN } from '../../utils/constants';
 
 const initialState = fromJS({
   timeRecords: [],
@@ -32,10 +34,13 @@ const initialState = fromJS({
   activityIdLoadedIntoTaskDialog: null,
   cachedSelectedDate: null, // The last date for which we have time records
   isDeletingRecord: false,
+  deleteTimeRecordConfirmDialogOpened: false,
 });
 
 function timesheetPageReducer(state = initialState, { type, payload }) {
   switch (type) {
+    case CHANGE_TIME_RECORD_DELETE_CONFIRM_DIALOG_OPENESS:
+      return state.set('deleteTimeRecordConfirmDialogOpened', payload.operation === OPEN);
     case START_DELETING_TIME_RECORD:
       return state.set('isDeletingRecord', true);
     case END_DELETING_TIME_RECORD:

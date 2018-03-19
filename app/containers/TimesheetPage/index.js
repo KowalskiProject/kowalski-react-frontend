@@ -38,6 +38,7 @@ import {
   makeSelectNewTaskFormSelectedActivity,
   makeSelectCachedSelectedDate,
   makeSelectSelectedTimeRecordForEdition,
+  makeSelectDeleteTimeRecordConfirmDialogOpened,
 } from './selectors';
 import reducer from './reducer';
 import saga from './saga';
@@ -252,6 +253,8 @@ class TimesheetPage extends React.Component {
                   onDismissForm={this.dismissLogHourForm}
                   initialValues={this.props.timeRecordOnEdition}
                   onDeleteRecord={this.props.deleteTimeRecord}
+                  isDeleteConfirmationDialogOpened={this.props.deleteTimeRecordConfirmDialogOpened}
+                  deleteConfirmationDialogCallback={this.props.changeTimeRecordDeleteConfirmDialogOpeness}
                 />
               )}
             />
@@ -311,6 +314,8 @@ TimesheetPage.propTypes = {
   navigateTo: PropTypes.func.isRequired,
   timeRecordOnEdition: PropTypes.object,
   deleteTimeRecord: PropTypes.func.isRequired,
+  deleteTimeRecordConfirmDialogOpened: PropTypes.bool.isRequired,
+  changeTimeRecordDeleteConfirmDialogOpeness: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -326,6 +331,7 @@ const mapStateToProps = createStructuredSelector({
   newTaskFormSelectedActivity: makeSelectNewTaskFormSelectedActivity(),
   newTaskFormSelectedProject: makeSelectNewTaskFormSelectedProjectSelector(),
   timeRecordOnEdition: makeSelectSelectedTimeRecordForEdition(),
+  deleteTimeRecordConfirmDialogOpened: makeSelectDeleteTimeRecordConfirmDialogOpened(),
 });
 
 const withConnect = connect(mapStateToProps, { ...actions, unauthorizedAccessDetected, navigateTo });

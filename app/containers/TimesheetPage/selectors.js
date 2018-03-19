@@ -137,6 +137,11 @@ const makeSelectCachedSelectedDate = () => createSelector(
   (substate) => substate.get('cachedSelectedDate'),
 );
 
+const makeSelectDeleteTimeRecordConfirmDialogOpened = () => createSelector(
+  selectTimesheetPageDomain,
+  (substate) => substate.get('deleteTimeRecordConfirmDialogOpened'),
+);
+
 export {
   selectTimesheetPageDomain,
   makeSelectSelectedDate,
@@ -156,4 +161,5 @@ export {
   makeSelectCachedSelectedDate,
   makeSelectSelectedTimeRecordIdForEdition,
   makeSelectSelectedTimeRecordForEdition,
+  makeSelectDeleteTimeRecordConfirmDialogOpened,
 };
