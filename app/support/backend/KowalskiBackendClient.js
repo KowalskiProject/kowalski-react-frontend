@@ -27,6 +27,7 @@ export function deleteTimeRecord({ config: { baseUrl }, token, trId }) {
   return request(`${baseUrl}/timerecords/${trId}`, {
     method: 'DELETE',
     headers: generateCommonHeaders(token),
+    parseResponse: false,
   });
 }
 

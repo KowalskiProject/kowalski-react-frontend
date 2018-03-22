@@ -17,7 +17,10 @@ import {
   dismissNewTaskDialog,
   startDeletingTimeRecord,
   endDeletingTimeRecord,
+  logUpdated,
 } from './actions';
+
+import { navigateTo } from '../App/actions';
 
 import {
   SUBMIT_LOG_FORM,
@@ -59,7 +62,11 @@ export function* handleSubmitLogForm({ payload }) {
     yield put(startSubmit(LOG_HOUR_FORM));
     const savedTimeRecord = yield call(saveTimeRecord, { timeRecordData, ...genCommonReqConfig() });
     yield put(stopSubmit(LOG_HOUR_FORM));
-    yield put(newLogSaved(fromJS(savedTimeRecord)));
+    if (payload.get('trId')) {
+      yield put(logUpdated(fromJS(savedTimeRecord)));
+    } else {
+      yield put(newLogSaved(fromJS(savedTimeRecord)));
+    }
     yield put(push('/'));
   } catch (error) {
     yield put(requestErrorReceived({
@@ -235,11 +242,12 @@ export function* handleUpdateSelectedDate({ payload: { currentDate, operation, n
   yield put(push(`?date=${format(resolvedNewDate)}`));
 }
 
-export function* handleDeleteTimeRecord({ payload: { trId } }) {
+export function* handleDeleteTimeRecord({ payload: { trId, callbackDate } }) {
   yield put(startDeletingTimeRecord());
   try {
     yield call(deleteTimeRecord, { trId, ...genCommonReqConfig() });
     yield put(endDeletingTimeRecord({ success: true, trId }));
+    yield put(navigateTo(`/?date=${format(callbackDate)}`));
   } catch (error) {
     yield put(requestErrorReceived({
       error,

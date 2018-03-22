@@ -49,6 +49,7 @@ function TaskSelectionField(props) {
     onSelectTaskClicked,
     optionGroups,
     onNewTaskSelected,
+    disabled,
   } = props;
 
   const labelHtml = label ? <label htmlFor={id} className="label">{label}</label> : '';
@@ -74,6 +75,7 @@ function TaskSelectionField(props) {
           onClick={onSelectTaskClicked}
           onBlur={() => onBlur(value)}
           className="button"
+          disabled={disabled}
         >
           {buttonLabel}
         </SelectButton>
@@ -107,6 +109,7 @@ TaskSelectionField.propTypes = {
       value: PropTypes.any.isRequired,
     })),
   })),
+  disabled: PropTypes.bool.isRequired,
 };
 
 export default TaskSelectionField;

@@ -30,6 +30,7 @@ import {
   START_DELETING_TIME_RECORD,
   END_DELETING_TIME_RECORD,
   CHANGE_TIME_RECORD_DELETE_CONFIRM_DIALOG_OPENESS,
+  LOG_UPDATED,
 } from './constants';
 
 export function defaultAction() {
@@ -174,10 +175,10 @@ export function updateCachedSelectDate(newDate) {
   };
 }
 
-export function deleteTimeRecord(trId) {
+export function deleteTimeRecord(trId, callbackDate) {
   return {
     type: DELETE_TIME_RECORD,
-    payload: { trId },
+    payload: { trId, callbackDate },
   };
 }
 
@@ -198,5 +199,12 @@ export function changeTimeRecordDeleteConfirmDialogOpeness(operation) {
   return {
     type: CHANGE_TIME_RECORD_DELETE_CONFIRM_DIALOG_OPENESS,
     payload: { operation },
+  };
+}
+
+export function logUpdated(payload) {
+  return {
+    type: LOG_UPDATED,
+    payload,
   };
 }

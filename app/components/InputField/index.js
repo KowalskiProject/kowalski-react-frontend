@@ -10,7 +10,7 @@ import PropTypes from 'prop-types';
 
 function InputField(props) {
   const { input, label, type = 'text', placeholder, meta: { touched, error } } = props;
-  const { fieldStyle } = props;
+  const { fieldStyle, disabled } = props;
 
   const labelHtml = label ? <label htmlFor={input.id} className="label">{label}</label> : '';
   const errorInputClasses = touched && error ? 'is-danger' : '';
@@ -18,7 +18,7 @@ function InputField(props) {
     <div className="field" style={fieldStyle || {}}>
       {labelHtml}
       <div className="control">
-        <input {...input} type={type} className={`input ${errorInputClasses}`} placeholder={placeholder} />
+        <input {...input} type={type} disabled={disabled} className={`input ${errorInputClasses}`} placeholder={placeholder} />
         {touched && error && <p className="help is-danger">{error}</p>}
       </div>
     </div>
@@ -32,6 +32,7 @@ InputField.propTypes = {
   label: PropTypes.string,
   meta: PropTypes.any,
   fieldStyle: PropTypes.object,
+  disabled: PropTypes.bool,
 };
 
 export default InputField;

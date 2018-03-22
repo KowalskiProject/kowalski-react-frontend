@@ -1,8 +1,10 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import styled from 'styled-components';
 import PropType from 'prop-types';
-import { Field, reduxForm } from 'redux-form/immutable';
+import { Field, reduxForm, formValueSelector } from 'redux-form/immutable';
 import ImmutablePropTypes from 'react-immutable-proptypes';
+import { fromJS } from 'immutable';
 
 import InputField from 'components/InputField/Loadable';
 import SelectField from 'components/SelectField/Loadable';
@@ -95,7 +97,7 @@ class LogHourForm extends React.Component { // eslint-disable-line react/prefer-
   }
 
   deleteTimeRecord() {
-    this.props.onDeleteRecord(this.props.initialValues.get('trId'));
+    this.props.onDeleteRecord(this.props.initialValues.get('trId'), this.props.date);
     this.props.deleteConfirmationDialogCallback(CLOSE);
   }
 
@@ -108,7 +110,6 @@ class LogHourForm extends React.Component { // eslint-disable-line react/prefer-
       error,
       onSubmit,
       handleSubmit,
-      onDeleteRecord,
       isSubmitting,
       isTaskOverlaySelectOpened,
       onDismissTaskOverlaySelect,
@@ -118,6 +119,7 @@ class LogHourForm extends React.Component { // eslint-disable-line react/prefer-
       onDismissForm,
       date,
       initialValues,
+      values,
     } = this.props;
 
     const isEdition = !!initialValues;
@@ -125,6 +127,9 @@ class LogHourForm extends React.Component { // eslint-disable-line react/prefer-
     if (!date) {
       onDismissForm();
     }
+
+    const taskDisabled = !(values && values.get('projectId'));
+    const durationAndCommentDisabled = !(values && values.get('taskId'));
 
     return (
       <Wrapper>
@@ -158,6 +163,7 @@ class LogHourForm extends React.Component { // eslint-disable-line react/prefer-
             {...{ isTaskOverlaySelectOpened, onDismissTaskOverlaySelect, onSelectTaskClicked, onNewTaskSelected }}
             validate={[required]}
             optionGroups={this.props.taskOverlaySelectOptions.toJSON()}
+            disabled={taskDisabled}
           />
 
           <Field
@@ -167,6 +173,7 @@ class LogHourForm extends React.Component { // eslint-disable-line react/prefer-
             validate={[required, timeEntryFormat]}
             label="How Long it last?"
             placeholder="Ex: 02:00, 1:20 etc."
+            disabled={durationAndCommentDisabled}
           />
 
           <Field
@@ -175,6 +182,7 @@ class LogHourForm extends React.Component { // eslint-disable-line react/prefer-
             component={TextAreaField}
             validate={[required]}
             label="Comment"
+            disabled={durationAndCommentDisabled}
           />
 
           {
@@ -239,8 +247,12 @@ LogHourForm.propTypes = {
   onDeleteRecord: PropType.func.isRequired,
   isDeleteConfirmationDialogOpened: PropType.bool.isRequired,
   deleteConfirmationDialogCallback: PropType.func.isRequired,
+  values: ImmutablePropTypes.map.isRequired,
 };
 
+const selector = formValueSelector(LOG_HOUR_FORM);
 export default reduxForm({
   form: LOG_HOUR_FORM,
-})(LogHourForm);
+})(connect((state) => ({
+  values: fromJS(selector(state, 'projectId', 'taskId')),
+}))(LogHourForm));

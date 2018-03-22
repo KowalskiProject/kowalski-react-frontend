@@ -20,6 +20,7 @@ import {
   START_DELETING_TIME_RECORD,
   END_DELETING_TIME_RECORD,
   CHANGE_TIME_RECORD_DELETE_CONFIRM_DIALOG_OPENESS,
+  LOG_UPDATED,
 } from './constants';
 import { OPEN } from '../../utils/constants';
 
@@ -88,6 +89,12 @@ function timesheetPageReducer(state = initialState, { type, payload }) {
       return state.set('isLoadingTimeRecords', true);
     case NEW_LOG_SAVED:
       return state.updateIn(['timeRecords'], (timeRecords) => timeRecords.push(payload));
+    case LOG_UPDATED:
+      return state.updateIn(['timeRecords'], (timeRecords) => (
+        timeRecords
+          .delete(timeRecords.findIndex((tr) => tr.get('trId') === payload.get('trId')))
+          .push(payload)
+      ));
     case OPEN_TASK_OVERLAY_SELECT:
       return state.set('isTaskOverlaySelectOpened', true);
     case CLOSE_TASK_OVERLAY_SELECT:
