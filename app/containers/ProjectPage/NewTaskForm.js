@@ -41,7 +41,7 @@ const FormActionWrapper = styled.div`
 `;
 
 function NewTaskForm(props) {
-  const { error, isSubmitting, onCancel, handleSubmit, onAdd, onSaveAndAddNew } = props;
+  const { error, submitting, onCancel, handleSubmit, onAdd, onSaveAndAddNew } = props;
   const { activity, project, predefinedAccountableId } = props;
 
   const myOnSubmit = (formData, func) => {
@@ -112,13 +112,13 @@ function NewTaskForm(props) {
           {
             onSaveAndAddNew &&
               <FormActionWrapper className="control">
-                <FormAction className="button" type="button" disabled={isSubmitting} onClick={handleSubmit((formData) => myOnSubmit(formData, onSaveAndAddNew))}>
+                <FormAction className="button" type="button" disabled={submitting} onClick={handleSubmit((formData) => myOnSubmit(formData, onSaveAndAddNew))}>
                   Save and add new
                 </FormAction>
               </FormActionWrapper>
           }
           <FormActionWrapper className="control">
-            <FormAction type="submit" className={`button is-primary ${isSubmitting ? 'is-loading' : ''}`} disabled={isSubmitting}>
+            <FormAction type="submit" className={`button is-primary ${submitting ? 'is-loading' : ''}`} disabled={submitting}>
               { props.onAddText || 'Add' }
             </FormAction>
           </FormActionWrapper>
@@ -147,7 +147,7 @@ NewTaskForm.propTypes = {
   handleSubmit: PropTypes.func,
   onAdd: PropTypes.func,
   onSaveAndAddNew: PropTypes.func,
-  isSubmitting: PropTypes.bool,
+  submitting: PropTypes.bool.isRequired,
   onAddText: PropTypes.string,
 };
 

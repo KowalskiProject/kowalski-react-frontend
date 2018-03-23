@@ -40,7 +40,7 @@ const FormActionWrapper = styled.div`
 `;
 
 function NewActivityForm(props) {
-  const { error, isSubmitting, onCancel, handleSubmit, onAdd, onSaveAndAddNew } = props;
+  const { error, submitting, onCancel, handleSubmit, onAdd, onSaveAndAddNew } = props;
   const { project } = props;
 
   const myOnSubmit = (formData, func) => (
@@ -85,12 +85,12 @@ function NewActivityForm(props) {
 
         <FormActions>
           <FormActionWrapper className="control">
-            <FormAction className="button" type="button" disabled={isSubmitting} onClick={handleSubmit((formData) => myOnSubmit(formData, onSaveAndAddNew))}>
+            <FormAction className="button" type="button" disabled={submitting} onClick={handleSubmit((formData) => myOnSubmit(formData, onSaveAndAddNew))}>
               Save and add new
             </FormAction>
           </FormActionWrapper>
           <FormActionWrapper className="control">
-            <FormAction type="submit" className={`button is-primary ${isSubmitting ? 'is-loading' : ''}`} disabled={isSubmitting}>
+            <FormAction type="submit" className={`button is-primary ${submitting ? 'is-loading' : ''}`} disabled={submitting}>
               Add
             </FormAction>
           </FormActionWrapper>
@@ -105,7 +105,7 @@ function NewActivityForm(props) {
 
 NewActivityForm.propTypes = {
   error: PropTypes.any,
-  isSubmitting: PropTypes.any,
+  submitting: PropTypes.any.isRequired,
   onCancel: PropTypes.func,
   handleSubmit: PropTypes.func,
   onAdd: PropTypes.func,

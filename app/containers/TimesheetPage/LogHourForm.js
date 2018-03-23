@@ -110,7 +110,7 @@ class LogHourForm extends React.Component { // eslint-disable-line react/prefer-
       error,
       onSubmit,
       handleSubmit,
-      isSubmitting,
+      submitting,
       isTaskOverlaySelectOpened,
       onDismissTaskOverlaySelect,
       onSelectTaskClicked,
@@ -198,13 +198,13 @@ class LogHourForm extends React.Component { // eslint-disable-line react/prefer-
 
           <FormActions>
             <FormActionWrapper className="control">
-              <FormAction type="submit" className={`button is-primary ${isSubmitting ? 'is-loading' : ''}`} disabled={isSubmitting}>
+              <FormAction type="submit" className={`button is-primary ${submitting ? 'is-loading' : ''}`} disabled={submitting}>
                 Submit
               </FormAction>
             </FormActionWrapper>
             {
               isEdition &&
-                <FormAction type="button" className="button is-danger" disabled={isSubmitting} onClick={this.confirmTimeRecordDeletion}>
+                <FormAction type="button" className="button is-danger" disabled={submitting} onClick={this.confirmTimeRecordDeletion}>
                   Delete
                 </FormAction>
             }
@@ -221,7 +221,7 @@ class LogHourForm extends React.Component { // eslint-disable-line react/prefer-
 LogHourForm.propTypes = {
   error: PropType.any,
   handleSubmit: PropType.func,
-  isSubmitting: PropType.any,
+  submitting: PropType.any.isRequired,
   onSubmit: PropType.func,
   isTaskOverlaySelectOpened: PropType.bool.isRequired,
   onDismissTaskOverlaySelect: PropType.func.isRequired,

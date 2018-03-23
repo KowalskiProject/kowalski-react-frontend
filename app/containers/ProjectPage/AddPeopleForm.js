@@ -58,7 +58,7 @@ AddPeopleCheckbox.propTypes = {
 };
 
 function AddPeopleForm(props) {
-  const { error, isSubmitting, onCancel, handleSubmit, onAdd } = props;
+  const { error, submitting, onCancel, handleSubmit, onAdd } = props;
   const { project, availableUsers } = props;
 
   const addPeopleOptions = availableUsers.map((user) => ({
@@ -96,7 +96,7 @@ function AddPeopleForm(props) {
 
         <FormActions>
           <FormActionWrapper className="control">
-            <FormAction type="submit" className={`button is-primary ${isSubmitting ? 'is-loading' : ''}`} disabled={isSubmitting}>
+            <FormAction type="submit" className={`button is-primary ${submitting ? 'is-loading' : ''}`} disabled={submitting}>
               Add
             </FormAction>
           </FormActionWrapper>
@@ -112,7 +112,7 @@ function AddPeopleForm(props) {
 AddPeopleForm.propTypes = {
   project: PropTypes.any.isRequired,
   error: PropTypes.any,
-  isSubmitting: PropTypes.any,
+  submitting: PropTypes.any.isRequired,
   onCancel: PropTypes.func,
   handleSubmit: PropTypes.func,
   onAdd: PropTypes.func,
