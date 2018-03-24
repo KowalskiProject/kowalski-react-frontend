@@ -18,8 +18,15 @@ const NavBarMenuWrapper = styled.span`
   margin-left: 2rem;
 `;
 
+const linkColor = '#5FA2C8';
+
 const NavMenu = styled.a`
   color: inherit;
+  ${({ active }) => active ? `color: ${linkColor};` : ''}
+
+  &:hover {
+    color: ${linkColor};
+  }
 `;
 
 class Header extends React.Component {
@@ -39,7 +46,7 @@ class Header extends React.Component {
   }
 
   render() {
-    const { children, onTimesheetClicked, onProjectsClicked, onPeopleClicked } = this.props;
+    const { children, onTimesheetClicked, onProjectsClicked, onPeopleClicked, activePage } = this.props;
 
     return (
       <div className="kowalski-react-basic-container-vertical">
@@ -53,19 +60,19 @@ class Header extends React.Component {
             {
               userCanAccess(PAGE.TIMESHEET) &&
                 <span className="navbar-item">
-                  <NavMenu onClick={onTimesheetClicked}><FormattedMessage {...messages.timesheet} /></NavMenu>
+                  <NavMenu onClick={onTimesheetClicked} active={activePage === 'timesheet'}><FormattedMessage {...messages.timesheet} /></NavMenu>
                 </span>
             }
             {
               userCanAccess(PAGE.PROJECTS) &&
                 <span className="navbar-item">
-                  <NavMenu onClick={onProjectsClicked}><FormattedMessage {...messages.projects} /></NavMenu>
+                  <NavMenu onClick={onProjectsClicked} active={activePage === 'projects'}><FormattedMessage {...messages.projects} /></NavMenu>
                 </span>
             }
             {
               userCanAccess(PAGE.PEOPLE) &&
                 <span className="navbar-item">
-                  <NavMenu onClick={onPeopleClicked}><FormattedMessage {...messages.people} /></NavMenu>
+                  <NavMenu onClick={onPeopleClicked} active={activePage === 'people'}><FormattedMessage {...messages.people} /></NavMenu>
                 </span>
             }
             <NavBarMenuWrapper className="navbar-item">
@@ -138,6 +145,7 @@ Header.propTypes = {
   onProjectsClicked: PropTypes.func.isRequired,
   onPeopleClicked: PropTypes.func.isRequired,
   onLogoutClicked: PropTypes.func.isRequired,
+  activePage: PropTypes.string.isRequired,
 };
 
 export default injectIntl(Header);

@@ -23,9 +23,23 @@ const makeSelectPageBeforeAuthError = () => createSelector(
   (globalState) => globalState.get('pageBeforeAuthError'),
 );
 
+const makeSelectActivePage = () => createSelector(
+  makeSelectLocation(),
+  (location) => {
+    const path = location.pathname;
+    if (path.match(/projects/gi)) {
+      return 'projects';
+    } else if (path.match(/people/gi)) {
+      return 'people';
+    }
+    return 'timesheet';
+  }
+);
+
 export {
   selectGlobal,
   makeSelectCurrentUser,
   makeSelectLocation,
   makeSelectPageBeforeAuthError,
+  makeSelectActivePage,
 };

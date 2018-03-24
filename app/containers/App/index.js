@@ -13,6 +13,7 @@ import PropTypes from 'prop-types';
 import { Switch, Route, withRouter } from 'react-router-dom';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
+import { createStructuredSelector } from 'reselect';
 
 import TimesheetPage from 'containers/TimesheetPage/Loadable';
 import ProjectsPage from 'containers/ProjectsPage/Loadable';
@@ -27,6 +28,7 @@ import saga from './saga';
 import * as actions from './actions';
 import requireAuth from '../../hoc/requireAuth';
 import requireUnAuth from '../../hoc/requireUnAuth';
+import { makeSelectActivePage } from './selectors';
 
 const AppWrapper = styled.div`
   margin: 0 auto;
@@ -49,6 +51,7 @@ function App(props) {
       <Switch>
         <Route path="/auth" component={requireUnAuth(AuthPage)} />
         <Header
+          activePage={props.activePage}
           onTimesheetClicked={() => navigateTo('/')}
           onProjectsClicked={() => navigateTo('/projects')}
           onPeopleClicked={() => navigateTo('/people')}
@@ -71,10 +74,13 @@ function App(props) {
 App.propTypes = {
   navigateTo: PropTypes.func.isRequired,
   logout: PropTypes.func.isRequired,
+  activePage: PropTypes.string.isRequired,
 };
 
 const withSaga = injectSaga({ key: 'global', saga });
-const withConnect = connect(null, actions);
+const withConnect = connect(createStructuredSelector({
+  activePage: makeSelectActivePage(),
+}), actions);
 
 export default withRouter(compose(
   withConnect,
