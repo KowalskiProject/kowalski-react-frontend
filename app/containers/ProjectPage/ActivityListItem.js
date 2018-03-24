@@ -11,6 +11,8 @@ import {
   launchNewTaskDialog as launchNewTaskDialogAction,
 } from './actions';
 import { makeSelectExpandedTaskIds } from './selectors';
+import { userCanAccess } from '../../support/auth/utils';
+import { ADD } from '../../support/auth/resources';
 
 const renderTasks = (tasks) => (
   (tasks || List()).map((task) => (
@@ -35,9 +37,12 @@ const renderActivityCardContent = ({ activity, onCreateNewTaskClicked }) => (
         </thead>
         <tbody>
           { renderTasks(activity.get('tasks')) }
-          <tr>
-            <td colSpan={3}><a tabIndex={0} role="button" onClick={() => onCreateNewTaskClicked(activity)}>+ Create new task</a></td>
-          </tr>
+          {
+            userCanAccess(ADD.TASK_TO_PROJECT) &&
+              <tr>
+                <td colSpan={3}><a tabIndex={0} role="button" onClick={() => onCreateNewTaskClicked(activity)}>+ Create new task</a></td>
+              </tr>
+          }
         </tbody>
       </table>
     </div>

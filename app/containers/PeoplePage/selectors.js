@@ -50,6 +50,21 @@ const makeSelectNewPersonFormSubmissionError = () => createSelector(
   (substate) => substate.get('newPersonFormSubmissionError'),
 );
 
+const makeSelectIsFetchingNewPersonFormOptions = () => createSelector(
+  selectPeoplePageDomain,
+  (substate) => substate.get('isFetchingNewPersonFormOptions'),
+);
+
+const makeSelectFetchingNewPersonFormOptionsErrorMsg = () => createSelector(
+  selectPeoplePageDomain,
+  (substate) => substate.get('fetchingNewPersonFormOptionsErrorMsg'),
+);
+
+const makeSelectRoles = () => createSelector(
+  selectPeoplePageDomain,
+  (substate) => substate.get('roles'),
+);
+
 export {
   selectPeoplePageDomain,
   makeSelectPeople,
@@ -58,6 +73,9 @@ export {
   makeSelectIsLoadingPeople,
   makeSelectLoadingPeopleErrorMsg,
   makeSelectNewPersonFormSubmissionError,
+  makeSelectIsFetchingNewPersonFormOptions,
+  makeSelectFetchingNewPersonFormOptionsErrorMsg,
+  makeSelectRoles,
 };
 
 export default makeSelectPeoplePage;

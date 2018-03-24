@@ -14,19 +14,21 @@ import {
   CLOSE_NEW_PERSON_FORM,
   PERSON_SELECTED,
   START_PEOPLE_LOADING,
+  START_FETCHING_NEW_PERSON_FORM_OPTIONS,
 } from './constants';
 
 import {
   startPeopleLoading,
   closeNewPersonForm,
   endPeopleLoading,
+  endFetchingNewPersonFormOptions,
 } from './actions';
 
 import {
   requestErrorReceived,
 } from '../App/actions';
 
-import { getPeople, registerPerson } from '../../support/backend/KowalskiBackendClient';
+import { getPeople, registerPerson, fetchRoles } from '../../support/backend/KowalskiBackendClient';
 import { genCommonReqConfig } from '../../support/backend/utils';
 
 export function* handleSubmit({ payload }) {
@@ -73,6 +75,25 @@ export function* submitPersonForm({ payload }) {
   return false;
 }
 
+export function* handleStartFetchingNewPersonFormOptions() {
+  try {
+    const roles = yield call(fetchRoles, genCommonReqConfig());
+    yield put(endFetchingNewPersonFormOptions({ success: true, data: fromJS(roles) }));
+  } catch (e) {
+    console.log(e);
+    yield put(requestErrorReceived({
+      error: e,
+      dispatchOnAnyError: [endFetchingNewPersonFormOptions({ success: false })],
+      dispatchOnOtherErrors: [
+        stopSubmit(
+          NEW_PERSON_FORM_ID,
+          { _error: 'There was an error while trying to fetch the form options from the server =(' }
+        ),
+      ],
+    }));
+  }
+}
+
 export function* clearPersonForm() {
   yield put(reset(NEW_PERSON_FORM_ID));
 }
@@ -104,4 +125,5 @@ export default function* defaultSaga() {
   yield takeEvery(CLOSE_NEW_PERSON_FORM, clearPersonForm);
   yield takeEvery(PERSON_SELECTED, handlePersonSelected);
   yield takeEvery(START_PEOPLE_LOADING, handlePeopleLoading);
+  yield takeEvery(START_FETCHING_NEW_PERSON_FORM_OPTIONS, handleStartFetchingNewPersonFormOptions);
 }

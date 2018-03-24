@@ -29,8 +29,9 @@ export function* handleSubmission({ payload: { username, password, pageBeforeAut
       yield put(serverResponded({ success: false, errorMsg: 'You have not been authorized to use this system. Please contact the Administrator.' }));
       return;
     }
-    yield put(serverResponded({ success: true }));
     localStorage.setItem('currentUserId', kUserId);
+    localStorage.setItem('currentUserAuths', authorities);
+    yield put(serverResponded({ success: true }));
     if (pageBeforeAuthError) {
       yield put(savePageBeforeAuthError(null));
       yield put(push(pageBeforeAuthError));

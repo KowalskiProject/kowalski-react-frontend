@@ -12,7 +12,6 @@ import { connect } from 'react-redux';
 import { Helmet } from 'react-helmet';
 
 import { createStructuredSelector } from 'reselect';
-import { List } from 'immutable';
 import { compose } from 'redux';
 import { RingLoader } from 'react-spinners';  // eslint-disable-line import/no-unresolved
 import injectSaga from 'utils/injectSaga';
@@ -30,6 +29,8 @@ import reducer from './reducer';
 import saga from './saga';
 import * as actions from './actions';
 import PeopleFlexGrid from '../../components/PeopleFlexGrid';
+import { userCanAccess } from '../../support/auth/utils';
+import { ADD } from '../../support/auth/resources';
 
 const MainContainerWrapper = styled.div`
   display: flex;
@@ -93,7 +94,7 @@ export class PeoplePage extends React.Component { // eslint-disable-line react/p
     }
 
     return (
-      <PeopleFlexGrid {... {people, personSelected}} />
+      <PeopleFlexGrid {... { people, personSelected }} />
     );
   }
 
@@ -113,7 +114,10 @@ export class PeoplePage extends React.Component { // eslint-disable-line react/p
         </Helmet>
         <TitleBar>
           <PageTitle>People</PageTitle>
-          <AddPersonButton className="button" onClick={openNewPersonForm}>Add person</AddPersonButton>
+          {
+            userCanAccess(ADD.PERSON) &&
+              <AddPersonButton className="button" onClick={openNewPersonForm}>Add person</AddPersonButton>
+          }
         </TitleBar>
         <PersonListWrapper>
           { this.renderPeoplePanel() }

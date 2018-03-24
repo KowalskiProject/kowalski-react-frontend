@@ -23,6 +23,7 @@ export function* handleNavigateTo({ payload }) {
 export function* handleExpiredSection() {
   localStorage.removeItem('authToken');
   localStorage.removeItem('currentUserId');
+  localStorage.removeItem('currentUserAuths');
   yield put(push('/auth'));
 }
 

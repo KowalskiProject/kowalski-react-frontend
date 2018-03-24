@@ -13,6 +13,8 @@ import {
   PERSON_SELECTED,
   START_PEOPLE_LOADING,
   END_PEOPLE_LOADING,
+  START_FETCHING_NEW_PERSON_FORM_OPTIONS,
+  END_FETCHING_NEW_PERSON_FORM_OPTIONS,
 } from './constants';
 
 export function openNewPersonForm() {
@@ -68,3 +70,15 @@ export function endPeopleLoading(payload) {
   };
 }
 
+export function startFetchingNewPersonFormOptions() {
+  return {
+    type: START_FETCHING_NEW_PERSON_FORM_OPTIONS,
+  };
+}
+
+export function endFetchingNewPersonFormOptions(payload) {
+  return {
+    type: END_FETCHING_NEW_PERSON_FORM_OPTIONS,
+    payload,
+  };
+}

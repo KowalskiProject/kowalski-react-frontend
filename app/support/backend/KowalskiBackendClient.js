@@ -23,6 +23,13 @@ export function getProject({ config: { baseUrl }, token, projectId }) {
   });
 }
 
+export function fetchRoles({ config: { baseUrl }, token }) {
+  return request(`${baseUrl}/users/roles`, {
+    method: 'GET',
+    headers: generateCommonHeaders(token),
+  });
+}
+
 export function deleteTimeRecord({ config: { baseUrl }, token, trId }) {
   return request(`${baseUrl}/timerecords/${trId}`, {
     method: 'DELETE',

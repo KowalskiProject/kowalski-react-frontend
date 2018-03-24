@@ -1,11 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import Modal from 'components/Modal/Loadable';
-import ProjectPerson from './ProjectPerson';
-import AddPeopleForm from './AddPeopleForm';
 import { List } from 'immutable';
+import Modal from 'components/Modal/Loadable';
+import AddPeopleForm from './AddPeopleForm';
 import PeopleFlexGrid from '../../components/PeopleFlexGrid';
+import { userCanAccess } from '../../support/auth/utils';
+import { ADD } from '../../support/auth/resources';
 
 const ProjectNameWrapper = styled.h3`
 `;
@@ -55,12 +56,6 @@ const AddPeopleButton = styled.button`
   color: #654EA3;
 `;
 
-const renderPeople = (people) => (
-  people.map((person) => (
-    <ProjectPerson person={person} key={`${person.name}-${person.position}`} />
-  ))
-);
-
 export default function GeneralTab(props) {
   const {
     project,
@@ -89,9 +84,12 @@ export default function GeneralTab(props) {
           <div style={{ display: 'flex', flexDirection: 'column-reverse' }}>
             <h4>People</h4>
           </div>
-          <AddPeopleButton className="button" onClick={props.openAddPeopleForm}>
-            Add People
-          </AddPeopleButton>
+          {
+            userCanAccess(ADD.PERSON_TO_PROJECT) &&
+              <AddPeopleButton className="button" onClick={props.openAddPeopleForm}>
+                Add People
+              </AddPeopleButton>
+          }
         </ProjectPeopleHeader>
         <ProjectPeopleContent>
           <PeopleFlexGrid people={project.get('people')} />

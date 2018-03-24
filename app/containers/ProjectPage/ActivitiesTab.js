@@ -28,6 +28,8 @@ import {
   makeSelectIsSubmittingNewTask,
 } from './selectors';
 import ActivityListItem from './ActivityListItem';
+import { userCanAccess } from '../../support/auth/utils';
+import { ADD } from '../../support/auth/resources';
 
 const Container = styled.div`
   padding-top: 2rem;
@@ -102,7 +104,10 @@ const ActivitiesTab = (props) => {
 
         </div>
 
-        <NewActivityButton className="button" onClick={() => launchNewActivityDialog(project)}>Add activity</NewActivityButton>
+        {
+          userCanAccess(ADD.ACTIVITY_TO_PROJECT) &&
+            <NewActivityButton className="button" onClick={() => launchNewActivityDialog(project)}>Add activity</NewActivityButton>
+        }
       </ToolbarContainer>
       <ActivityListContainer className="activitieWrapper">
         { renderActivities(project, activityFilteringText) }

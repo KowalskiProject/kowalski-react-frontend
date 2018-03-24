@@ -28,6 +28,8 @@ import {
 import reducer from './reducer';
 import saga from './saga';
 import * as actions from './actions';
+import { userCanAccess } from '../../support/auth/utils';
+import { ADD } from '../../support/auth/resources';
 
 const MainContainerWrapper = styled.div`
   display: flex;
@@ -131,7 +133,10 @@ class ProjectsPage extends React.Component { // eslint-disable-line react/prefer
         </Helmet>
         <TitleBar>
           <PageTitle>Projects</PageTitle>
-          <AddProjectButton className="button" onClick={openNewProjectForm}>Add project</AddProjectButton>
+          {
+            userCanAccess(ADD.PROJECT) &&
+              <AddProjectButton className="button" onClick={openNewProjectForm}>Add project</AddProjectButton>
+          }
         </TitleBar>
         <ProjectListWrapper>
           { this.renderProjectsPanel() }

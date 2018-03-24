@@ -6,7 +6,8 @@ import FaAngleDown from 'react-icons/lib/fa/angle-down';
 import SaturnoLogo from 'images/saturno-logo.svg';
 import NavBar from './NavBar';
 import messages from './messages';
-import { fromJS } from 'immutable';
+import { userCanAccess } from '../../support/auth/utils';
+import { PAGE } from '../../support/auth/resources';
 const jwtDecode = require('jwt-decode');
 
 const AppNameWrapper = styled.span`
@@ -38,7 +39,7 @@ class Header extends React.Component {
   }
 
   render() {
-    const { children, onTimesheetClicked, onProjectsClicked, onPeopleClicked, onLogoutClicked } = this.props;
+    const { children, onTimesheetClicked, onProjectsClicked, onPeopleClicked } = this.props;
 
     return (
       <div className="kowalski-react-basic-container-vertical">
@@ -49,15 +50,24 @@ class Header extends React.Component {
             </AppNameWrapper>
           </div>
           <div className="navbar-end">
-            <span className="navbar-item">
-              <NavMenu onClick={onTimesheetClicked}><FormattedMessage {...messages.timesheet} /></NavMenu>
-            </span>
-            <span className="navbar-item">
-              <NavMenu onClick={onProjectsClicked}><FormattedMessage {...messages.projects} /></NavMenu>
-            </span>
-            <span className="navbar-item">
-              <NavMenu onClick={onPeopleClicked}><FormattedMessage {...messages.people} /></NavMenu>
-            </span>
+            {
+              userCanAccess(PAGE.TIMESHEET) &&
+                <span className="navbar-item">
+                  <NavMenu onClick={onTimesheetClicked}><FormattedMessage {...messages.timesheet} /></NavMenu>
+                </span>
+            }
+            {
+              userCanAccess(PAGE.PROJECTS) &&
+                <span className="navbar-item">
+                  <NavMenu onClick={onProjectsClicked}><FormattedMessage {...messages.projects} /></NavMenu>
+                </span>
+            }
+            {
+              userCanAccess(PAGE.PEOPLE) &&
+                <span className="navbar-item">
+                  <NavMenu onClick={onPeopleClicked}><FormattedMessage {...messages.people} /></NavMenu>
+                </span>
+            }
             <NavBarMenuWrapper className="navbar-item">
               <UserDropdown
                 expanded={this.state.dropDownExpanded}
@@ -74,6 +84,7 @@ class Header extends React.Component {
   }
 }
 
+// Extract this component to another file
 const UserDropdown = (props) => {
   const authToken = localStorage.getItem('authToken');
   let username = null;
@@ -85,7 +96,8 @@ const UserDropdown = (props) => {
   }
 
   return (
-    <div className={`dropdown ${props.expanded ? 'is-active' : ''}`}
+    <div
+      className={`dropdown ${props.expanded ? 'is-active' : ''}`}
       onMouseEnter={props.handleMenuExpansion}
       onMouseLeave={props.handleMenuCollapse}
     >
@@ -104,13 +116,20 @@ const UserDropdown = (props) => {
       </div>
       <div className="dropdown-menu" id="dropdown-menu" role="menu">
         <div className="dropdown-content">
-          <a href="#" className="dropdown-item" onClick={props.onLogoutClicked}>
+          <a role="button" tabIndex="0" className="dropdown-item" onClick={props.onLogoutClicked}>
             Logout
           </a>
         </div>
       </div>
     </div>
   );
+};
+
+UserDropdown.propTypes = {
+  expanded: PropTypes.bool,
+  handleMenuCollapse: PropTypes.func.isRequired,
+  handleMenuExpansion: PropTypes.func.isRequired,
+  onLogoutClicked: PropTypes.func.isRequired,
 };
 
 Header.propTypes = {

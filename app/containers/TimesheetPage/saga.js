@@ -20,8 +20,6 @@ import {
   logUpdated,
 } from './actions';
 
-import { navigateTo } from '../App/actions';
-
 import {
   SUBMIT_LOG_FORM,
   LOAD_TIME_RECORDS_FOR_WEEK_DATE,
@@ -42,7 +40,7 @@ import {
   getProjects, getProjectActivities, createTask, saveTimeRecord, fetchTimeRecords, deleteTimeRecord,
 } from '../../support/backend/KowalskiBackendClient';
 
-import { expiredSessionDetected, requestErrorReceived } from '../App/actions';
+import { expiredSessionDetected, requestErrorReceived, navigateTo } from '../App/actions';
 import { genCommonReqConfig } from '../../support/backend/utils';
 import { formatDate } from '../../support/backend/formatters';
 
