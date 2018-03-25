@@ -73,7 +73,7 @@ export function* handleSubmitLogForm({ payload }) {
       dispatchOnOtherErrors: [
         stopSubmit(
           LOG_HOUR_FORM,
-          { _error: 'There was an error while trying to communicate with the server =(' },
+          { _error: 'Houve um erro enquanto se tentava comunicar com o servidor =(' },
         ),
       ],
     }));
@@ -105,7 +105,7 @@ export function* handleTimeRecordsLoading({ payload }) {
       dispatchOnAuthError: [endedLoadingTimeRecords({ success: false })],
       dispatchOnOtherErrors: [endedLoadingTimeRecords({
         success: false,
-        errorMsg: 'There was a server related error while trying to load the form options. Please try again later.',
+        errorMsg: 'Houve um erro relacionado com o servidor enquanto se tentava carregar as opções do formulário. Por favor tente novamente mais tarde.',
       })],
     }));
   }
@@ -133,7 +133,7 @@ export function* handleLoadFormProjects() {
       dispatchOnOtherErrors: [
         stopSubmit(
           LOG_HOUR_FORM,
-          { _error: 'There was a server related error while trying to load the form options. Please try again later.' },
+          { _error: 'Houve um erro relacionado com o servidor enquanto se tentava carregar as opções do formulário. Por favor tente novamente mais tarde.' },
         ),
       ],
       dispatchOnAnyError: [
@@ -166,7 +166,7 @@ export function* handleLoadFormActivities({ payload }) {
       dispatchOnOtherErrors: [
         stopSubmit(
           LOG_HOUR_FORM,
-          { _error: 'There was a server related error while trying to load the form options. Please try again later.' },
+          { _error: 'Houve um erro relacionado com o servidor enquanto se tentava carregar as opções do formulário. Por favor tente novamente mais tarde.' },
         ),
       ],
       dispatchOnAnyError: [
@@ -201,7 +201,7 @@ export function* handleSubmitNewTaskForm({ payload }) {
       dispatchOnOtherErrors: [
         stopSubmit(
           NEW_TASK_FORM_ID,
-          { _error: 'There was an error while trying to communicate with the server =(' },
+          { _error: 'Houve um erro enquanto se tentava comunicar com o servidor =(' },
         ),
       ],
     }));
@@ -255,7 +255,7 @@ export function* handleDeleteTimeRecord({ payload: { trId, callbackDate } }) {
       dispatchOnOtherErrors: [
         stopSubmit(
           LOG_HOUR_FORM,
-          { _error: 'There was an error in the server while trying to delete this record =(' },
+          { _error: 'Houve um erro no servidor enquanto se tentava excluir este apontamento =(' },
         ),
       ],
     }));

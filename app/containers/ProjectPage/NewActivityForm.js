@@ -4,10 +4,12 @@ import PropTypes from 'prop-types';
 import InputField from 'components/InputField/Loadable';
 import TextAreaField from 'components/TextAreaField/Loadable';
 import { Field, reduxForm } from 'redux-form/immutable';
+import { FormattedMessage, injectIntl } from 'react-intl';
 
 import { required } from '../../support/forms/validation';
 import { NEW_ACTIVITY_FORM_ID } from './constants';
 import { formatDate } from '../../support/backend/formatters';
+import messages from './messages';
 
 const Wrapper = styled.div`
   display: flex;
@@ -41,7 +43,7 @@ const FormActionWrapper = styled.div`
 
 function NewActivityForm(props) {
   const { error, submitting, onCancel, handleSubmit, onAdd, onSaveAndAddNew } = props;
-  const { project } = props;
+  const { project, intl: { formatMessage } } = props;
 
   const myOnSubmit = (formData, func) => (
     func(formData
@@ -54,13 +56,15 @@ function NewActivityForm(props) {
   return (
     <Wrapper className="box">
       <form onSubmit={handleSubmit((formData) => myOnSubmit(formData, onAdd))}>
-        <FormTitle><H1>Create new activity</H1></FormTitle>
+        <FormTitle><H1>
+          <FormattedMessage {... messages.newActivityFormTitle} />
+        </H1></FormTitle>
 
         <Field
           name="name"
           id="name"
           component={InputField}
-          label="Activity Name"
+          label={formatMessage(messages.newActivityFormLabelName)}
           validate={[required]}
         />
 
@@ -68,7 +72,7 @@ function NewActivityForm(props) {
           name="description"
           id="description"
           component={TextAreaField}
-          label="Activity Description"
+          label={formatMessage(messages.newActivityFormLabelDescription)}
           validate={[required]}
         />
 
@@ -86,16 +90,18 @@ function NewActivityForm(props) {
         <FormActions>
           <FormActionWrapper className="control">
             <FormAction className="button" type="button" disabled={submitting} onClick={handleSubmit((formData) => myOnSubmit(formData, onSaveAndAddNew))}>
-              Save and add new
+              <FormattedMessage {... messages.newActivityFormButtonSaveAndAddNew} />
             </FormAction>
           </FormActionWrapper>
           <FormActionWrapper className="control">
             <FormAction type="submit" className={`button is-primary ${submitting ? 'is-loading' : ''}`} disabled={submitting}>
-              Add
+              <FormattedMessage {... messages.newActivityFormButtonAnd} />
             </FormAction>
           </FormActionWrapper>
           <FormActionWrapper className="control">
-            <FormAction className="button" type="button" onClick={onCancel}>Cancel</FormAction>
+            <FormAction className="button" type="button" onClick={onCancel}>
+              <FormattedMessage {... messages.newActivityFormButtonCancel} />
+            </FormAction>
           </FormActionWrapper>
         </FormActions>
       </form>
@@ -111,8 +117,9 @@ NewActivityForm.propTypes = {
   onAdd: PropTypes.func,
   onSaveAndAddNew: PropTypes.func,
   project: PropTypes.object,
+  intl: PropTypes.object.isRequired,
 };
 
 export default reduxForm({
   form: NEW_ACTIVITY_FORM_ID,
-})(NewActivityForm);
+})(injectIntl(NewActivityForm));

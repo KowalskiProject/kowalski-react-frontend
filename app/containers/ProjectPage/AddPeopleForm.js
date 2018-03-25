@@ -3,9 +3,11 @@ import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import CheckboxGroup from 'components/CheckboxGroup/Loadable';
 import { reduxForm } from 'redux-form/immutable';
+import { FormattedMessage } from 'react-intl';
 import { List } from 'immutable';
 
 import { ADD_PEOPLE_FORM_ID } from './constants';
+import messages from './messages';
 
 const Wrapper = styled.div`
   display: flex;
@@ -77,9 +79,13 @@ function AddPeopleForm(props) {
   return (
     <Wrapper className="box">
       <form onSubmit={handleSubmit((formData) => myOnSubmit(formData, onAdd))}>
-        <FormTitle><H1>Add people</H1></FormTitle>
+        <FormTitle><H1>
+          <FormattedMessage {... messages.generalTabProjectAddPeople} />
+        </H1></FormTitle>
 
-        <p>Select one or more users</p>
+        <p>
+          <FormattedMessage {... messages.generalTabSelectOneOrMorePeople} />
+        </p>
 
         <CheckboxGroup options={addPeopleOptions} component={AddPeopleCheckbox} name="people" />
 
@@ -97,11 +103,13 @@ function AddPeopleForm(props) {
         <FormActions>
           <FormActionWrapper className="control">
             <FormAction type="submit" className={`button is-primary ${submitting ? 'is-loading' : ''}`} disabled={submitting}>
-              Add
+              <FormattedMessage {... messages.generalTabAddPeopleFormButtonAdd} />
             </FormAction>
           </FormActionWrapper>
           <FormActionWrapper className="control">
-            <FormAction className="button" type="button" onClick={onCancel}>Cancel</FormAction>
+            <FormAction className="button" type="button" onClick={onCancel}>
+              <FormattedMessage {... messages.generalTabAddPeopleFormButtonCancel} />
+            </FormAction>
           </FormActionWrapper>
         </FormActions>
       </form>

@@ -5,6 +5,7 @@ import PropType from 'prop-types';
 import { Field, reduxForm, formValueSelector } from 'redux-form/immutable';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { fromJS } from 'immutable';
+import { injectIntl, FormattedMessage } from 'react-intl';
 
 import InputField from 'components/InputField/Loadable';
 import SelectField from 'components/SelectField/Loadable';
@@ -12,6 +13,7 @@ import TextAreaField from 'components/TextAreaField/Loadable';
 
 import { required, timeEntryFormat } from '../../support/forms/validation';
 import TaskSelectionField from '../../components/TaskSelectionField';
+import messages from './messages';
 import {
   LOG_HOUR_FORM,
 } from './constants';
@@ -121,6 +123,7 @@ class LogHourForm extends React.Component { // eslint-disable-line react/prefer-
       date,
       initialValues,
       values,
+      intl: { formatMessage },
     } = this.props;
 
     const isEdition = !!initialValues;
@@ -135,31 +138,31 @@ class LogHourForm extends React.Component { // eslint-disable-line react/prefer-
     return (
       <Wrapper>
         <ConfirmationDialog
-          message="Are you sure you want to delete this record?"
+          message={formatMessage(messages.confirmTimeRecordDeletion)}
           onCancel={this.closeDeleteRecordConfirmDialog}
           onConfirm={this.deleteTimeRecord}
           isActive={this.props.isDeleteConfirmationDialogOpened}
         />
 
         <form onSubmit={handleSubmit(submissionHook(onSubmit, date))}>
-          <FormTitle><H1>{`${isEdition ? 'Edit Time' : 'Add Time'}`}</H1></FormTitle>
+          <FormTitle><H1>{`${isEdition ? formatMessage(messages.editTimeTitle) : formatMessage(messages.addTimeTitle)}`}</H1></FormTitle>
 
           <Field
             name="projectId"
             id="projectId"
             component={SelectField}
-            label="Your Projects"
+            label={formatMessage(messages.labelProjectId)}
             onChange={this.handleProjectChange}
             validate={[required]}
           >
-            <option value="">Choose a project</option>
+            <option value="">{formatMessage(messages.labelChooseAProject)}</option>
             { renderProjectOptions(formProjects) }
           </Field>
 
           <Field
             name="taskId"
             id="taskId"
-            label="Your Tasks"
+            label={formatMessage(messages.labelTaskId)}
             component={TaskSelectionField}
             {...{ isTaskOverlaySelectOpened, onDismissTaskOverlaySelect, onSelectTaskClicked, onNewTaskSelected }}
             validate={[required]}
@@ -172,7 +175,7 @@ class LogHourForm extends React.Component { // eslint-disable-line react/prefer-
             id="reportedTime"
             component={InputField}
             validate={[required, timeEntryFormat]}
-            label="How Long it last?"
+            label={formatMessage(messages.labelReportedTime)}
             placeholder="Ex: 02:00, 1:20 etc."
             disabled={durationAndCommentDisabled}
           />
@@ -182,7 +185,7 @@ class LogHourForm extends React.Component { // eslint-disable-line react/prefer-
             id="comment"
             component={TextAreaField}
             validate={[required]}
-            label="Comment"
+            label={formatMessage(messages.labelComment)}
             disabled={durationAndCommentDisabled}
           />
 
@@ -200,17 +203,19 @@ class LogHourForm extends React.Component { // eslint-disable-line react/prefer-
           <FormActions>
             <FormActionWrapper className="control">
               <FormAction type="submit" className={`button is-primary ${submitting ? 'is-loading' : ''}`} disabled={submitting}>
-                Submit
+                <FormattedMessage {... messages.buttonSubmit} />
               </FormAction>
             </FormActionWrapper>
             {
               isEdition &&
                 <FormAction type="button" className="button is-danger" disabled={submitting} onClick={this.confirmTimeRecordDeletion}>
-                  Delete
+                  <FormattedMessage {... messages.buttonDelete} />
                 </FormAction>
             }
             <FormActionWrapper className="control">
-              <FormAction className="button" type="button" onClick={onDismissForm}>Cancel</FormAction>
+              <FormAction className="button" type="button" onClick={onDismissForm}>
+                <FormattedMessage {... messages.buttonCancel} />
+              </FormAction>
             </FormActionWrapper>
           </FormActions>
         </form>
@@ -249,6 +254,7 @@ LogHourForm.propTypes = {
   isDeleteConfirmationDialogOpened: PropType.bool.isRequired,
   deleteConfirmationDialogCallback: PropType.func.isRequired,
   values: ImmutablePropTypes.map.isRequired,
+  intl: PropType.object.isRequired,
 };
 
 const selector = formValueSelector(LOG_HOUR_FORM);
@@ -256,4 +262,4 @@ export default reduxForm({
   form: LOG_HOUR_FORM,
 })(connect((state) => ({
   values: fromJS(selector(state, 'projectId', 'taskId')),
-}))(LogHourForm));
+}))(injectIntl(LogHourForm)));

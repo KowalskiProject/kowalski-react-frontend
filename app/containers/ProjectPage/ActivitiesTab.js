@@ -4,6 +4,7 @@ import { createStructuredSelector } from 'reselect';
 import styled from 'styled-components';
 import FaSearch from 'react-icons/lib/fa/search';
 import PropTypes from 'prop-types';
+import { FormattedMessage } from 'react-intl';
 import Modal from 'components/Modal/Loadable';
 import NewTaskForm from './NewTaskForm';
 import NewActivityForm from './NewActivityForm';
@@ -30,6 +31,7 @@ import {
 import ActivityListItem from './ActivityListItem';
 import { userCanAccess } from '../../support/auth/utils';
 import { ADD } from '../../support/auth/resources';
+import messages from './messages';
 
 const Container = styled.div`
   padding-top: 2rem;
@@ -106,7 +108,9 @@ const ActivitiesTab = (props) => {
 
         {
           userCanAccess(ADD.ACTIVITY_TO_PROJECT) &&
-            <NewActivityButton className="button" onClick={() => launchNewActivityDialog(project)}>Add activity</NewActivityButton>
+            <NewActivityButton className="button" onClick={() => launchNewActivityDialog(project)}>
+              <FormattedMessage {... messages.activitiesTabButtonAddActivity} />
+            </NewActivityButton>
         }
       </ToolbarContainer>
       <ActivityListContainer className="activitieWrapper">

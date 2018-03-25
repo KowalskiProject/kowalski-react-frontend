@@ -7,10 +7,12 @@
 import React from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
+import { injectIntl } from 'react-intl';
 import OverlaySelect from '../../components/OverlaySelect';
 import OverlaySelectGroup from '../../components/OverlaySelectGroup';
 import OverlaySelectGroupHeader from '../../components/OverlaySelectGroupHeader';
 import OverlaySelectOption from '../../components/OverlaySelectOption';
+import messages from '../../containers/TimesheetPage/messages';
 
 const SelectButton = styled.button`
   width: 100%;
@@ -18,22 +20,22 @@ const SelectButton = styled.button`
   ${(props) => props.hasError ? 'border-color: red !important;' : ''}
 `;
 
-const renderOptions = (options, groupValue, onNewTaskSelected) => (
+const renderOptions = (options, groupValue, onNewTaskSelected, formatMessage) => (
   [
     ...options.map(({ label, value }) => (
       <OverlaySelectOption value={value} key={value}>{label}</OverlaySelectOption>
     )),
     <OverlaySelectOption key={`${groupValue}-new`} value={`${groupValue}-new`} onOptionSelect={onNewTaskSelected}>
-      New task...
+      { formatMessage(messages.buttonNewTask) }
     </OverlaySelectOption>,
   ]
 );
 
-const renderGroupOptions = (optionGroups, onNewTaskSelected) => (
+const renderGroupOptions = (optionGroups, onNewTaskSelected, formatMessage) => (
   optionGroups.map(({ label, value, options }) => (
     <OverlaySelectGroup key={value}>
       <OverlaySelectGroupHeader>{label}</OverlaySelectGroupHeader>
-      { renderOptions(options, value, onNewTaskSelected) }
+      { renderOptions(options, value, onNewTaskSelected, formatMessage) }
     </OverlaySelectGroup>
   ))
 );
@@ -50,10 +52,11 @@ function TaskSelectionField(props) {
     optionGroups,
     onNewTaskSelected,
     disabled,
+    intl: { formatMessage },
   } = props;
 
   const labelHtml = label ? <label htmlFor={id} className="label">{label}</label> : '';
-  let buttonLabel = 'Select a Task';
+  let buttonLabel = formatMessage(messages.buttonSelectATask);
 
   if (value) {
     const foundGroup = optionGroups.find((group) => group.options
@@ -81,12 +84,12 @@ function TaskSelectionField(props) {
         </SelectButton>
         {touched && error && <p className="help is-danger">{error}</p>}
         <OverlaySelect
-          title="Select a Task"
+          title={formatMessage(messages.buttonSelectATask)}
           opened={isTaskOverlaySelectOpened}
           onDismiss={onDismissTaskOverlaySelect}
           onOptionSelect={(selectedValue) => onBlur(selectedValue) && onChange(selectedValue)}
         >
-          { renderGroupOptions(optionGroups, onNewTaskSelected) }
+          { renderGroupOptions(optionGroups, onNewTaskSelected, formatMessage) }
         </OverlaySelect>
       </div>
     </div>
@@ -110,6 +113,7 @@ TaskSelectionField.propTypes = {
     })),
   })),
   disabled: PropTypes.bool.isRequired,
+  intl: PropTypes.object.isRequired,
 };
 
-export default TaskSelectionField;
+export default injectIntl(TaskSelectionField);

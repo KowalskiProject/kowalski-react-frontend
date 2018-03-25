@@ -66,7 +66,7 @@ export function* submitPersonForm({ payload }) {
       dispatchOnOtherErrors: [
         stopSubmit(
           NEW_PERSON_FORM_ID,
-          { _error: 'There was an error while trying to communicate with the server =(' }
+          { _error: 'Houve um erro enquanto tentávamos comunicar com o servidor =(' }
         ),
       ],
     }));
@@ -80,14 +80,13 @@ export function* handleStartFetchingNewPersonFormOptions() {
     const roles = yield call(fetchRoles, genCommonReqConfig());
     yield put(endFetchingNewPersonFormOptions({ success: true, data: fromJS(roles) }));
   } catch (e) {
-    console.log(e);
     yield put(requestErrorReceived({
       error: e,
       dispatchOnAnyError: [endFetchingNewPersonFormOptions({ success: false })],
       dispatchOnOtherErrors: [
         stopSubmit(
           NEW_PERSON_FORM_ID,
-          { _error: 'There was an error while trying to fetch the form options from the server =(' }
+          { _error: 'Houve um erro relacionado com o servidor enquanto se tentava carregar as opções do formulário. Por favor tente novamente mais tarde. =(' }
         ),
       ],
     }));
@@ -112,7 +111,7 @@ export function* handlePeopleLoading() {
         endPeopleLoading({ success: false, errorMsg: '' }),
       ],
       dispatchOnOtherErrors: [
-        endPeopleLoading({ success: false, errorMsg: 'There was an error while trying to communicate with the server =(' }),
+        endPeopleLoading({ success: false, errorMsg: 'Houve um erro enquanto tentávamos comunicar com o servidor =(' }),
       ],
     }));
   }

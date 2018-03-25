@@ -92,7 +92,8 @@ class Header extends React.Component {
 }
 
 // Extract this component to another file
-const UserDropdown = (props) => {
+const UserDropdown = injectIntl((props) => {
+  const { intl } = props;
   const authToken = localStorage.getItem('authToken');
   let username = null;
   if (authToken) {
@@ -124,19 +125,20 @@ const UserDropdown = (props) => {
       <div className="dropdown-menu" id="dropdown-menu" role="menu">
         <div className="dropdown-content">
           <a role="button" tabIndex="0" className="dropdown-item" onClick={props.onLogoutClicked}>
-            Logout
+            { intl.formatMessage(messages.logout) }
           </a>
         </div>
       </div>
     </div>
   );
-};
+});
 
 UserDropdown.propTypes = {
   expanded: PropTypes.bool,
   handleMenuCollapse: PropTypes.func.isRequired,
   handleMenuExpansion: PropTypes.func.isRequired,
   onLogoutClicked: PropTypes.func.isRequired,
+  intl: PropTypes.any,
 };
 
 Header.propTypes = {

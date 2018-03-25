@@ -73,7 +73,7 @@ export function* handleSelectedProjectId({ payload }) {
         loadedSelectedProject({ success: false, errorMsg: '' }),
       ],
       dispatchOnOtherErrors: [
-        loadedSelectedProject({ success: false, errorMsg: 'There was an error while trying to communicate with the server =(' }),
+        loadedSelectedProject({ success: false, errorMsg: 'Houve um erro enquanto tentávamos comunicar com o servidor =(' }),
       ],
     }));
   }
@@ -94,7 +94,7 @@ export function* handleLoadProjectCodes() {
         endProjectCodesLoading({ success: false, errorMsg: '' }),
       ],
       dispatchOnOtherErrors: [
-        endProjectCodesLoading({ success: false, errorMsg: 'There was an error while trying to communicate with the server =(' }),
+        endProjectCodesLoading({ success: false, errorMsg: 'Houve um erro enquanto tentávamos comunicar com o servidor =(' }),
       ],
     }));
   }
@@ -125,7 +125,7 @@ export function* handleSubmitNewTaskForm({ payload }) {
       dispatchOnOtherErrors: [
         stopSubmit(
           NEW_TASK_FORM_ID,
-          { _error: 'There was an error while trying to communicate with the server =(' },
+          { _error: 'Houve um erro enquanto tentávamos comunicar com o servidor =(' },
         ),
       ],
     }));
@@ -160,7 +160,7 @@ export function* handleSubmitNewActivityForm({ payload }) {
       dispatchOnOtherErrors: [
         stopSubmit(
           NEW_ACTIVITY_FORM_ID,
-          { _error: 'There was an error while trying to communicate with the server =(' },
+          { _error: 'Houve um erro enquanto tentávamos comunicar com o servidor =(' },
         ),
       ],
     }));
@@ -191,9 +191,9 @@ export function* handleFetchTaskList({ payload: { activityId, projectId, people 
       activityId,
       projectId,
     });
-    tasks.forEach((task) => (
+    tasks.forEach((task) => {
       task.accountable = people.find((person) => person.get('kUserId') === task.accountableId)
-    ));
+    });
     yield put(tasksLoaded({ activityId, taskList: fromJS(tasks) }));
   } catch (e) {
     yield put(requestErrorReceived({
@@ -202,7 +202,7 @@ export function* handleFetchTaskList({ payload: { activityId, projectId, people 
       dispatchOnOtherErrors: [
         stopSubmit(
           NEW_ACTIVITY_FORM_ID,
-          { _error: 'There was an error while trying to communicate with the server =(' },
+          { _error: 'Houve um erro enquanto tentávamos comunicar com o servidor =(' },
         ),
       ],
     }));
@@ -223,7 +223,7 @@ export function* handleLoadUsers() {
         endedUsersLoading({ success: false, errorMsg: '' }),
       ],
       dispatchOnOtherErrors: [
-        endedUsersLoading({ success: false, errorMsg: 'There was an error while trying to communicate with the server =(' }),
+        endedUsersLoading({ success: false, errorMsg: 'Houve um erro enquanto tentávamos comunicar com o servidor =(' }),
       ],
     }));
   }
@@ -247,7 +247,7 @@ export function* handleSubmitAddPeopleForm({ payload }) {
       dispatchOnOtherErrors: [
         stopSubmit(
           ADD_PEOPLE_FORM_ID,
-          { _error: 'There was an error while trying to communicate with the server =(' },
+          { _error: 'Houve um erro enquanto tentávamos comunicar com o servidor =(' },
         ),
       ],
     }));

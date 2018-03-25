@@ -7,23 +7,27 @@
 import { addLocaleData } from 'react-intl';
 import enLocaleData from 'react-intl/locale-data/en';
 import deLocaleData from 'react-intl/locale-data/de';
+import ptLocaleData from 'react-intl/locale-data/pt';
 
 import { DEFAULT_LOCALE } from '../app/containers/App/constants';
 
 import enTranslationMessages from './translations/en.json';
 import deTranslationMessages from './translations/de.json';
+import ptBRTranslationMessages from './translations/pt-BR.json';
 
 addLocaleData(enLocaleData);
 addLocaleData(deLocaleData);
+addLocaleData(ptLocaleData);
 
 export const appLocales = [
   'en',
   'de',
+  'pt-BR',
 ];
 
 export const formatTranslationMessages = (locale, messages) => {
   const defaultFormattedMessages = locale !== DEFAULT_LOCALE
-    ? formatTranslationMessages(DEFAULT_LOCALE, enTranslationMessages)
+    ? formatTranslationMessages(DEFAULT_LOCALE, ptBRTranslationMessages)
     : {};
   return Object.keys(messages).reduce((formattedMessages, key) => {
     const formattedMessage = !messages[key] && locale !== DEFAULT_LOCALE
@@ -36,4 +40,5 @@ export const formatTranslationMessages = (locale, messages) => {
 export const translationMessages = {
   en: formatTranslationMessages('en', enTranslationMessages),
   de: formatTranslationMessages('de', deTranslationMessages),
+  'pt-BR': formatTranslationMessages('pt-BR', ptBRTranslationMessages),
 };

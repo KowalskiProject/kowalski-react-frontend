@@ -2,13 +2,14 @@ import React from 'react';
 import styled from 'styled-components';
 import PropType from 'prop-types';
 import { Field, reduxForm } from 'redux-form/immutable';
-
+import { injectIntl, FormattedMessage } from 'react-intl';
 import InputField from 'components/InputField/Loadable';
 import TextAreaField from 'components/TextAreaField/Loadable';
 
 import { required } from '../../support/forms/validation';
 import { NEW_PROJECT_FORM_ID } from './constants';
 import { formatDate } from '../../support/backend/formatters';
+import messages from './messages';
 
 const Wrapper = styled.div`
   display: flex;
@@ -41,7 +42,7 @@ const FormActionWrapper = styled.div`
 `;
 
 function NewProjectForm(props) {
-  const { error, submitting, onCancel, handleSubmit, onAdd, onSaveAndAddNew } = props;
+  const { error, submitting, onCancel, handleSubmit, onAdd, onSaveAndAddNew, intl: { formatMessage } } = props;
 
   const myOnSubmit = (formData, func) => (
     func(formData
@@ -53,13 +54,13 @@ function NewProjectForm(props) {
   return (
     <Wrapper className="box">
       <form onSubmit={handleSubmit((formData) => myOnSubmit(formData, onAdd))}>
-        <FormTitle><H1>Create new project</H1></FormTitle>
+        <FormTitle><H1>{formatMessage(messages.newProjectFormTitle)}</H1></FormTitle>
 
         <Field
           name="code"
           id="code"
           component={InputField}
-          label="Project Code"
+          label={formatMessage(messages.newProjectLabelCode)}
           validate={[required]}
           fieldStyle={{ width: '200px' }}
         />
@@ -68,7 +69,7 @@ function NewProjectForm(props) {
           name="name"
           id="name"
           component={InputField}
-          label="Project Name"
+          label={formatMessage(messages.newProjectLabelName)}
           validate={[required]}
         />
 
@@ -76,7 +77,7 @@ function NewProjectForm(props) {
           name="description"
           id="description"
           component={TextAreaField}
-          label="Project Description"
+          label={formatMessage(messages.newProjectLabelDescription)}
           validate={[required]}
         />
 
@@ -99,16 +100,18 @@ function NewProjectForm(props) {
               disabled={submitting}
               onClick={handleSubmit((formData) => myOnSubmit(formData, onSaveAndAddNew))}
             >
-              Save and add new
+              <FormattedMessage {... messages.newProjectButtonSaveAndAddNew} />
             </FormAction>
           </FormActionWrapper>
           <FormActionWrapper className="control">
             <FormAction type="submit" className={`button is-primary ${submitting ? 'is-loading' : ''}`} disabled={submitting}>
-              Add
+              <FormattedMessage {... messages.newProjectButtonAdd} />
             </FormAction>
           </FormActionWrapper>
           <FormActionWrapper className="control">
-            <FormAction className="button" type="button" onClick={onCancel}>Cancel</FormAction>
+            <FormAction className="button" type="button" onClick={onCancel}>
+              <FormattedMessage {... messages.newProjectButtonCancel} />
+            </FormAction>
           </FormActionWrapper>
         </FormActions>
       </form>
@@ -123,8 +126,9 @@ NewProjectForm.propTypes = {
   handleSubmit: PropType.func,
   onAdd: PropType.func,
   onSaveAndAddNew: PropType.func,
+  intl: PropType.object.isRequired,
 };
 
 export default reduxForm({
   form: NEW_PROJECT_FORM_ID,
-})(NewProjectForm);
+})(injectIntl(NewProjectForm));

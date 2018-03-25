@@ -11,6 +11,7 @@ import { connect } from 'react-redux';
 import { Helmet } from 'react-helmet';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
+import { injectIntl } from 'react-intl';
 
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
@@ -31,6 +32,7 @@ import saga from './saga';
 import * as actions from './actions';
 import ActivitiesTab from './ActivitiesTab';
 import GeneralTab from './GeneralTab';
+import messages from './messages';
 
 const Wrapper = styled.div`
   display: flex;
@@ -96,7 +98,7 @@ class ProjectPage extends React.PureComponent {
   }
 
   selectedProjectId() {
-    return parseInt(this.props.match.params.code);
+    return parseInt(this.props.match.params.code, 10);
   }
 
   renderProjectMenuItems() {
@@ -140,6 +142,7 @@ class ProjectPage extends React.PureComponent {
       openAddPeopleForm,
       submitAddPeopleFormAndCloseIt,
       usersNotInProject,
+      intl: { formatMessage },
     } = this.props;
 
     const generalTabProps = {
@@ -171,10 +174,10 @@ class ProjectPage extends React.PureComponent {
         <TabsWrapper className="tabs">
           <ul>
             <li className={selectedTab === 0 ? 'is-active' : ''}>
-              <a role="button" tabIndex={0} onClick={() => selectedTabChanged(0)}>General</a>
+              <a role="button" tabIndex={0} onClick={() => selectedTabChanged(0)}>{formatMessage(messages.generalTab)}</a>
             </li>
             <li className={selectedTab === 1 ? 'is-active' : ''}>
-              <a role="button" tabIndex={0} onClick={() => selectedTabChanged(1)}>Activities</a>
+              <a role="button" tabIndex={0} onClick={() => selectedTabChanged(1)}>{formatMessage(messages.activitiesTab)}</a>
             </li>
           </ul>
         </TabsWrapper>
@@ -223,6 +226,7 @@ ProjectPage.propTypes = {
   openAddPeopleForm: PropTypes.func.isRequired,
   submitAddPeopleFormAndCloseIt: PropTypes.func.isRequired,
   usersNotInProject: PropTypes.instanceOf(List).isRequired,
+  intl: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -246,4 +250,4 @@ export default compose(
   withReducer,
   withSaga,
   withConnect,
-)(ProjectPage);
+)(injectIntl(ProjectPage));

@@ -6,17 +6,18 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import format from 'date-fns/format';
 import startOfMonth from 'date-fns/start_of_month';
 import startOfWeek from 'date-fns/start_of_week';
 import isSameDay from 'date-fns/is_same_day';
 import isSameMonth from 'date-fns/is_same_month';
+import { injectIntl } from 'react-intl';
 import isWithinRange from 'date-fns/is_within_range';
 import addDays from 'date-fns/add_days';
 import getDate from 'date-fns/get_date';
 import filter from 'lodash/filter';
 import FaChevronLeft from 'react-icons/lib/fa/chevron-left';
 import FaChevronRight from 'react-icons/lib/fa/chevron-right';
+import { capitalize } from '../../support/string/utils';
 
 const extractDaysForCalendar = (date) => {
   const extractedStartOfMonth = startOfMonth(date);
@@ -93,9 +94,8 @@ const renderCalendarDay = (
 
 const renderCalendarDays = (date, options, dateClickCallback) => extractDaysForCalendar(date)
   .map(renderCalendarDay.bind(this, date, options, dateClickCallback));
-const extractMonthAndYearExpression = (day) => format(day, 'MMMM GGGG');
 
-function AppCalendar({ selectedDate, options = {}, onNextMonthClicked, onPreviousMonthClicked, onDateClicked }) {
+function AppCalendar({ selectedDate, options = {}, onNextMonthClicked, onPreviousMonthClicked, onDateClicked, intl }) {
   return (
     <div className="calendar">
       <div className="calendar-nav">
@@ -104,7 +104,7 @@ function AppCalendar({ selectedDate, options = {}, onNextMonthClicked, onPreviou
             <FaChevronLeft />
           </button>
         </div>
-        <div className="yearMonth" >{extractMonthAndYearExpression(selectedDate)}</div>
+        <div className="yearMonth" >{capitalize(intl.formatDate(selectedDate, { year: 'numeric', month: 'long' }))}</div>
         <div className="calendar-nav-right">
           <button className="button is-text" onClick={onNextMonthClicked}>
             <FaChevronRight />
@@ -135,6 +135,7 @@ AppCalendar.propTypes = {
   onNextMonthClicked: PropTypes.func,
   onPreviousMonthClicked: PropTypes.func,
   onDateClicked: PropTypes.func,
+  intl: PropTypes.object.isRequired,
 };
 
-export default AppCalendar;
+export default injectIntl(AppCalendar);

@@ -6,7 +6,9 @@ import InputField from 'components/InputField/Loadable';
 import SelectField from 'components/SelectField/Loadable';
 import TextAreaField from 'components/TextAreaField/Loadable';
 import { Field, reduxForm } from 'redux-form/immutable';
+import { FormattedMessage, injectIntl } from 'react-intl';
 
+import messages from './messages';
 import { required } from '../../support/forms/validation';
 import { NEW_TASK_FORM_ID } from './constants';
 
@@ -42,31 +44,28 @@ const FormActionWrapper = styled.div`
 
 function NewTaskForm(props) {
   const { error, submitting, onCancel, handleSubmit, onAdd, onSaveAndAddNew } = props;
-  const { activity, project, predefinedAccountableId } = props;
+  const { activity, project, predefinedAccountableId, intl: { formatMessage } } = props;
 
-  const myOnSubmit = (formData, func) => {
-    if (predefinedAccountableId) {
-      formData = formData.set('accountableId', predefinedAccountableId);
-    }
-
-    return func(formData
+  const myOnSubmit = (formData, func) => (
+    func(formData
       .set('project', project)
+      .updateIn(['accountableId'], (accountableId) => predefinedAccountableId || accountableId)
       .set('activityId', activity.get('activityId'))
-    );
-  };
+    )
+  );
 
   const people = project.get('people');
 
   return (
     <Wrapper className="box">
       <form onSubmit={handleSubmit((formData) => myOnSubmit(formData, onAdd))}>
-        <FormTitle><H1>Create new task</H1></FormTitle>
+        <FormTitle><H1>{formatMessage(messages.newTaskFormTitle)}</H1></FormTitle>
 
         <Field
           name="name"
           id="name"
           component={InputField}
-          label="Task Name"
+          label={formatMessage(messages.newTaskLabelName)}
           validate={[required]}
         />
 
@@ -76,10 +75,10 @@ function NewTaskForm(props) {
               name="accountableId"
               id="accountableId"
               component={SelectField}
-              label="Project Members"
+              label={formatMessage(messages.newTaskLabelAccountableId)}
               validate={[required]}
             >
-              <option value="">Select a person</option>
+              <option value="">{formatMessage(messages.newTaskSelectAccountableId)}</option>
               {
                 people.map((person) => (
                   <option key={person.get('kUserId')} value={person.get('kUserId')}>{person.get('name')}</option>
@@ -93,7 +92,7 @@ function NewTaskForm(props) {
           name="description"
           id="description"
           component={TextAreaField}
-          label="Task Description"
+          label={formatMessage(messages.newTaskLabelDescription)}
           validate={[required]}
         />
 
@@ -113,17 +112,19 @@ function NewTaskForm(props) {
             onSaveAndAddNew &&
               <FormActionWrapper className="control">
                 <FormAction className="button" type="button" disabled={submitting} onClick={handleSubmit((formData) => myOnSubmit(formData, onSaveAndAddNew))}>
-                  Save and add new
+                  <FormattedMessage {... messages.newTaskButtonSaveAndAddNew} />
                 </FormAction>
               </FormActionWrapper>
           }
           <FormActionWrapper className="control">
             <FormAction type="submit" className={`button is-primary ${submitting ? 'is-loading' : ''}`} disabled={submitting}>
-              { props.onAddText || 'Add' }
+              { props.onAddText || formatMessage(messages.newTaskButtonAdd) }
             </FormAction>
           </FormActionWrapper>
           <FormActionWrapper className="control">
-            <FormAction className="button" type="button" onClick={onCancel}>Cancel</FormAction>
+            <FormAction className="button" type="button" onClick={onCancel}>
+              <FormattedMessage {... messages.newTaskButtonCancel} />
+            </FormAction>
           </FormActionWrapper>
         </FormActions>
       </form>
@@ -149,8 +150,9 @@ NewTaskForm.propTypes = {
   onSaveAndAddNew: PropTypes.func,
   submitting: PropTypes.bool.isRequired,
   onAddText: PropTypes.string,
+  intl: PropTypes.object.isRequired,
 };
 
 export default reduxForm({
   form: NEW_TASK_FORM_ID,
-})(NewTaskForm);
+})(injectIntl(NewTaskForm));

@@ -14,6 +14,7 @@ import { Helmet } from 'react-helmet';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 import { RingLoader } from 'react-spinners';  // eslint-disable-line import/no-unresolved
+import { FormattedMessage } from 'react-intl';
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
 import Modal from 'components/Modal/Loadable';
@@ -31,6 +32,7 @@ import * as actions from './actions';
 import PeopleFlexGrid from '../../components/PeopleFlexGrid';
 import { userCanAccess } from '../../support/auth/utils';
 import { ADD } from '../../support/auth/resources';
+import messages from './messages';
 
 const MainContainerWrapper = styled.div`
   display: flex;
@@ -113,10 +115,14 @@ export class PeoplePage extends React.Component { // eslint-disable-line react/p
           <meta name="description" content="Description of PeoplePage" />
         </Helmet>
         <TitleBar>
-          <PageTitle>People</PageTitle>
+          <PageTitle>
+            <FormattedMessage {... messages.title} />
+          </PageTitle>
           {
             userCanAccess(ADD.PERSON) &&
-              <AddPersonButton className="button" onClick={openNewPersonForm}>Add person</AddPersonButton>
+              <AddPersonButton className="button" onClick={openNewPersonForm}>
+                <FormattedMessage {... messages.buttonAddPerson} />
+              </AddPersonButton>
           }
         </TitleBar>
         <PersonListWrapper>

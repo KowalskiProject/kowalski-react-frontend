@@ -21,4 +21,7 @@ export default defineMessages({
   appTitle: {
     id: 'app.title',
   },
+  logout: {
+    id: 'app.components.navbar.logout',
+  },
 });

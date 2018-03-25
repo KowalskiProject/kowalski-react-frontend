@@ -2,11 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { List } from 'immutable';
+import { FormattedMessage } from 'react-intl';
 import Modal from 'components/Modal/Loadable';
 import AddPeopleForm from './AddPeopleForm';
 import PeopleFlexGrid from '../../components/PeopleFlexGrid';
 import { userCanAccess } from '../../support/auth/utils';
 import { ADD } from '../../support/auth/resources';
+import messages from './messages';
 
 const ProjectNameWrapper = styled.h3`
 `;
@@ -49,7 +51,7 @@ const ProjectPeopleContent = styled.div`
 const AddPeopleButton = styled.button`
   margin-right: 2rem;
   margin-botton: 1rem;
-  width:156px;
+  width:186px;
   height:50px !important;
   border-radius:2px;
   border:1px solid #654EA3;
@@ -74,7 +76,9 @@ export default function GeneralTab(props) {
         {project.get('name')}
       </ProjectNameWrapper>
       <ProjectDescriptionWrapper>
-        <ProjectDescriptionHeader>Description</ProjectDescriptionHeader>
+        <ProjectDescriptionHeader>
+          <FormattedMessage {... messages.generalTabProjectDescription} />
+        </ProjectDescriptionHeader>
         <ProjectDescriptionContent>
           <p>{project.get('description')}</p>
         </ProjectDescriptionContent>
@@ -82,12 +86,14 @@ export default function GeneralTab(props) {
       <ProjectPeopleWrapper>
         <ProjectPeopleHeader>
           <div style={{ display: 'flex', flexDirection: 'column-reverse' }}>
-            <h4>People</h4>
+            <h4>
+              <FormattedMessage {... messages.generalTabProjectPeople} />
+            </h4>
           </div>
           {
             userCanAccess(ADD.PERSON_TO_PROJECT) &&
               <AddPeopleButton className="button" onClick={props.openAddPeopleForm}>
-                Add People
+                <FormattedMessage {... messages.generalTabProjectAddPeople} />
               </AddPeopleButton>
           }
         </ProjectPeopleHeader>

@@ -7,9 +7,11 @@
 import React from 'react';
 import styled from 'styled-components';
 import format from 'date-fns/format';
+import { injectIntl } from 'react-intl';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import parseAmountOfHours from '../../support/parsers/duration';
+import { capitalize } from '../../support/string/utils';
 
 const wrapperFlexBasis = 14.286;
 const slotsBackgroundColor = '#fff';
@@ -92,11 +94,11 @@ const renderPlusButton = (timeRecords, onClickCallback) => {
   );
 };
 
-function DayColumn({ day, onFreeSlotClick, timeRecords, onSlotClicked }) {
+function DayColumn({ day, onFreeSlotClick, timeRecords, onSlotClicked, intl }) {
   return (
     <Wrapper>
       <DayLabelWrapper>
-        <p>{ format(day, 'ddd') }</p>
+        <p>{capitalize(intl.formatDate(day, { weekday: 'short' }))}</p>
         <p>{ format(day, 'D') }</p>
       </DayLabelWrapper>
       <SlotsContainer>
@@ -112,6 +114,7 @@ DayColumn.propTypes = {
   onFreeSlotClick: PropTypes.func.isRequired,
   onSlotClicked: PropTypes.func.isRequired,
   timeRecords: ImmutablePropTypes.list.isRequired,
+  intl: PropTypes.object.isRequired,
 };
 
-export default DayColumn;
+export default injectIntl(DayColumn);

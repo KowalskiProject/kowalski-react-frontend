@@ -7,7 +7,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Helmet } from 'react-helmet';
-import { FormattedMessage, FormattedDate } from 'react-intl';
+import { FormattedMessage, FormattedDate, injectIntl } from 'react-intl';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 import styled from 'styled-components';
@@ -191,7 +191,7 @@ class TimesheetPage extends React.Component {
               activity={this.props.newTaskFormSelectedActivity}
               predefinedAccountableId={parseInt(localStorage.getItem('currentUserId'), 10)}
               onAdd={this.props.submitNewTaskFormAndCloseIt}
-              onAddText="Create and Select"
+              onAddText={this.props.intl.formatMessage(messages.newTaskButtonAdd)}
               onCancel={this.props.dismissNewTaskDialog}
             />
         }
@@ -314,6 +314,7 @@ TimesheetPage.propTypes = {
   deleteTimeRecord: PropTypes.func.isRequired,
   deleteTimeRecordConfirmDialogOpened: PropTypes.bool.isRequired,
   changeTimeRecordDeleteConfirmDialogOpeness: PropTypes.func.isRequired,
+  intl: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -341,4 +342,4 @@ export default compose(
   withReducer,
   withSaga,
   withConnect,
-)(TimesheetPage);
+)(injectIntl(TimesheetPage));

@@ -5,6 +5,7 @@ import FaAngleUp from 'react-icons/lib/fa/angle-up';
 import { List } from 'immutable';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
+import { FormattedMessage } from 'react-intl';
 import {
   expandTaskListItem as expandTaskListItemAction,
   collapseTaskListItem as collapseTaskListItemAction,
@@ -13,6 +14,7 @@ import {
 import { makeSelectExpandedTaskIds } from './selectors';
 import { userCanAccess } from '../../support/auth/utils';
 import { ADD } from '../../support/auth/resources';
+import messages from './messages';
 
 const renderTasks = (tasks) => (
   (tasks || List()).map((task) => (
@@ -30,9 +32,9 @@ const renderActivityCardContent = ({ activity, onCreateNewTaskClicked }) => (
       <table className="table">
         <thead>
           <tr>
-            <th>Task</th>
-            <th>Owner</th>
-            <th>Description</th>
+            <th><FormattedMessage {... messages.activitiesTabTask} /></th>
+            <th><FormattedMessage {... messages.activitiesOwner} /></th>
+            <th><FormattedMessage {... messages.activitiesDescription} /></th>
           </tr>
         </thead>
         <tbody>
@@ -40,7 +42,9 @@ const renderActivityCardContent = ({ activity, onCreateNewTaskClicked }) => (
           {
             userCanAccess(ADD.TASK_TO_PROJECT) &&
               <tr>
-                <td colSpan={3}><a tabIndex={0} role="button" onClick={() => onCreateNewTaskClicked(activity)}>+ Create new task</a></td>
+                <td colSpan={3}><a tabIndex={0} role="button" onClick={() => onCreateNewTaskClicked(activity)}>
+                  <FormattedMessage {... messages.activitiesTabCreateNewTask} />
+                </a></td>
               </tr>
           }
         </tbody>

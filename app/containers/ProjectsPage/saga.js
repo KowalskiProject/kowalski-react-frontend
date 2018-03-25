@@ -41,7 +41,7 @@ export function* submitProjectForm({ payload }) {
   } catch (e) {
     yield put(stopSubmit(
       NEW_PROJECT_FORM_ID,
-      { _error: 'There was an error while trying to communicate with the server =(' },
+      { _error: 'Houve um erro enquanto se tentava comunicar com o servidor =(' },
     ));
   }
 
@@ -78,7 +78,6 @@ export function* handleProjectLoading() {
     );
     yield put(endProjectLoading({ success: true, data: fromJS(projects) }));
   } catch (e) {
-    console.log(e);
     if (e.response && e.response.status) {
       if (e.response.status === 403) {
         yield put(endProjectLoading({ success: false, errorMsg: null }));
@@ -86,7 +85,7 @@ export function* handleProjectLoading() {
         return;
       }
     }
-    yield put(endProjectLoading({ success: false, errorMsg: 'There was an error while trying to communicate with the server =(' }));
+    yield put(endProjectLoading({ success: false, errorMsg: 'Houve um erro enquanto se tentava comunicar com o servidor =(' }));
   }
 }
 

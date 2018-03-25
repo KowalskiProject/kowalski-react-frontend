@@ -17,6 +17,7 @@ import { RingLoader } from 'react-spinners';  // eslint-disable-line import/no-u
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
 import Modal from 'components/Modal/Loadable';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import NewProjectForm from './NewProjectForm';
 import {
   makeSelectProjects,
@@ -30,6 +31,7 @@ import saga from './saga';
 import * as actions from './actions';
 import { userCanAccess } from '../../support/auth/utils';
 import { ADD } from '../../support/auth/resources';
+import messages from './messages';
 
 const MainContainerWrapper = styled.div`
   display: flex;
@@ -123,6 +125,7 @@ class ProjectsPage extends React.Component { // eslint-disable-line react/prefer
       openNewProjectForm,
       closeNewProjectForm,
       isNewProjectFormOpen,
+      intl: { formatMessage },
     } = this.props;
 
     return (
@@ -132,10 +135,14 @@ class ProjectsPage extends React.Component { // eslint-disable-line react/prefer
           <meta name="description" content="Description of ProjectsPage" />
         </Helmet>
         <TitleBar>
-          <PageTitle>Projects</PageTitle>
+          <PageTitle>
+            <FormattedMessage {... messages.title} />
+          </PageTitle>
           {
             userCanAccess(ADD.PROJECT) &&
-              <AddProjectButton className="button" onClick={openNewProjectForm}>Add project</AddProjectButton>
+              <AddProjectButton className="button" onClick={openNewProjectForm}>
+                {formatMessage(messages.buttonAddProject)}
+              </AddProjectButton>
           }
         </TitleBar>
         <ProjectListWrapper>
@@ -166,6 +173,7 @@ ProjectsPage.propTypes = {
   projectSelected: PropTypes.func,
   isLoadingProjects: PropTypes.bool,
   loadingProjectsErrorMsg: PropTypes.string,
+  intl: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -185,4 +193,4 @@ export default compose(
   withReducer,
   withSaga,
   withConnect,
-)(ProjectsPage);
+)(injectIntl(ProjectsPage));

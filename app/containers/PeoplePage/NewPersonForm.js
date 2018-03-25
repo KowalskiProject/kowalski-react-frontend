@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import FaCloudUpload from 'react-icons/lib/fa/cloud-upload';
+import { FormattedMessage, injectIntl } from 'react-intl';
 
 import InputField from 'components/InputField/Loadable';
 import SelectField from 'components/SelectField/Loadable';
@@ -15,6 +16,7 @@ import { required, email } from '../../support/forms/validation';
 import { NEW_PERSON_FORM_ID } from './constants';
 import { makeSelectIsFetchingNewPersonFormOptions, makeSelectFetchingNewPersonFormOptionsErrorMsg, makeSelectRoles } from './selectors';
 import LoadingCentralDiv from '../../components/LoadingCentralDiv';
+import messages from './messages';
 
 const Wrapper = styled.div`
   display: flex;
@@ -98,14 +100,22 @@ class NewPersonForm extends React.Component {
   }
 
   renderRoles() {
-    const options = [<option value="">Select a Role</option>];
+    const { intl: { formatMessage } } = this.props;
+    const options = [
+      <option value="">
+        <FormattedMessage {... messages.newPersonFormSelectARole} />
+      </option>,
+    ];
     return options.concat(this.props.roles.map((role) => (
-      <option value={role} key={role}>{this.formatRole(role)}</option>
+      <option value={role} key={role}>
+        {formatMessage(messages[`role${this.formatRole(role)}`])}
+      </option>
     )));
   }
 
   render() {
     const { error, submitting, onCancel, handleSubmit, onAdd, onSaveAndAddNew } = this.props;
+    const { intl: { formatMessage } } = this.props;
     const myOnSubmit = (formData, func) => (
       func(formData) // TEMP
     );
@@ -117,7 +127,9 @@ class NewPersonForm extends React.Component {
     return (
       <Wrapper className="box">
         <form onSubmit={handleSubmit((formData) => myOnSubmit(formData, onAdd))}>
-          <FormTitle><H1>Add person</H1></FormTitle>
+          <FormTitle><H1>
+            <FormattedMessage {... messages.newPersonFormTitle} />
+          </H1></FormTitle>
 
           <div className="tile is-ancestor">
             <div className="tile is-4 is-vertical is-parent">
@@ -129,10 +141,12 @@ class NewPersonForm extends React.Component {
                     <UploadButton className="button">
                       <FaCloudUpload />
                       <br />
-                      <span>Choose a file</span>
+                      <span>
+                        <FormattedMessage {... messages.newPersonFormChooseAFile} />
+                      </span>
                     </UploadButton>
                     <HelpUploadPictureInstructions>
-                      Your file must be in .jpeg or .png format
+                      <FormattedMessage {... messages.newPersonFormFileHelpText} />
                     </HelpUploadPictureInstructions>
                   </UploadButtonContainer>
                 </PhotoUploadContainer>
@@ -145,7 +159,7 @@ class NewPersonForm extends React.Component {
                     name="username"
                     id="username"
                     component={InputField}
-                    label="Username"
+                    label={formatMessage(messages.newPersonFormLabelUsername)}
                     validate={[required]}
                   />
                 </div>
@@ -154,7 +168,7 @@ class NewPersonForm extends React.Component {
                     name="role"
                     id="role"
                     component={SelectField}
-                    label="Role"
+                    label={formatMessage(messages.newPersonFormLabelRole)}
                   >
                     { this.renderRoles() }
                   </Field>
@@ -166,7 +180,7 @@ class NewPersonForm extends React.Component {
                     name="name"
                     id="name"
                     component={InputField}
-                    label="Name"
+                    label={formatMessage(messages.newPersonFormLabelName)}
                     validate={[required]}
                   />
                 </div>
@@ -177,7 +191,7 @@ class NewPersonForm extends React.Component {
                     name="email"
                     id="email"
                     component={InputField}
-                    label="Email"
+                    label={formatMessage(messages.newPersonFormLabelEmail)}
                     validate={[required, email]}
                   />
                 </div>
@@ -204,16 +218,18 @@ class NewPersonForm extends React.Component {
                 disabled={submitting}
                 onClick={handleSubmit((formData) => myOnSubmit(formData, onSaveAndAddNew))}
               >
-                Save and add new
+                <FormattedMessage {... messages.newPersonFormButtonSaveAndAddNew} />
               </FormAction>
             </FormActionWrapper>
             <FormActionWrapper className="control">
               <FormAction type="submit" className={`button is-primary ${submitting ? 'is-loading' : ''}`} disabled={submitting}>
-                Add
+                <FormattedMessage {... messages.newPersonFormButtonAdd} />
               </FormAction>
             </FormActionWrapper>
             <FormActionWrapper className="control">
-              <FormAction className="button" type="button" onClick={onCancel}>Cancel</FormAction>
+              <FormAction className="button" type="button" onClick={onCancel}>
+                <FormattedMessage {... messages.newPersonFormButtonCancel} />
+              </FormAction>
             </FormActionWrapper>
           </FormActions>
         </form>
@@ -232,6 +248,7 @@ NewPersonForm.propTypes = {
   isFetchingNewPersonFormOptions: PropType.bool.isRequired,
   roles: ImmutablePropTypes.listOf(PropType.string).isRequired,
   startFetchingNewPersonFormOptions: PropType.func.isRequired,
+  intl: PropType.object.isRequired,
 };
 
 export default reduxForm({
@@ -240,4 +257,4 @@ export default reduxForm({
   isFetchingNewPersonFormOptions: makeSelectIsFetchingNewPersonFormOptions(),
   fetchingNewPersonFormOptionsErrorMsg: makeSelectFetchingNewPersonFormOptionsErrorMsg(),
   roles: makeSelectRoles(),
-}), { startFetchingNewPersonFormOptions })(NewPersonForm));
+}), { startFetchingNewPersonFormOptions })(injectIntl(NewPersonForm)));
