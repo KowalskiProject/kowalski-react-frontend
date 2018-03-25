@@ -169,8 +169,8 @@ class TimesheetPage extends React.Component {
     this.props.navigateTo(`/?date=${format(this.props.selectedDate)}`);
   }
 
-  selectTimeRecordForEdition(trId) {
-    this.props.navigateTo(`/log?date=${format(this.props.selectedDate)}&trId=${trId}`);
+  selectTimeRecordForEdition(trId, date) {
+    this.props.navigateTo(`/log?date=${format(date)}&trId=${trId}`);
   }
 
   selectFreeTimeSlot(date) {
@@ -206,58 +206,56 @@ class TimesheetPage extends React.Component {
           <title>TimesheetPage</title>
           <meta name="description" content="Description of TimesheetPage" />
         </Helmet>
-        <ColumnsWrapper className="columns">
-          {/* Calendar */}
-          <CalendarColumn className="column">
-            <TimeSheetLabelWrapper>
-              <TimeSheetLabelInsideWrapper>
-                <FormattedMessage {... messages.timesheetLabel} />
-              </TimeSheetLabelInsideWrapper>
-              <span>
-                <FormattedDate value={this.props.selectedRange[0]} /> -
-                <FormattedDate value={this.props.selectedRange[1]} />
-              </span>
-            </TimeSheetLabelWrapper>
-            <AppCalendar
-              selectedDate={this.props.selectedDate}
-              onNextMonthClicked={this.forwardOneMonth}
-              onPreviousMonthClicked={this.backwardOneMonth}
-              onDateClicked={this.selectNewDate}
-              options={{ highlightedRanges: [this.props.selectedRange] }}
-            />
-            <TimeSheetLabelWrapper>
-              <TimeSheetLabelInsideWrapper>
-                <FormattedMessage {... messages.notifications} />
-              </TimeSheetLabelInsideWrapper>
-            </TimeSheetLabelWrapper>
-          </CalendarColumn>
-
-          { this.renderNewTaskModal() }
-
-          <Switch>
-            <Route
-              path={`${this.props.match.url}log`}
-              render={(myProps) => (
-                <LogHourForm
-                  {...myProps}
-                  date={this.props.selectedDate}
-                  loadFormProjects={this.props.loadFormProjects}
-                  onSubmit={this.props.submitLogForm}
-                  isTaskOverlaySelectOpened={this.props.isTaskOverlaySelectOpened}
-                  onDismissTaskOverlaySelect={this.props.closeTaskOverlaySelect}
-                  onSelectTaskClicked={this.props.openTaskOverlaySelect}
-                  formProjects={this.props.formProjects}
-                  taskOverlaySelectOptions={this.props.formActivitiesAsOverlaySelectOptions}
-                  loadFormActivities={this.props.loadFormActivities}
-                  onNewTaskSelected={this.props.launchNewTaskDialog}
-                  onDismissForm={this.dismissLogHourForm}
-                  initialValues={this.props.timeRecordOnEdition}
-                  onDeleteRecord={this.props.deleteTimeRecord}
-                  isDeleteConfirmationDialogOpened={this.props.deleteTimeRecordConfirmDialogOpened}
-                  deleteConfirmationDialogCallback={this.props.changeTimeRecordDeleteConfirmDialogOpeness}
-                />
-              )}
-            />
+        { this.renderNewTaskModal() }
+        <Switch>
+          <Route
+            path={`${this.props.match.url}log`}
+            render={(myProps) => (
+              <LogHourForm
+                {...myProps}
+                date={this.props.selectedDate}
+                loadFormProjects={this.props.loadFormProjects}
+                onSubmit={this.props.submitLogForm}
+                isTaskOverlaySelectOpened={this.props.isTaskOverlaySelectOpened}
+                onDismissTaskOverlaySelect={this.props.closeTaskOverlaySelect}
+                onSelectTaskClicked={this.props.openTaskOverlaySelect}
+                formProjects={this.props.formProjects}
+                taskOverlaySelectOptions={this.props.formActivitiesAsOverlaySelectOptions}
+                loadFormActivities={this.props.loadFormActivities}
+                onNewTaskSelected={this.props.launchNewTaskDialog}
+                onDismissForm={this.dismissLogHourForm}
+                initialValues={this.props.timeRecordOnEdition}
+                onDeleteRecord={this.props.deleteTimeRecord}
+                isDeleteConfirmationDialogOpened={this.props.deleteTimeRecordConfirmDialogOpened}
+                deleteConfirmationDialogCallback={this.props.changeTimeRecordDeleteConfirmDialogOpeness}
+              />
+            )}
+          />
+          <ColumnsWrapper className="columns">
+            {/* Calendar */}
+            <CalendarColumn className="column">
+              <TimeSheetLabelWrapper>
+                <TimeSheetLabelInsideWrapper>
+                  <FormattedMessage {... messages.timesheetLabel} />
+                </TimeSheetLabelInsideWrapper>
+                <span>
+                  <FormattedDate value={this.props.selectedRange[0]} /> -
+                  <FormattedDate value={this.props.selectedRange[1]} />
+                </span>
+              </TimeSheetLabelWrapper>
+              <AppCalendar
+                selectedDate={this.props.selectedDate}
+                onNextMonthClicked={this.forwardOneMonth}
+                onPreviousMonthClicked={this.backwardOneMonth}
+                onDateClicked={this.selectNewDate}
+                options={{ highlightedRanges: [this.props.selectedRange] }}
+              />
+              <TimeSheetLabelWrapper>
+                <TimeSheetLabelInsideWrapper>
+                  <FormattedMessage {... messages.notifications} />
+                </TimeSheetLabelInsideWrapper>
+              </TimeSheetLabelWrapper>
+            </CalendarColumn>
             <DayColumnsWrapper className="column">
               <AboveDaysArea>
               </AboveDaysArea>
@@ -273,8 +271,8 @@ class TimesheetPage extends React.Component {
                 }
               </DaysArea>
             </DayColumnsWrapper>
-          </Switch>
-        </ColumnsWrapper>
+          </ColumnsWrapper>
+        </Switch>
       </MainContainerWrapper>
     );
   }

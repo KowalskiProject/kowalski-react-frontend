@@ -23,6 +23,7 @@ import {
   LOG_UPDATED,
 } from './constants';
 import { OPEN } from '../../utils/constants';
+import { CLEAN_UP_STATE } from '../App/constants';
 
 const initialState = fromJS({
   timeRecords: [],
@@ -40,6 +41,8 @@ const initialState = fromJS({
 
 function timesheetPageReducer(state = initialState, { type, payload }) {
   switch (type) {
+    case CLEAN_UP_STATE:
+      return initialState;
     case CHANGE_TIME_RECORD_DELETE_CONFIRM_DIALOG_OPENESS:
       return state.set('deleteTimeRecordConfirmDialogOpened', payload.operation === OPEN);
     case START_DELETING_TIME_RECORD:

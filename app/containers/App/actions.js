@@ -25,6 +25,7 @@ import {
   REQUEST_ERROR_RECEIVED,
   SAVE_PAGE_BEFORE_AUTH_ERROR,
   LOGOUT,
+  CLEAN_UP_STATE,
 } from './constants';
 
 export function startLoadingResource() {
@@ -81,5 +82,11 @@ export function savePageBeforeAuthError(payload) {
 export function logout() {
   return {
     type: LOGOUT,
+  };
+}
+
+export function cleanUpState() {
+  return {
+    type: CLEAN_UP_STATE,
   };
 }

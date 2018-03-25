@@ -12,6 +12,7 @@ import {
 import {
   expiredSessionDetected,
   savePageBeforeAuthError,
+  cleanUpState,
 } from './actions';
 import { isAuthError } from '../../support/backend/utils';
 import { makeSelectLocation } from './selectors';
@@ -24,6 +25,7 @@ export function* handleExpiredSection() {
   localStorage.removeItem('authToken');
   localStorage.removeItem('currentUserId');
   localStorage.removeItem('currentUserAuths');
+  yield put(cleanUpState());
   yield put(push('/auth'));
 }
 

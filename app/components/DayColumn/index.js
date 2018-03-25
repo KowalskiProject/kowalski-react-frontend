@@ -58,18 +58,18 @@ const generatePlusSlotWrapper = (hourSlot, totalSlot) => generateSlotWrapper(hou
   }
 `;
 
-const renderTimeRecords = (timeRecords, onSlotClicked) => (
+const renderTimeRecords = (timeRecords, onSlotClicked, day) => (
   timeRecords.map((timeRecord) => {
     const amountOfHours = parseAmountOfHours(timeRecord.get('reportedTime'));
     const SlotWrapper = generateSlotWrapper(amountOfHours, 8.0);
     const id = timeRecord.get('trId');
     return (
-      <SlotWrapper key={id} onClick={() => onSlotClicked(id)}>
+      <SlotWrapper key={id} onClick={() => onSlotClicked(id, day)}>
         <p>{ timeRecord.get('reportedTime') }</p>
         <p>
           {
             `${(timeRecord.get('projectCode') || '[PROJ]')} - ` +
-            `${(timeRecord.get('activityName') || 'Activity Name -')}` +
+            `${(timeRecord.get('activityName') || 'Activity Name - ')}` +
             `${(timeRecord.get('taskName') || 'Task Name')}`
           }
         </p>
@@ -100,7 +100,7 @@ function DayColumn({ day, onFreeSlotClick, timeRecords, onSlotClicked }) {
         <p>{ format(day, 'D') }</p>
       </DayLabelWrapper>
       <SlotsContainer>
-        { renderTimeRecords(timeRecords, onSlotClicked) }
+        { renderTimeRecords(timeRecords, onSlotClicked, day) }
         { renderPlusButton(timeRecords, onFreeSlotClick) }
       </SlotsContainer>
     </Wrapper>
