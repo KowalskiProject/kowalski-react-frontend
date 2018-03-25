@@ -52,6 +52,7 @@ const FormActionWrapper = styled.div`
 const submissionHook = (onSubmit, reportedDay) => (values) => {
   const newValues = values
     .delete('projectId')
+    .updateIn(['reportedTime'], (rT) => rT.length < 5 ? `0${rT}` : rT)
     .set('reportedDay', reportedDay);
   onSubmit(newValues);
 };

@@ -18,6 +18,6 @@ export const email = (value) =>
     ? 'Invalid email address'
     : undefined;
 export const timeEntryFormat = (value) =>
-  value && !/^\d{2}:\d{2}$/i.test(value)
+  value && !/^\d{1,2}:\d{2}$/i.test(value)
     ? 'Invalid format. Please informe the duration in the \'HH:mm\' format.'
     : undefined;
