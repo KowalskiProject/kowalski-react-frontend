@@ -22,6 +22,7 @@ const linkColor = '#5FA2C8';
 
 const NavMenu = styled.a`
   color: inherit;
+
   ${({ active }) => active ? `color: ${linkColor};` : ''}
 
   &:hover {
@@ -75,6 +76,7 @@ class Header extends React.Component {
                   <NavMenu onClick={onPeopleClicked} active={activePage === 'people'}><FormattedMessage {...messages.people} /></NavMenu>
                 </span>
             }
+
             <NavBarMenuWrapper className="navbar-item">
               <UserDropdown
                 expanded={this.state.dropDownExpanded}

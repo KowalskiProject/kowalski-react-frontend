@@ -125,8 +125,9 @@ select {
 .calendar{
   min-width:18em;
   min-height:17em;
+  background-color:#FBFAFF;
   .calendar-nav{
-    background:white;
+    background:#FBFAFF;
     color: $ultraviolet;
     padding-bottom: 0;
     button{
@@ -175,6 +176,16 @@ select {
       .card {
         border-left:3px solid #654EA3;
       }
+    }
+  }
+}
+.navbar{
+  .navbar-item{
+    :hover{
+      color:#5FA2C8;
+    }
+    :active{
+      color:#5FA2C8;
     }
   }
 }
