@@ -31,7 +31,7 @@ const DayLabelWrapper = styled.div`
 const SlotsContainer = styled.div`
   flex-basis: ${100 - wrapperFlexBasis}%;
   background-color: ${slotsBackgroundColor};
-  border: 0.5px solid #aaa;
+  border: 0.1px solid rgba(101,78,163,10);
   border-left:0px;
   display: flex;
   flex-direction: column;

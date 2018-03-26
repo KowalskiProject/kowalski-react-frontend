@@ -59,12 +59,13 @@ const ColumnsWrapper = styled.div`
 `;
 
 const CalendarColumn = styled.div`
-  border-right: solid 1px #ccc;
+  border-right: solid 1px #654EA3;
   width: 333px;
   flex-grow: 0 !important;
   height: 100%;
   display: flex;
   flex-direction: column;
+  background-color:#FBFAFF;
 `;
 
 const TimeSheetLabelWrapper = styled.div`
