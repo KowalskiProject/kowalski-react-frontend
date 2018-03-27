@@ -59,7 +59,7 @@ const ColumnsWrapper = styled.div`
 `;
 
 const CalendarColumn = styled.div`
-  border-right: solid 1px #654EA3;
+  border-right: solid 0.5px rgba(102,78,164,0.7);
   width: 333px;
   flex-grow: 0 !important;
   height: 100%;

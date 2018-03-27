@@ -14,7 +14,7 @@ import parseAmountOfHours from '../../support/parsers/duration';
 import { capitalize } from '../../support/string/utils';
 
 const wrapperFlexBasis = 14.286;
-const slotsBackgroundColor = '#fff';
+const slotsBackgroundColor = '#FDFCFF';
 
 const Wrapper = styled.div`
   flex-grow: 0;
@@ -31,7 +31,7 @@ const DayLabelWrapper = styled.div`
 const SlotsContainer = styled.div`
   flex-basis: ${100 - wrapperFlexBasis}%;
   background-color: ${slotsBackgroundColor};
-  border: 0.1px solid rgba(101,78,163,10);
+  border: solid 0.5px rgba(102,78,164,0.4);;
   border-left:0px;
   display: flex;
   flex-direction: column;

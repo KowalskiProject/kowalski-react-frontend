@@ -48,7 +48,7 @@ const AddPeopleCheckboxElement = styled.div`
 const AddPeopleCheckbox = ({ input, label }) => (
   <AddPeopleCheckboxElement>
     <label htmlFor={input.id} className="checkbox">
-      <input type="checkbox" {...input} />
+      <input className="checkboxInput" type="checkbox" {...input} />
       {` ${label}`}
     </label>
   </AddPeopleCheckboxElement>
