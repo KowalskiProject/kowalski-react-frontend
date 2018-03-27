@@ -1,5 +1,5 @@
 import styled from 'styled-components';
 
 export default styled.div`
-  box-shadow: 0px 5px 5px #ccc;
+border-bottom: solid 0.5px rgba(102,78,164,0.4);
 `;

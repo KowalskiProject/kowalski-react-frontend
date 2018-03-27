@@ -22,7 +22,9 @@ $family-primary: $family-serif;
 
 @import "~bulma";
 @import "~bulma-calendar";
-
+body{
+  background-color: white;
+}
 .auth-page-left-container {
   background-color: $primary;
   color: white;
@@ -95,20 +97,47 @@ h4{
 h5{
   font-size: 1.125rem;
   color:#414549;
-
 }
 
 h6{
   font-size:1em;
   color:#414549;
-
 }
+
 p{
   font-size: 1rem;
   color:#414549;
-
 }
-
+form{
+  padding: 2.2em;
+}
+.checkboxInput{
+    width:13px;
+    height:13px;
+    -webkit-appearance: none;
+    border: 1px solid #cacece;
+    padding: 9px;
+    border-radius: 3px;
+    display: inline-block;
+    position: relative;
+  &:active, :checked:active {
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05), inset 0px 1px 3px rgba(0,0,0,0.1);
+  }
+  &:checked {
+    background-color: #654EA3;
+    border: 1px solid #654EA3;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05), inset 0px -15px 10px -12px rgba(0,0,0,0.05), inset 15px 10px -12px rgba(255,255,255,0.1);
+    color: #99a1a7;
+  }
+  &:checked:after {
+    content: '\2714';
+    font-size: 14px;
+    position: absolute;
+    top: 0px;
+    left: 3px;
+    color: white;
+  }
+}
 .select {
   width: 100%;
 }
@@ -152,12 +181,13 @@ select {
   padding:2%;
   box-shadow: 0 3px 3px -2px rgba(0, 0, 0, .2), 0 3px 4px 0 rgba(0, 0, 0, .14), 0 1px 8px 0 rgba(0, 0, 0, .05);
   border-left: 4px solid #654EA3;
+  background-color: white;
 }
 
 .projectBox:hover{
   box-shadow: 0 3px 3px -2px rgba(0, 0, 0, .2), 0 3px 4px 0 rgba(0, 0, 0, .14), 0 1px 8px 0 rgba(0, 0, 0, .12);
-
 }
+
 .card{
   margin-bottom: 20px;
 }
@@ -166,7 +196,11 @@ select {
   .modal-background{
     background-color:rgba(101,68,173,0.25);
   }
+  .box{
+    border-radius:2px;
+  }
 }
+
 .activitieTabWrapper{
   span{
     top:12%!important;
@@ -179,6 +213,7 @@ select {
     }
   }
 }
+
 .navbar{
   .navbar-item{
     :hover{

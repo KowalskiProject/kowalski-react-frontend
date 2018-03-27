@@ -47,6 +47,7 @@ const ProjectSelectorWrapper = styled.div`
   flex-grow: 0;
   border-right: 0.5px solid #dbdbdb;
   align-items: stretch;
+  background:#FBFAFF;
 `;
 
 const OuterWrapper = styled.div`
@@ -59,8 +60,9 @@ const ProjectCodeWrapper = styled.a`
   width: 200px;
   padding: 2rem;
   text-align: center;
+  color:#414549;
   border-bottom: 0.5px solid #dbdbdb;
-  ${(props) => props.selected ? 'background-color: #ccc;' : ''}
+  ${(props) => props.selected ? 'background-color: #D2CCEB;' : ''}
 
   &:hover {
     ${(props) => props.selected ? '' : 'background-color: #eee;'}

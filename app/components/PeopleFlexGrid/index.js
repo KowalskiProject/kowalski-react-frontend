@@ -46,6 +46,7 @@ function PeopleFlexGrid(props) {
     <Container>
       {
         people.map((person, index) => (
+
           <PersonContainer
             key={person.get('kUserId')}
             tabIndex={index}

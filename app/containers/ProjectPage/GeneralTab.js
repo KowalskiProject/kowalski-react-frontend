@@ -86,6 +86,7 @@ export default function GeneralTab(props) {
       <ProjectPeopleWrapper>
         <ProjectPeopleHeader>
           <div style={{ display: 'flex', flexDirection: 'column-reverse' }}>
+
             <h4>
               <FormattedMessage {... messages.generalTabProjectPeople} />
             </h4>
@@ -98,6 +99,7 @@ export default function GeneralTab(props) {
           }
         </ProjectPeopleHeader>
         <ProjectPeopleContent>
+
           <PeopleFlexGrid people={project.get('people')} />
         </ProjectPeopleContent>
         <Modal active={isAddPeopleFormOpen} onDismiss={closeAddPeopleForm}>
