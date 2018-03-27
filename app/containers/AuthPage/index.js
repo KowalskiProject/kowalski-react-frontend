@@ -30,6 +30,7 @@ const H3Wrapper = styled.h3`
   margin-top: 100px;
   margin-left: 50px;
   margin-right: 50px;
+  padding-bottom:7%;
   font-size:25px;
   font-weight:200;
   color:white;
@@ -38,6 +39,7 @@ const H3Wrapper = styled.h3`
 const RightPanelWrapper = styled.div`
   display: flex;
   flex-direction: column;
+  padding-top:90px;
 `;
 
 const ButtonsArea = styled.div`
@@ -54,7 +56,7 @@ const FormTitleWrapper = styled.div`
   flex-basis: 30%;
   flex-grow: 1;
   margin-top: 10%;
-  padding-bottom:10%;
+  padding-bottom:5%;
   justify-content: center;
   font-size: 3rem;
 `;
@@ -85,15 +87,8 @@ function AuthPage() { // eslint-disable-line react/prefer-stateless-function
         <H3Wrapper><FormattedMessage {...messages.friendlyIntroductoryMessage} /></H3Wrapper>
         <img src={Calendar} alt="Illustartion of a calendar" />
       </div>
-      <RightPanelWrapper className="column">
-        <ButtonsArea className="buttons has-addons">
-          <button className="button is-medium">
-            <ButtonText><FormattedMessage {...messages.signupButton} /></ButtonText>
-          </button>
-          <button className="button is-primary is-medium">
-            <ButtonText><FormattedMessage {...messages.signinButton} /></ButtonText>
-          </button>
-        </ButtonsArea>
+      <RightPanelWrapper className="column auth-page-right-container">
+
         <FormTitleWrapper>
           <span className="kowalski-primarily-colored"> <img src={SaturnoLogo} alt="react-boilerplate - Logo" /></span>
         </FormTitleWrapper>
