@@ -22,9 +22,19 @@ $family-primary: $family-serif;
 
 @import "~bulma";
 @import "~bulma-calendar";
-body{
-  background-color: white;
+
+/*body style*/
+html, body, #app {
+  height: 100%;
+  width: 100%;
 }
+
+body{
+  background-color: #FBFAFF;
+}
+
+
+/*basic containers*/
 .auth-page-left-container {
   background-color: $primary;
   color: white;
@@ -34,32 +44,7 @@ body{
 
   padding-top:8%;
 }
-.kowalski-primarily-colored {
-  color: $primary;
-}
 
-.kowalski-back-panel {
-  background-color: $primary;
-  color: $primary-invert;
-
-  a, a:hover {
-    color: $primary-invert;
-  }
-
-  a:hover {
-    background-color: $primary;
-  }
-}
-
-.button, .input {
-  border-radius: 0px
-}
-
-html, body, #app {
-  height: 100%;
-  width: 100%;
-
-}
 
 .kowalski-react-basic-container {
   display: flex;
@@ -72,6 +57,7 @@ html, body, #app {
   flex-direction: column;
 }
 
+/*typography scale*/
 h1{
   font-size: 2.875rem;
   font-family: $family-primary;
@@ -111,6 +97,45 @@ p{
   font-size: 1rem;
   color:#414549;
 }
+
+/*color definitions*/
+
+.kowalski-primarily-colored {
+  color: $primary;
+}
+
+.kowalski-back-panel {
+  background-color: $primary;
+  color: $primary-invert;
+
+  a, a:hover {
+    color: $primary-invert;
+  }
+
+  a:hover {
+    background-color: $primary;
+  }
+}
+
+/*button definitions*/
+.button, .input {
+  border-radius: 0px;
+  height:35px;
+  font-size:0.8em;
+}
+.primary-button{
+  color:white;
+  background-color:#654EA3;
+  font-size:1em;
+  &:hover{
+    background-color:#7D60C9;
+    color:white;
+  }
+}
+.secondary-button{
+
+}
+
 form{
   padding: 2.2em;
 }
