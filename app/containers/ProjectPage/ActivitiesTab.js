@@ -53,6 +53,7 @@ const NewActivityButton = styled.button`
   border-radius:2px;
   border:1px solid #654EA3;
   margin-left: 1rem;
+  color:white;
 `;
 
 const ActivityListContainer = styled.div`
@@ -108,7 +109,7 @@ const ActivitiesTab = (props) => {
 
         {
           userCanAccess(ADD.ACTIVITY_TO_PROJECT) &&
-            <NewActivityButton className="button" onClick={() => launchNewActivityDialog(project)}>
+            <NewActivityButton className="button primary-button" onClick={() => launchNewActivityDialog(project)}>
               <FormattedMessage {... messages.activitiesTabButtonAddActivity} />
             </NewActivityButton>
         }

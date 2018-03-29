@@ -18,7 +18,8 @@
   "app.containers.TimesheetPage.labelProjectId": "Seus Projetos",
   "app.containers.TimesheetPage.labelTaskId": "Suas tarefas",
   "app.containers.TimesheetPage.labelReportedTime": "Quanto tempo durou?",
-  "app.containers.TimesheetPage.labelComment": "Comentário",
+  "app.containers.TimesheetPage.labelComment": "Qual o valor essa tarefa gerou?",
+  "app.containers.TimesheetPage.placeholderComment": "Ex: Minha implementação possibilitou que a aplicação ficasse mais performatica",
   "app.containers.TimesheetPage.buttonSubmit": "Enviar",
   "app.containers.TimesheetPage.buttonDelete": "Excluir",
   "app.containers.TimesheetPage.buttonCancel": "Cancelar",
@@ -79,4 +80,5 @@
   "app.containers.ProjectPage.newPersonFormSelectARole": "Selecione um perfil",
   "app.containers.ProjectPage.title": "Pessoas",
   "app.containers.ProjectPage.buttonAddPerson": "Adicionar pessoa"
+
 }

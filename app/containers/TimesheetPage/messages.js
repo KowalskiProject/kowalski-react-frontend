@@ -68,4 +68,8 @@ export default defineMessages({
     id: 'app.containers.TimesheetPage.newTaskButtonAdd',
     defaultMessage: 'Create and Select',
   },
+  commentPlaceholder: {
+    id: 'app.containers.TimesheetPage.placeholderComment',
+    defaultMessage: 'Ex: Minha implementação possibilitou que a aplicação ficasse mais performatica',
+  },
 });
