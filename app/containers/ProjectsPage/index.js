@@ -77,8 +77,7 @@ const AddProjectButton = styled.button`
   width:226px;
   height:50px !important;
   border-radius:2px;
-  border:1px solid #654EA3;
-  color: #654EA3;
+  color: white;
 `;
 
 const ProjectListWrapper = styled.div`
@@ -140,7 +139,7 @@ class ProjectsPage extends React.Component { // eslint-disable-line react/prefer
           </PageTitle>
           {
             userCanAccess(ADD.PROJECT) &&
-              <AddProjectButton className="button" onClick={openNewProjectForm}>
+              <AddProjectButton className="button primary-button" onClick={openNewProjectForm}>
                 {formatMessage(messages.buttonAddProject)}
               </AddProjectButton>
           }

@@ -45,6 +45,8 @@ const H1 = styled.h1`
 const FormAction = styled.button`
   font-size: 1.1rem;
   width: 100%;
+  height:40px!important;
+ 
 `;
 
 const FormActionWrapper = styled.div`
@@ -187,6 +189,7 @@ class LogHourForm extends React.Component { // eslint-disable-line react/prefer-
             validate={[required]}
             label={formatMessage(messages.labelComment)}
             disabled={durationAndCommentDisabled}
+            placeholder={formatMessage(messages.commentPlaceholder)}
           />
 
           {

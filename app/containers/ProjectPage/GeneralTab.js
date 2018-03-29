@@ -55,7 +55,7 @@ const AddPeopleButton = styled.button`
   height:50px !important;
   border-radius:2px;
   border:1px solid #654EA3;
-  color: #654EA3;
+  color: white;
 `;
 
 export default function GeneralTab(props) {
@@ -93,7 +93,7 @@ export default function GeneralTab(props) {
           </div>
           {
             userCanAccess(ADD.PERSON_TO_PROJECT) &&
-              <AddPeopleButton className="button" onClick={props.openAddPeopleForm}>
+              <AddPeopleButton className="button primary-button" onClick={props.openAddPeopleForm}>
                 <FormattedMessage {... messages.generalTabProjectAddPeople} />
               </AddPeopleButton>
           }
