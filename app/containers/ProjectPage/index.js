@@ -65,7 +65,7 @@ const ProjectCodeWrapper = styled.a`
   ${(props) => props.selected ? 'background-color: #D2CCEB;' : ''}
 
   &:hover {
-    ${(props) => props.selected ? '' : 'background-color: #eee;'}
+    ${(props) => props.selected ? '' : 'background-color: #DFD9FA;'}
   }
 `;
 

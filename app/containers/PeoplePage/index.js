@@ -63,8 +63,7 @@ const AddPersonButton = styled.button`
   width:226px;
   height:50px !important;
   border-radius:2px;
-  border:1px solid #654EA3;
-  color: #654EA3;
+  color: white;
 `;
 
 const PersonListWrapper = styled.div`
@@ -127,7 +126,7 @@ export class PeoplePage extends React.Component { // eslint-disable-line react/p
           </PageTitle>
           {
             userCanAccess(ADD.PERSON) &&
-              <AddPersonButton className="button" onClick={openNewPersonForm}>
+              <AddPersonButton className="button primary-button" onClick={openNewPersonForm}>
                 <FormattedMessage {... messages.buttonAddPerson} />
               </AddPersonButton>
           }
