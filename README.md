@@ -4,10 +4,12 @@ yarn install
 KOWALSKI_API_BASE_URL='<http/https>://<kowalski_host>:<kowalski_port' yarn run start
 ```
 
-# Implemented Screens
-  * /auth (Sign in)
-  * / (Timesheet page)
-  * /log (Log hour form)
+# Deployment in production using Docker
+```shell
+SATURNO_VERSION="SOME_VERSION" KOWALSKI_API_BASE_URL="PRODUCTION_KOWALSKI_API_URI" yarn run build
+docker build . -t kowalski/saturno
+docker run --rm -p 3443:443 -v /path/to/certificate.crt:/etc/nginx/ssl/certificate.crt -v /path/to/server.key:/etc/nginx/ssl/server.key kowalski/saturno
+```
 
 # Contribution Guidelines
   * Fork the project.
