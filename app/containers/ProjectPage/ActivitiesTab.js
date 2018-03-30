@@ -25,7 +25,6 @@ import {
   makeSelectActivityLoadedIntoNewTaskForm,
   makeSelectProjectLoadedIntoNewTaskForm,
   makeSelectIsNewActivityFormDialogOpened,
-  makeSelectIsSubmittingNewActivity,
   makeSelectIsSubmittingNewTask,
 } from './selectors';
 import ActivityListItem from './ActivityListItem';
@@ -149,7 +148,6 @@ ActivitiesTab.propTypes = {
   submitNewTaskForm: PropTypes.func,
   submitNewTaskFormAndCloseIt: PropTypes.func,
   submitNewActivityForm: PropTypes.func,
-  isSubmittingNewActivity: PropTypes.bool,
   dismissNewActivityDialog: PropTypes.func,
   isNewTaskFormDialogOpened: PropTypes.bool,
   dismissNewTaskDialog: PropTypes.func,
@@ -163,7 +161,6 @@ const mapStateToProps = createStructuredSelector({
   activityLoadedIntoNewTaskForm: makeSelectActivityLoadedIntoNewTaskForm(),
   projectLoadedIntoNewTaskForm: makeSelectProjectLoadedIntoNewTaskForm(),
   isNewActivityFormDialogOpened: makeSelectIsNewActivityFormDialogOpened(),
-  isSubmittingNewActivity: makeSelectIsSubmittingNewActivity(),
   isSubmittingNewTask: makeSelectIsSubmittingNewTask(),
 });
 

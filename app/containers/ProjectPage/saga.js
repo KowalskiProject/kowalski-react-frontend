@@ -191,10 +191,10 @@ export function* handleFetchTaskList({ payload: { activityId, projectId, people 
       activityId,
       projectId,
     });
-    tasks.forEach((task) => {
-      task.accountable = people.find((person) => person.get('kUserId') === task.accountableId)
-    });
-    yield put(tasksLoaded({ activityId, taskList: fromJS(tasks) }));
+    const taskList = fromJS(tasks).map((task) => (
+      task.set('accountable', people.find((person) => person.get('kUserId') === task.get('accountableId')))
+    ));
+    yield put(tasksLoaded({ activityId, taskList }));
   } catch (e) {
     yield put(requestErrorReceived({
       error: e,

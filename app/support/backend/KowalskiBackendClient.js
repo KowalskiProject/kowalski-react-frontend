@@ -105,11 +105,13 @@ export function getProjectActivities({ config: { baseUrl }, token, projectId, pa
 }
 
 export function saveTimeRecord({ config, token, timeRecordData }) {
-  const trId = timeRecordData.get('trId')
+  const trId = timeRecordData.get('trId');
   if (trId) {
     return updateTimeRecord({
-      config, token, trId,
-      timeRecordData: timeRecordData.delete('trId')
+      config,
+      token,
+      trId,
+      timeRecordData: timeRecordData.delete('trId'),
     });
   }
 
