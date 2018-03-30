@@ -1,7 +1,7 @@
 # Quick Start
 ```shell
 yarn install
-yarn run start
+KOWALSKI_API_BASE_URL='<http/https>://<kowalski_host>:<kowalski_port' yarn run start
 ```
 
 # Implemented Screens

@@ -42,15 +42,6 @@ const RightPanelWrapper = styled.div`
   padding-top:90px;
 `;
 
-const ButtonsArea = styled.div`
-  margin-top: 30px;
-  margin-right: 30px;
-  display: flex;
-  flex-direction: row-reverse;
-  flex-basis: 20%;
-  flex-grow: 1;
-`;
-
 const FormTitleWrapper = styled.div`
   display: flex;
   flex-basis: 30%;
@@ -72,8 +63,10 @@ const FormWrapper = styled.div`
   margin-right: 15%;
 `;
 
-const ButtonText = styled.span`
-  font-size: 0.9rem;
+const VersionContainer = styled.div`
+  display: flex;
+  flex-grow: 1;
+  flex-direction: column-reverse;
 `;
 
 function AuthPage() { // eslint-disable-line react/prefer-stateless-function
@@ -86,9 +79,11 @@ function AuthPage() { // eslint-disable-line react/prefer-stateless-function
       <div className="column has-text-centered auth-page-left-container">
         <H3Wrapper><FormattedMessage {...messages.friendlyIntroductoryMessage} /></H3Wrapper>
         <img src={Calendar} alt="Illustartion of a calendar" />
+        <VersionContainer>
+          <FormattedMessage {...messages.version} />
+        </VersionContainer>
       </div>
       <RightPanelWrapper className="column auth-page-right-container">
-
         <FormTitleWrapper>
           <span className="kowalski-primarily-colored"> <img src={SaturnoLogo} alt="react-boilerplate - Logo" /></span>
         </FormTitleWrapper>

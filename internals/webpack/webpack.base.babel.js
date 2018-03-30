@@ -94,6 +94,8 @@ module.exports = (options) => ({
     new webpack.DefinePlugin({
       'process.env': {
         NODE_ENV: JSON.stringify(process.env.NODE_ENV),
+        SATURNO_VERSION: JSON.stringify(process.env.SATURNO_VERSION || 'dev'),
+        KOWALSKI_API_BASE_URL: JSON.stringify(process.env.KOWALSKI_API_BASE_URL || 'http://localhost:8000'),
       },
     }),
     new webpack.NamedModulesPlugin(),

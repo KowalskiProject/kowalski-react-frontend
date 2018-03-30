@@ -2,10 +2,13 @@ import request from '../../utils/request';
 import { queryString } from '../serializers/utils';
 
 export function authenticate({ config: { baseUrl }, username, password }) {
+  const headers = new Headers();
+  headers.append('Content-Type', 'application/json');
   return request(`${baseUrl}/login`, {
     method: 'POST',
     body: JSON.stringify({ username, password }),
     parseResponse: false,
+    headers,
   });
 }
 

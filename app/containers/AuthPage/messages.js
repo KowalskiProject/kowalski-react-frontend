@@ -33,4 +33,11 @@ export default defineMessages({
   appTitle: {
     id: 'app.title',
   },
+  version: {
+    id: 'app.containers.AuthPage.version',
+    defaultMessage: 'Version {version}',
+    values: {
+      version: process.env.SATURNO_VERSION,
+    },
+  },
 });
