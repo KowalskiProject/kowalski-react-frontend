@@ -122,4 +122,8 @@ export default defineMessages({
     id: 'app.containers.ProjectPage.newActivityFormButtonCancel',
     defaultMessage: 'Cancel',
   },
+  activitiesResourceNamePlural: {
+    id: 'app.containers.ProjectPage.activitiesTab.resourceNamePlural',
+    defaultMessage: 'activities',
+  },
 });

@@ -78,4 +78,8 @@ export default defineMessages({
     id: 'app.containers.ProjectPage.buttonAddPerson',
     defaultMessage: 'Add person',
   },
+  resourceNamePlural: {
+    id: 'app.containers.PeoplePage.resourceNamePlural',
+    defaultMessage: 'people',
+  },
 });

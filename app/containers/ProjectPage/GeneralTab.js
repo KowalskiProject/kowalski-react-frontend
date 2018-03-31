@@ -99,7 +99,6 @@ export default function GeneralTab(props) {
           }
         </ProjectPeopleHeader>
         <ProjectPeopleContent>
-
           <PeopleFlexGrid people={project.get('people')} />
         </ProjectPeopleContent>
         <Modal active={isAddPeopleFormOpen} onDismiss={closeAddPeopleForm}>

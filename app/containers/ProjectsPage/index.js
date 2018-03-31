@@ -32,6 +32,7 @@ import * as actions from './actions';
 import { userCanAccess } from '../../support/auth/utils';
 import { ADD } from '../../support/auth/resources';
 import messages from './messages';
+import NoResourcesIndication from '../../components/NoResourcesIndication';
 
 const MainContainerWrapper = styled.div`
   display: flex;
@@ -99,6 +100,7 @@ class ProjectsPage extends React.Component { // eslint-disable-line react/prefer
       projectSelected,
       isLoadingProjects,
       loadingProjectsErrorMsg,
+      intl: { formatMessage },
     } = this.props;
 
     if (isLoadingProjects) {
@@ -111,6 +113,8 @@ class ProjectsPage extends React.Component { // eslint-disable-line react/prefer
           </div>
         </article>
       );
+    } else if (projects.size === 0) {
+      return <NoResourcesIndication resourceName={formatMessage(messages.resourceNamePlural)} gender="male" />;
     }
 
     return (

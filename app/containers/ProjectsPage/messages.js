@@ -46,4 +46,8 @@ export default defineMessages({
     id: 'app.containers.ProjectsPage.newProjectFormTitle',
     defaultMessage: 'Create new project',
   },
+  resourceNamePlural: {
+    id: 'app.containers.ProjectsPage.resourceNamePlural',
+    defaultMessage: 'projects',
+  },
 });

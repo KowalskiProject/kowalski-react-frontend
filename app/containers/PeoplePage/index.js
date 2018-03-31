@@ -33,6 +33,7 @@ import PeopleFlexGrid from '../../components/PeopleFlexGrid';
 import { userCanAccess } from '../../support/auth/utils';
 import { ADD } from '../../support/auth/resources';
 import messages from './messages';
+import NoResourcesIndication from '../../components/NoResourcesIndication';
 
 const MainContainerWrapper = styled.div`
   display: flex;
@@ -68,6 +69,8 @@ const AddPersonButton = styled.button`
 
 const PersonListWrapper = styled.div`
   ${margins}
+  display: flex;
+  flex-grow: 1;
 `;
 
 export class PeoplePage extends React.Component { // eslint-disable-line react/prefer-stateless-function
@@ -81,6 +84,7 @@ export class PeoplePage extends React.Component { // eslint-disable-line react/p
       loadingPeopleErrorMsg,
       people,
       personSelected,
+      intl: { formatMessage },
     } = this.props;
 
     if (isLoadingPeople) {
@@ -93,6 +97,8 @@ export class PeoplePage extends React.Component { // eslint-disable-line react/p
           </div>
         </article>
       );
+    } else if (people.size === 0) {
+      return <NoResourcesIndication resourceName={formatMessage(messages.resourceNamePlural)} />;
     }
 
     return (

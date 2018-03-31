@@ -4,7 +4,7 @@ import { createStructuredSelector } from 'reselect';
 import styled from 'styled-components';
 import FaSearch from 'react-icons/lib/fa/search';
 import PropTypes from 'prop-types';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import Modal from 'components/Modal/Loadable';
 import NewTaskForm from './NewTaskForm';
 import NewActivityForm from './NewActivityForm';
@@ -31,6 +31,7 @@ import ActivityListItem from './ActivityListItem';
 import { userCanAccess } from '../../support/auth/utils';
 import { ADD } from '../../support/auth/resources';
 import messages from './messages';
+import NoResourcesIndication from '../../components/NoResourcesIndication';
 
 const Container = styled.div`
   padding-top: 2rem;
@@ -64,19 +65,24 @@ const ActivityListContainer = styled.div`
 const ActivityContainer = styled.div`
 `;
 
-const renderActivities = (project, term) => {
-  // TODO key must be activitiy ID -> will be fetched from server in the future
+const renderActivities = (project, term, formatMessage) => {
   if (!project) {
     return <div></div>;
   }
 
-  return project.get('activities')
+  const activityElementList = project.get('activities')
     .filter((activity) => activity.get('name').includes(term))
     .map((activity) => (
       <ActivityContainer key={activity.get('activityId')}>
         <ActivityListItem activity={activity} project={project} />
       </ActivityContainer>
     ));
+
+  if (activityElementList.size === 0) {
+    return <NoResourcesIndication resourceName={formatMessage(messages.activitiesResourceNamePlural)} />;
+  }
+
+  return activityElementList;
 };
 
 const Input = styled.input`
@@ -85,7 +91,7 @@ const Input = styled.input`
 `;
 
 const ActivitiesTab = (props) => {
-  const { project, changedActivitiesTextFilter, activityFilteringText, launchNewActivityDialog } = props;
+  const { project, changedActivitiesTextFilter, activityFilteringText, launchNewActivityDialog, intl: { formatMessage } } = props;
   return (
     <Container className="activitieTabWrapper">
       <ToolbarContainer>
@@ -113,7 +119,7 @@ const ActivitiesTab = (props) => {
         }
       </ToolbarContainer>
       <ActivityListContainer className="activitieWrapper">
-        { renderActivities(project, activityFilteringText) }
+        { renderActivities(project, activityFilteringText, formatMessage) }
       </ActivityListContainer>
       <Modal active={props.isNewActivityFormDialogOpened} onDismiss={props.dismissNewActivityDialog}>
         <NewActivityForm
@@ -153,6 +159,7 @@ ActivitiesTab.propTypes = {
   dismissNewTaskDialog: PropTypes.func,
   isNewActivityFormDialogOpened: PropTypes.bool,
   launchNewActivityDialog: PropTypes.func,
+  intl: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -174,4 +181,4 @@ export default connect(mapStateToProps, {
   submitNewActivityForm: submitNewActivityFormAction,
   submitNewActivityFormAndCloseIt: submitNewActivityFormAndCloseItAction,
   changedActivitiesTextFilter: changedActivitiesTextFilterAction,
-})(ActivitiesTab);
+})(injectIntl(ActivitiesTab));
