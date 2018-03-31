@@ -6,12 +6,6 @@
 import { defineMessages } from 'react-intl';
 
 export default defineMessages({
-  appTitle: {
-    id: 'app.title',
-    defaultMessage: 'Saturno',
-  },
-  description: {
-    id: 'app.description',
-    defaultMessage: 'Your best friend to help in daily management tasks',
-  },
+  appTitle: { id: 'app.title' },
+  description: { id: 'app.description' },
 });

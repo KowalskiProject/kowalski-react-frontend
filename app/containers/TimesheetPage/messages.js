@@ -6,74 +6,22 @@
 import { defineMessages } from 'react-intl';
 
 export default defineMessages({
-  title: {
-    id: 'app.containers.TimesheetPage.title',
-    defaultMessage: 'Timesheet',
-  },
-  description: {
-    id: 'app.containers.TimesheetPage.description',
-    defaultMessage: 'Manage your Timesheet',
-  },
-  timesheetLabel: {
-    id: 'app.containers.TimesheetPage.timesheetLabel',
-  },
-  notifications: {
-    id: 'app.containers.TimesheetPage.notifications',
-  },
-  confirmTimeRecordDeletion: {
-    id: 'app.containers.TimesheetPage.confirmTimeRecordDeletion',
-    defaultMessage: 'Are you sure you want to delete this record?',
-  },
-  editTimeTitle: {
-    id: 'app.containers.TimesheetPage.editTimeTitle',
-    defaultMessage: 'Edit Time',
-  },
-  addTimeTitle: {
-    id: 'app.containers.TimesheetPage.addTimeTitle',
-    defaultMessage: 'Add Time',
-  },
-  labelProjectId: {
-    id: 'app.containers.TimesheetPage.labelProjectId',
-    defaultMessage: 'Your Projects',
-  },
-  labelTaskId: {
-    id: 'app.containers.TimesheetPage.labelTaskId',
-    defaultMessage: 'Your Tasks',
-  },
-  labelReportedTime: {
-    id: 'app.containers.TimesheetPage.labelReportedTime',
-    defaultMessage: 'How Long it last?',
-  },
-  labelComment: {
-    id: 'app.containers.TimesheetPage.labelComment',
-    defaultMessage: 'Comment',
-  },
-  buttonSubmit: {
-    id: 'app.containers.TimesheetPage.buttonSubmit',
-    defaultMessage: 'Submit',
-  },
-  buttonDelete: {
-    id: 'app.containers.TimesheetPage.buttonDelete',
-    defaultMessage: 'Delete',
-  },
-  buttonCancel: {
-    id: 'app.containers.TimesheetPage.buttonCancel',
-    defaultMessage: 'Cancel',
-  },
-  buttonSelectATask: {
-    id: 'app.containers.TimesheetPage.buttonSelectATask',
-    defaultMessage: 'Select a Task',
-  },
-  buttonNewTask: {
-    id: 'app.containers.TimesheetPage.buttonNewTask',
-    defaultMessage: 'New task...',
-  },
-  labelChooseAProject: {
-    id: 'app.containers.TimesheetPage.labelChooseAProject',
-    defaultMessage: 'Choose a project',
-  },
-  newTaskButtonAdd: {
-    id: 'app.containers.TimesheetPage.newTaskButtonAdd',
-    defaultMessage: 'Create and Select',
-  },
+  title: { id: 'app.containers.TimesheetPage.title' },
+  description: { id: 'app.containers.TimesheetPage.description' },
+  timesheetLabel: { id: 'app.containers.TimesheetPage.timesheetLabel' },
+  notifications: { id: 'app.containers.TimesheetPage.notifications' },
+  confirmTimeRecordDeletion: { id: 'app.containers.TimesheetPage.confirmTimeRecordDeletion' },
+  editTimeTitle: { id: 'app.containers.TimesheetPage.editTimeTitle' },
+  addTimeTitle: { id: 'app.containers.TimesheetPage.addTimeTitle' },
+  labelProjectId: { id: 'app.containers.TimesheetPage.labelProjectId' },
+  labelTaskId: { id: 'app.containers.TimesheetPage.labelTaskId' },
+  labelReportedTime: { id: 'app.containers.TimesheetPage.labelReportedTime' },
+  labelComment: { id: 'app.containers.TimesheetPage.labelComment' },
+  buttonSubmit: { id: 'app.containers.TimesheetPage.buttonSubmit' },
+  buttonDelete: { id: 'app.containers.TimesheetPage.buttonDelete' },
+  buttonCancel: { id: 'app.containers.TimesheetPage.buttonCancel' },
+  buttonSelectATask: { id: 'app.containers.TimesheetPage.buttonSelectATask' },
+  buttonNewTask: { id: 'app.containers.TimesheetPage.buttonNewTask' },
+  labelChooseAProject: { id: 'app.containers.TimesheetPage.labelChooseAProject' },
+  newTaskButtonAdd: { id: 'app.containers.TimesheetPage.newTaskButtonAdd' },
 });
