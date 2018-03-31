@@ -14,7 +14,7 @@ import { Helmet } from 'react-helmet';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 import { RingLoader } from 'react-spinners';  // eslint-disable-line import/no-unresolved
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
 import Modal from 'components/Modal/Loadable';
@@ -106,13 +106,14 @@ export class PeoplePage extends React.Component { // eslint-disable-line react/p
       openNewPersonForm,
       closeNewPersonForm,
       isNewPersonFormOpen,
+      intl: { formatMessage },
     } = this.props;
 
     return (
       <MainContainerWrapper className="kowalski-react-basic-container">
         <Helmet>
-          <title>PeoplePage</title>
-          <meta name="description" content="Description of PeoplePage" />
+          <title>{formatMessage(messages.title)}</title>
+          <meta name="description" content={formatMessage(messages.description)} />
         </Helmet>
         <TitleBar>
           <PageTitle>
@@ -154,6 +155,7 @@ PeoplePage.propTypes = {
   isLoadingPeople: PropTypes.bool.isRequired,
   personSelected: PropTypes.func.isRequired,
   loadingPeopleErrorMsg: PropTypes.string.isRequired,
+  intl: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -171,4 +173,4 @@ export default compose(
   withReducer,
   withSaga,
   withConnect,
-)(PeoplePage);
+)(injectIntl(PeoplePage));

@@ -33,6 +33,14 @@ export default defineMessages({
   appTitle: {
     id: 'app.title',
   },
+  pageTitle: {
+    id: 'app.containers.AuthPage.pageTitle',
+    defaultMessage: 'Sign In',
+  },
+  pageDescription: {
+    id: 'app.containers.AuthPage.pageDescription',
+    defaultMessage: 'Auntheticate in the system',
+  },
   version: {
     id: 'app.containers.AuthPage.version',
     defaultMessage: 'Version {version}',

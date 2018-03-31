@@ -6,6 +6,14 @@
 import { defineMessages } from 'react-intl';
 
 export default defineMessages({
+  title: {
+    id: 'app.containers.TimesheetPage.title',
+    defaultMessage: 'Timesheet',
+  },
+  description: {
+    id: 'app.containers.TimesheetPage.description',
+    defaultMessage: 'Manage your Timesheet',
+  },
   timesheetLabel: {
     id: 'app.containers.TimesheetPage.timesheetLabel',
   },

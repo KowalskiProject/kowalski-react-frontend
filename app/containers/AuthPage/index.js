@@ -6,8 +6,9 @@
 
 import React from 'react';
 import { Helmet } from 'react-helmet';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import { compose } from 'redux';
+import PropTypes from 'prop-types';
 
 import styled from 'styled-components';
 import SaturnoLogo from 'images/saturno-logo.svg';
@@ -69,23 +70,23 @@ const VersionContainer = styled.div`
   flex-direction: column-reverse;
 `;
 
-function AuthPage() { // eslint-disable-line react/prefer-stateless-function
+function AuthPage({ intl: { formatMessage } }) { // eslint-disable-line react/prefer-stateless-function
   return (
     <ColumnsWrapper className="columns">
       <Helmet>
-        <title>AuthPage</title>
-        <meta name="description" content="Description of AuthPage" />
+        <title>{formatMessage(messages.pageTitle)}</title>
+        <meta name="description" content={formatMessage(messages.pageDescription)} />
       </Helmet>
       <div className="column has-text-centered auth-page-left-container">
         <H3Wrapper><FormattedMessage {...messages.friendlyIntroductoryMessage} /></H3Wrapper>
-        <img src={Calendar} alt="Illustartion of a calendar" />
+        <img src={Calendar} alt="Illustration of a calendar" />
         <VersionContainer>
           <FormattedMessage {...messages.version} />
         </VersionContainer>
       </div>
       <RightPanelWrapper className="column auth-page-right-container">
         <FormTitleWrapper>
-          <span className="kowalski-primarily-colored"> <img src={SaturnoLogo} alt="react-boilerplate - Logo" /></span>
+          <span className="kowalski-primarily-colored"> <img src={SaturnoLogo} alt="Saturno - Logo" /></span>
         </FormTitleWrapper>
         <FormWrapper>
           <LoginForm />
@@ -98,7 +99,11 @@ function AuthPage() { // eslint-disable-line react/prefer-stateless-function
 const withReducer = injectReducer({ key: 'authpage', reducer });
 const withSaga = injectSaga({ key: 'authpage', saga });
 
+AuthPage.propTypes = {
+  intl: PropTypes.object.isRequired,
+};
+
 export default compose(
   withReducer,
   withSaga,
-)(AuthPage);
+)(injectIntl(AuthPage));

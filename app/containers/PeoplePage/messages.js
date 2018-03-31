@@ -6,6 +6,14 @@
 import { defineMessages } from 'react-intl';
 
 export default defineMessages({
+  title: {
+    id: 'app.containers.PeoplePage.title',
+    defaultMessage: 'People',
+  },
+  description: {
+    id: 'app.containers.PeoplePage.description',
+    defaultMessage: 'Manage or View System People',
+  },
   newPersonFormTitle: {
     id: 'app.containers.ProjectPage.newPersonFormTitle',
     defaultMessage: 'Add person',
@@ -65,10 +73,6 @@ export default defineMessages({
   newPersonFormSelectARole: {
     id: 'app.containers.ProjectPage.newPersonFormSelectARole',
     defaultMessage: 'Select a Role',
-  },
-  title: {
-    id: 'app.containers.ProjectPage.title',
-    defaultMessage: 'People',
   },
   buttonAddPerson: {
     id: 'app.containers.ProjectPage.buttonAddPerson',

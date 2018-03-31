@@ -192,12 +192,17 @@ class ProjectPage extends React.PureComponent {
   }
 
   render() {
+    const { intl: { formatMessage }, selectedProject } = this.props;
+
     return (
       <OuterWrapper>
-        <Helmet>
-          <title>ProjectPage</title>
-          <meta name="description" content="Description of ProjectPage" />
-        </Helmet>
+        {
+          selectedProject &&
+            <Helmet>
+              <title>{formatMessage(messages.title, { code: selectedProject.get('code') })}</title>
+              <meta name="description" content={formatMessage(messages.description, { code: selectedProject.get('code') })} />
+            </Helmet>
+        }
         <Wrapper>
           <ProjectSelectorWrapper>
             { this.renderProjectMenuItems() }

@@ -131,8 +131,8 @@ class ProjectsPage extends React.Component { // eslint-disable-line react/prefer
     return (
       <MainContainerWrapper className="kowalski-react-basic-container">
         <Helmet>
-          <title>Projetos</title>
-          <meta name="description" content="Description of ProjectsPage" />
+          <title>{formatMessage(messages.title)}</title>
+          <meta name="description" content={formatMessage(messages.description)} />
         </Helmet>
         <TitleBar>
           <PageTitle>

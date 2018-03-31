@@ -6,6 +6,14 @@
 import { defineMessages } from 'react-intl';
 
 export default defineMessages({
+  title: {
+    id: 'app.containers.ProjectPage.title',
+    defaultMessage: 'Project {code}',
+  },
+  description: {
+    id: 'app.containers.ProjectPage.description',
+    defaultMessage: 'Manage or view project {code}',
+  },
   newTaskFormTitle: {
     id: 'app.containers.ProjectPage.newTaskFormTitle',
     defaultMessage: 'Create new task',

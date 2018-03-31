@@ -201,11 +201,13 @@ class TimesheetPage extends React.Component {
   }
 
   render() {
+    const { intl: { formatMessage } } = this.props;
+
     return (
       <MainContainerWrapper className="kowalski-react-basic-container">
         <Helmet>
-          <title>TimesheetPage</title>
-          <meta name="description" content="Description of TimesheetPage" />
+          <title>{formatMessage(messages.title)}</title>
+          <meta name="description" content={formatMessage(messages.description)} />
         </Helmet>
         { this.renderNewTaskModal() }
         <Switch>

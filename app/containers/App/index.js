@@ -14,6 +14,7 @@ import { Switch, Route, withRouter } from 'react-router-dom';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
+import { injectIntl } from 'react-intl';
 
 import TimesheetPage from 'containers/TimesheetPage/Loadable';
 import ProjectsPage from 'containers/ProjectsPage/Loadable';
@@ -29,6 +30,7 @@ import * as actions from './actions';
 import requireAuth from '../../hoc/requireAuth';
 import requireUnAuth from '../../hoc/requireUnAuth';
 import { makeSelectActivePage } from './selectors';
+import messages from './messages';
 
 const AppWrapper = styled.div`
   margin: 0 auto;
@@ -38,15 +40,15 @@ const AppWrapper = styled.div`
 `;
 
 function App(props) {
-  const { navigateTo, logout } = props;
+  const { navigateTo, logout, intl: { formatMessage } } = props;
 
   return (
     <AppWrapper>
       <Helmet
-        titleTemplate="%s - React.js Boilerplate"
-        defaultTitle="React.js Boilerplate"
+        titleTemplate={`%s - ${formatMessage(messages.appTitle)}`}
+        defaultTitle={formatMessage(messages.appTitle)}
       >
-        <meta name="description" content="A React.js Boilerplate application" />
+        <meta name="description" content={formatMessage(messages.description)} />
       </Helmet>
       <Switch>
         <Route path="/auth" component={requireUnAuth(AuthPage)} />
@@ -75,6 +77,7 @@ App.propTypes = {
   navigateTo: PropTypes.func.isRequired,
   logout: PropTypes.func.isRequired,
   activePage: PropTypes.string.isRequired,
+  intl: PropTypes.object.isRequired,
 };
 
 const withSaga = injectSaga({ key: 'global', saga });
@@ -85,4 +88,4 @@ const withConnect = connect(createStructuredSelector({
 export default withRouter(compose(
   withConnect,
   withSaga,
-)(App));
+)(injectIntl(App)));

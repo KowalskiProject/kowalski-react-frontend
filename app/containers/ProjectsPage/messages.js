@@ -10,6 +10,10 @@ export default defineMessages({
     id: 'app.containers.ProjectsPage.title',
     defaultMessage: 'Projects',
   },
+  description: {
+    id: 'app.containers.ProjectsPage.title',
+    defaultMessage: 'Manage or view system projects',
+  },
   buttonAddProject: {
     id: 'app.containers.ProjectsPage.buttonAddProject',
     defaultMessage: 'Add project',
