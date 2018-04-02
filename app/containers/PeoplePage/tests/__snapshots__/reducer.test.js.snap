@@ -1,0 +1,14 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`peoplePageReducer returns the initial state 1`] = `
+Immutable.Map {
+  people: Immutable.List [
+  ],
+  personFormOpen: false,
+  isLoadingPeople: false,
+  loadingPeopleErrorMsg: "",
+  isFetchingNewPersonFormOptions: false,
+  roles: Immutable.List [
+  ],
+}
+`;

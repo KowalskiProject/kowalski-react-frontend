@@ -1,0 +1,3 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<ProjectPage /> renders 1`] = `"<div class=\\"ProjectPage__OuterWrapper-fYMRsl cpgLwO\\"><div class=\\"ProjectPage__Wrapper-bPnjyl jABazg\\"><div class=\\"ProjectPage__ProjectSelectorWrapper-jTdWLU eMDqiy\\"></div><div class=\\"ProjectPage__ProjectPaneWrapper-jRjhhV lFbDg\\"><div class=\\"tabs ProjectPage__TabsWrapper-elxnjt cMRMUv\\"><ul><li class=\\"\\"><a role=\\"button\\" tabindex=\\"0\\"></a></li><li class=\\"\\"><a role=\\"button\\" tabindex=\\"0\\"></a></li></ul></div><div class=\\"ProjectPage__TabContentWrapper-jYvZOn kBLxpV\\"></div></div></div></div>"`;

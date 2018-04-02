@@ -16,8 +16,6 @@
  */
 
 import {
-  START_LOADING_RESOURCE,
-  END_LOADING_RESOURCE,
   NAVIGATE_TO,
   EXPIRED_SECTION_DETECTED,
   UNAUTHORIZED_ACCESS_DETECTED,
@@ -27,18 +25,6 @@ import {
   LOGOUT,
   CLEAN_UP_STATE,
 } from './constants';
-
-export function startLoadingResource() {
-  return {
-    type: START_LOADING_RESOURCE,
-  };
-}
-
-export function endLoadingResource() {
-  return {
-    type: END_LOADING_RESOURCE,
-  };
-}
 
 export function navigateTo(path) {
   return {

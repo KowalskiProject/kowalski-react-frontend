@@ -1,10 +1,14 @@
-// import React from 'react';
-// import { shallow } from 'enzyme';
-
-// import OverlaySelectGroupHeader from '../index';
+import React from 'react';
+import { mount } from 'enzyme';
+import OverlaySelectGroupHeader from '../index';
 
 describe('<OverlaySelectGroupHeader />', () => {
-  it('Expect to have unit tests specified', () => {
-    expect(true).toEqual(false);
+  it('Expect render h4 element', () => {
+    const renderedComponent = mount(
+      <OverlaySelectGroupHeader>
+        Some text
+      </OverlaySelectGroupHeader>
+    );
+    expect(renderedComponent.find('h4').length).toEqual(1);
   });
 });

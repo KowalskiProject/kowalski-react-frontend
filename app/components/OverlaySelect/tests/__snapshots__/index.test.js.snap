@@ -1,0 +1,3 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<OverlaySelect /> Expect to have unit tests specified 1`] = `"<div class=\\"OverlaySelect__Overlay-kpvDhg gGlSub\\"><h3></h3><div class=\\"OverlaySelect__OverlaySelectInnerContentContainer-dZagTg gNCBAw\\"></div></div>"`;

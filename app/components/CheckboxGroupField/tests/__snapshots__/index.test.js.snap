@@ -1,0 +1,3 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<CheckboxGroupField /> render 1`] = `"<form><div class=\\"CheckboxGroupField__CheckboxContainer-jPIDgp bQvIuF\\"><label for=\\"test[0]\\"><input type=\\"checkbox\\" name=\\"test[0]\\" id=\\"test[0]\\" value=\\"A\\"><span>A</span></label></div></form>"`;

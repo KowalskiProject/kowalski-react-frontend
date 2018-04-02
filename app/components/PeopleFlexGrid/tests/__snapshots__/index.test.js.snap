@@ -1,0 +1,3 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<PeopleFlexGrid /> renders 1`] = `"<div class=\\"PeopleFlexGrid__Container-lDUyI bSnzxM\\"><div class=\\"PeopleFlexGrid__PersonContainer-jLvaEV kMyiMo\\" tabindex=\\"0\\" role=\\"button\\"><div class=\\"PeopleFlexGrid__PersonPictureContainer-bQjxpx lhHdjA\\"><img class=\\"PeopleFlexGrid__PersonImg-cbMrBq jgRTBA\\" src=\\"[object Object]\\"/></div><span class=\\"PeopleFlexGrid__PersonNameContainer-sZXHU iGYrwP\\">Test</span></div></div>"`;

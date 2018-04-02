@@ -34,7 +34,10 @@ function SelectField({ input, label, id, children, meta: { touched, error } }) {
 SelectField.propTypes = {
   input: PropTypes.object.isRequired,
   label: PropTypes.string,
-  meta: PropTypes.any,
+  meta: PropTypes.shape({
+    touched: PropTypes.bool,
+    error: PropTypes.string,
+  }).isRequired,
   children: PropTypes.any,
   id: PropTypes.string,
 };

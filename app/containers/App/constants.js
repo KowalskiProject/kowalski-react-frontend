@@ -9,8 +9,6 @@
  * export const YOUR_ACTION_CONSTANT = 'yourproject/YourContainer/YOUR_ACTION_CONSTANT';
  */
 
-export const START_LOADING_RESOURCE = 'app/App/START_LOADING_RESOURCE';
-export const END_LOADING_RESOURCE = 'app/App/END_LOADING_RESOURCE';
 export const NAVIGATE_TO = 'app/App/NAVIGATE_TO';
 export const DEFAULT_LOCALE = 'pt-BR';
 export const EXPIRED_SECTION_DETECTED = 'app/App/EXPIRED_SECTION_DETECTED';

@@ -70,7 +70,7 @@ const VersionContainer = styled.div`
   flex-direction: column-reverse;
 `;
 
-function AuthPage({ intl: { formatMessage } }) { // eslint-disable-line react/prefer-stateless-function
+export function AuthPage({ intl: { formatMessage } }) { // eslint-disable-line react/prefer-stateless-function
   return (
     <ColumnsWrapper className="columns">
       <Helmet>

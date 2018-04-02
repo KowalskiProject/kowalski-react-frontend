@@ -1,8 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
-import CheckboxGroup from 'components/CheckboxGroup/Loadable';
-import { reduxForm } from 'redux-form/immutable';
+import CheckboxGroupField from 'components/CheckboxGroupField/Loadable';
+import { reduxForm, Field } from 'redux-form/immutable';
 import { FormattedMessage } from 'react-intl';
 import { List } from 'immutable';
 
@@ -87,7 +87,12 @@ function AddPeopleForm(props) {
           <FormattedMessage {... messages.generalTabSelectOneOrMorePeople} />
         </p>
 
-        <CheckboxGroup options={addPeopleOptions} component={AddPeopleCheckbox} name="people" />
+        <Field
+          name="people"
+          component={CheckboxGroupField}
+          options={addPeopleOptions}
+          checkboxItemComponent={AddPeopleCheckbox}
+        />
 
         {
           error &&

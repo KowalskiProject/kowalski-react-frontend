@@ -2,11 +2,11 @@ import { fromJS } from 'immutable';
 
 import {
   selectGlobal,
+  selectRoute,
   makeSelectCurrentUser,
-  makeSelectLoading,
-  makeSelectError,
-  makeSelectRepos,
   makeSelectLocation,
+  makeSelectPageBeforeAuthError,
+  makeSelectActivePage,
 } from '../selectors';
 
 describe('selectGlobal', () => {
@@ -32,44 +32,13 @@ describe('makeSelectCurrentUser', () => {
   });
 });
 
-describe('makeSelectLoading', () => {
-  const loadingSelector = makeSelectLoading();
-  it('should select the loading', () => {
-    const loading = false;
+describe('selectRoute', () => {
+  it('should select the route state', () => {
+    const routeState = fromJS({});
     const mockedState = fromJS({
-      global: {
-        loading,
-      },
+      route: routeState,
     });
-    expect(loadingSelector(mockedState)).toEqual(loading);
-  });
-});
-
-describe('makeSelectError', () => {
-  const errorSelector = makeSelectError();
-  it('should select the error', () => {
-    const error = 404;
-    const mockedState = fromJS({
-      global: {
-        error,
-      },
-    });
-    expect(errorSelector(mockedState)).toEqual(error);
-  });
-});
-
-describe('makeSelectRepos', () => {
-  const reposSelector = makeSelectRepos();
-  it('should select the repos', () => {
-    const repositories = fromJS([]);
-    const mockedState = fromJS({
-      global: {
-        userData: {
-          repositories,
-        },
-      },
-    });
-    expect(reposSelector(mockedState)).toEqual(repositories);
+    expect(selectRoute(mockedState)).toEqual(routeState);
   });
 });
 
@@ -83,5 +52,44 @@ describe('makeSelectLocation', () => {
       route,
     });
     expect(locationStateSelector(mockedState)).toEqual(route.get('location').toJS());
+  });
+});
+
+describe('makeSelectPageBeforeAuthError', () => {
+  const pageBeforeAuthErrorSelector = makeSelectPageBeforeAuthError();
+  it('should select page before auth error', () => {
+    const pageBeforeAuthError = 'foo/bar';
+    const mockedState = fromJS({
+      global: {
+        pageBeforeAuthError,
+      },
+    });
+    expect(pageBeforeAuthErrorSelector(mockedState)).toEqual(pageBeforeAuthError);
+  });
+});
+
+
+describe('makeSelectActivePage', () => {
+  const activePageSelector = makeSelectActivePage();
+
+  it('should return people when on a people page ', () => {
+    let mockedState = fromJS({ route: { location: { pathname: '/test/people/something/else' } } });
+    expect(activePageSelector(mockedState)).toEqual('people');
+    mockedState = fromJS({ route: { location: { pathname: '/people' } } });
+    expect(activePageSelector(mockedState)).toEqual('people');
+  });
+
+  it('should return timesheet when on a timesheet a page', () => {
+    let mockedState = fromJS({ route: { location: { pathname: '/test/timesheet/something/else' } } });
+    expect(activePageSelector(mockedState)).toEqual('timesheet');
+    mockedState = fromJS({ route: { location: { pathname: '/timesheet' } } });
+    expect(activePageSelector(mockedState)).toEqual('timesheet');
+  });
+
+  it('should return projects when on a projects page', () => {
+    let mockedState = fromJS({ route: { location: { pathname: '/test/projects/something/else' } } });
+    expect(activePageSelector(mockedState)).toEqual('projects');
+    mockedState = fromJS({ route: { location: { pathname: '/projects' } } });
+    expect(activePageSelector(mockedState)).toEqual('projects');
   });
 });

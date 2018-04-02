@@ -1,0 +1,30 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`projectPageReducer returns the initial state 1`] = `
+Immutable.Map {
+  updateProjectAttributesErrorMsg: "",
+  users: Immutable.List [
+  ],
+  activityFilteringText: "",
+  loadingProjectError: "",
+  projectLoadedIntoNewTaskForm: null,
+  projectCodes: Immutable.List [
+  ],
+  expandedActivityIds: Immutable.List [
+  ],
+  isNewTaskFormDialogOpened: false,
+  isAddPeopleFormOpen: false,
+  activityLoadedIntoNewTaskForm: null,
+  isSubmittingNewTask: false,
+  projectLoadedIntoNewActivityForm: null,
+  selectedProjectId: null,
+  updateProjectAttributesStatus: Immutable.Map {
+  },
+  isNewActivityFormDialogOpened: false,
+  selectedTab: 0,
+  loadingUsersError: "",
+  selectedProject: null,
+  isSubmittingNewActivity: false,
+  loadingProjectCodesError: "",
+}
+`;

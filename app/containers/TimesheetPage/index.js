@@ -131,7 +131,7 @@ function renderDays(
   return dayColumns;
 }
 
-class TimesheetPage extends React.Component {
+export class TimesheetPage extends React.Component {
   constructor(props) {
     super(props);
     this.forwardOneMonth = this.forwardOneMonth.bind(this);
@@ -289,7 +289,6 @@ TimesheetPage.propTypes = {
   selectedDate: PropTypes.objectOf(Date).isRequired,
   cachedSelectedDate: PropTypes.objectOf(Date),
   selectedRange: PropTypes.arrayOf(Date).isRequired,
-  match: PropTypes.object,
   submitLogForm: PropTypes.func,
   timeRecordDayMap: PropTypes.object,
   isTaskOverlaySelectOpened: PropTypes.bool,
@@ -322,6 +321,9 @@ TimesheetPage.propTypes = {
   deleteTimeRecordConfirmDialogOpened: PropTypes.bool.isRequired,
   changeTimeRecordDeleteConfirmDialogOpeness: PropTypes.func.isRequired,
   intl: PropTypes.object.isRequired,
+  match: PropTypes.shape({
+    url: PropTypes.string.isRequired,
+  }),
 };
 
 const mapStateToProps = createStructuredSelector({

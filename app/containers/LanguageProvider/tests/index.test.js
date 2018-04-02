@@ -11,9 +11,7 @@ import { translationMessages } from '../../../i18n';
 
 const messages = defineMessages({
   someMessage: {
-    id: 'some.id',
-    defaultMessage: 'This is some default message',
-    en: 'This is some en message',
+    id: 'app.title',
   },
 });
 
@@ -21,7 +19,7 @@ describe('<LanguageProvider />', () => {
   it('should render its children', () => {
     const children = (<h1>Test</h1>);
     const renderedComponent = shallow(
-      <LanguageProvider messages={messages} locale="en">
+      <LanguageProvider messages={messages} locale="pt-BR">
         {children}
       </LanguageProvider>
     );

@@ -1,0 +1,3 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<SelectField /> renders 1`] = `"<div class=\\"field\\"><span class=\\"control\\"><div class=\\"select \\"><select></select></div></span></div>"`;

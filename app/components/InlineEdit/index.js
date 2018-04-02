@@ -239,7 +239,7 @@ InlineEdit.propTypes = {
   displayEditElementWhenSaving: PropTypes.bool,
   displayEditElementWhenOnHover: PropTypes.bool,
   displayEditElementWhenNormal: PropTypes.bool,
-  value: PropTypes.oneOf(PropTypes.string, PropTypes.number, PropTypes.instanceOf(Date)),
+  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number, PropTypes.instanceOf(Date)]),
 };
 
 export default InlineEdit;

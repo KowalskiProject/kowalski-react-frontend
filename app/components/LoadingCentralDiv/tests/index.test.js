@@ -1,10 +1,13 @@
-// import React from 'react';
-// import { shallow } from 'enzyme';
+import React from 'react';
+import { shallow } from 'enzyme';
 
-// import LoadingCentralDiv from '../index';
+import LoadingCentralDiv from '../index';
 
 describe('<LoadingCentralDiv />', () => {
-  it('Expect to have unit tests specified', () => {
-    expect(true).toEqual(false);
+  it('renders', () => {
+    const renderedComponent = shallow(
+      <LoadingCentralDiv />
+    );
+    expect(renderedComponent.html()).toMatchSnapshot();
   });
 });

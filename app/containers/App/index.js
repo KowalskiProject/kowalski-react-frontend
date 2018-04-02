@@ -40,7 +40,7 @@ const AppWrapper = styled.div`
   flex-direction: column;
 `;
 
-function App(props) {
+export function App(props) {
   const { navigateTo, logout, intl: { formatMessage } } = props;
 
   return (
@@ -51,6 +51,9 @@ function App(props) {
       >
         <meta name="description" content={formatMessage(messages.description)} />
       </Helmet>
+      {/* TODO Export the below node to an independent component so that we can test it with shallow rendering and
+          mock functions instead of a mocked redux store
+          */}
       <Switch>
         <Route path="/auth" component={requireUnAuth(AuthPage)} />
         <Header
@@ -60,6 +63,9 @@ function App(props) {
           onPeopleClicked={() => navigateTo('/people')}
           onLogoutClicked={() => logout()}
         >
+          {/* TODO Export the below node to an independent component so that we can test it with shallow rendering and
+              mock functions instead of a mocked redux store
+              */}
           <Switch>
             <Route path="/projects/:code" component={requireAuth(ProjectPage)} />
             <Route path="/projects" component={requireAuth(ProjectsPage)} />

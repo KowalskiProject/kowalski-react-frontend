@@ -1,10 +1,10 @@
 import { DEFAULT_LOCALE } from '../containers/App/constants';
 import { formatTranslationMessages } from '../i18n';
 
-jest.mock('../translations/en.json', () => (
+jest.mock('../translations/pt-BR.json', () => (
   {
-    message1: 'default message',
-    message2: 'default message 2',
+    message1: 'mensagem padrão',
+    message2: 'mensagem padrão 2',
   }
 ));
 
@@ -26,7 +26,7 @@ describe('formatTranslationMessages', () => {
 
     expect(result).toEqual({
       message1: 'mensaje predeterminado',
-      message2: 'default message 2',
+      message2: 'mensagem padrão 2',
     });
   });
 });

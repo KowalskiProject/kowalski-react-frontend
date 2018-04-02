@@ -13,14 +13,11 @@
 import { fromJS } from 'immutable';
 
 import {
-  START_LOADING_RESOURCE,
-  END_LOADING_RESOURCE,
   SAVE_PAGE_BEFORE_AUTH_ERROR,
 } from './constants';
 
 // The initial state of the App
 const initialState = fromJS({
-  loadingResource: false,
   currentUser: false,
   pageBeforeAuthError: null,
 });
@@ -30,12 +27,6 @@ function appReducer(state = initialState, action) {
     case SAVE_PAGE_BEFORE_AUTH_ERROR:
       return state
         .set('pageBeforeAuthError', action.payload);
-    case START_LOADING_RESOURCE:
-      return state
-        .set('loadingResource', true);
-    case END_LOADING_RESOURCE:
-      return state
-        .set('loadingResource', false);
     default:
       return state;
   }

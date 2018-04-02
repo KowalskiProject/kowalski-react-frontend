@@ -81,7 +81,6 @@ export function* handleSubmitLogForm({ payload }) {
 }
 
 export function* handleTimeRecordsLoading({ payload }) {
-  console.log('WILL START FETCHING THIS SIT!');
   const userId = localStorage.getItem('currentUserId');
 
   if (!userId) {

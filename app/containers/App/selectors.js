@@ -32,12 +32,14 @@ const makeSelectActivePage = () => createSelector(
     } else if (path.match(/people/gi)) {
       return 'people';
     }
+
     return 'timesheet';
   }
 );
 
 export {
   selectGlobal,
+  selectRoute,
   makeSelectCurrentUser,
   makeSelectLocation,
   makeSelectPageBeforeAuthError,

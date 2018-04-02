@@ -1,10 +1,18 @@
-// import React from 'react';
-// import { shallow } from 'enzyme';
+import React from 'react';
+import { shallow } from 'enzyme';
 
-// import ConfirmationDialog from '../index';
+import ConfirmationDialog from '../index';
 
 describe('<ConfirmationDialog />', () => {
-  it('Expect to have unit tests specified', () => {
-    expect(true).toEqual(false);
+  it('renders', () => {
+    const renderedComponent = shallow(
+      <ConfirmationDialog
+        message="something"
+        onCancel={jest.fn()}
+        onConfirm={jest.fn()}
+        isActive
+      />
+    );
+    expect(renderedComponent.html()).toMatchSnapshot();
   });
 });

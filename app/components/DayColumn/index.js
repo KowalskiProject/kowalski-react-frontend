@@ -105,7 +105,7 @@ const renderPlusButton = (timeRecords, onClickCallback) => {
   );
 };
 
-function DayColumn({ day, onFreeSlotClick, timeRecords, onSlotClicked, intl }) {
+export function DayColumn({ day, onFreeSlotClick, timeRecords, onSlotClicked, intl }) {
   return (
     <Wrapper>
       <DayLabelWrapper>

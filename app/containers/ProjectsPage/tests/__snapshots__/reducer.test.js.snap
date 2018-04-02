@@ -1,0 +1,11 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`projectsPageReducer returns the initial state 1`] = `
+Immutable.Map {
+  projects: Immutable.List [
+  ],
+  projectFormOpen: false,
+  isLoadingProjects: false,
+  loadingProjectsErrorMsg: "",
+}
+`;

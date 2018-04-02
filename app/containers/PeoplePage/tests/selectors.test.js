@@ -1,8 +1,16 @@
-// import { fromJS } from 'immutable';
-// import { selectPeoplePageDomain } from '../selectors';
+import { fromJS } from 'immutable';
+import { selectPeoplePageDomain } from '../selectors';
 
 describe('selectPeoplePageDomain', () => {
-  it('Expect to have unit tests specified', () => {
-    expect(true).toEqual(false);
+  it('selects the proper substate', () => {
+    const peoplePage = fromJS({
+      testing2: 'b',
+    });
+    const state = fromJS({
+      testing: 'a',
+      peoplePage,
+    });
+    expect(selectPeoplePageDomain(state)).toMatchSnapshot();
+    expect(selectPeoplePageDomain(state)).toEqual(peoplePage);
   });
 });

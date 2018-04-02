@@ -1,10 +1,13 @@
-// import React from 'react';
-// import { shallow } from 'enzyme';
+import React from 'react';
+import { shallow } from 'enzyme';
 
-// import InlineDateEdit from '../index';
+import InlineTextEdit from '../index';
 
-describe('<InlineDateEdit />', () => {
-  it('Expect to have unit tests specified', () => {
-    expect(true).toEqual(false);
+describe('<InlineTextEdit />', () => {
+  it('render', () => {
+    const renderedComponent = shallow(
+      <InlineTextEdit onCommit={jest.fn()} />
+    );
+    expect(renderedComponent.html()).toMatchSnapshot();
   });
 });

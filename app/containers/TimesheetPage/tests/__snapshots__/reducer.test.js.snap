@@ -1,0 +1,20 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`timesheetPageReducer returns the initial state 1`] = `
+Immutable.Map {
+  isTaskDialogOpen: false,
+  isDeletingRecord: false,
+  isLoadingTimeRecords: false,
+  isTaskOverlaySelectOpened: false,
+  deleteTimeRecordConfirmDialogOpened: false,
+  cachedSelectedDate: null,
+  formActivities: Immutable.List [
+  ],
+  loadingTimeRecordsErrorMsg: "",
+  timeRecords: Immutable.List [
+  ],
+  activityIdLoadedIntoTaskDialog: null,
+  formProjects: Immutable.List [
+  ],
+}
+`;
