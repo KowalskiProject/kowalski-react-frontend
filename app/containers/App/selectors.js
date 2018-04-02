@@ -31,13 +31,16 @@ const makeSelectActivePage = () => createSelector(
       return 'projects';
     } else if (path.match(/people/gi)) {
       return 'people';
+    } else if (path.match(/timesheet/gi)) {
+      return 'timesheet';
     }
-    return 'timesheet';
+    throw new Error(`Unmachable path: ${path}`);
   }
 );
 
 export {
   selectGlobal,
+  selectRoute,
   makeSelectCurrentUser,
   makeSelectLocation,
   makeSelectPageBeforeAuthError,
