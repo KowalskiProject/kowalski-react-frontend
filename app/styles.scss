@@ -179,10 +179,17 @@ select {
     height: 50px;
   }
 }
+
 .calendar{
   min-width:18em;
   min-height:17em;
   background-color:#FBFAFF;
+ .calendar-range {
+   .date-item {
+     color: #5FA2C8;
+     font-weight:600;
+   }
+ }
   .calendar-nav{
     background:#FBFAFF;
     color: $ultraviolet;
@@ -200,7 +207,18 @@ select {
     padding-bottom: 0;
     .calendar-date{
       padding: 0px;
+      .date-item.active {
+      font-weight:600;
+      }
+      .date-item.is-active {
+        background: none;
+        color: #5FA2C8;
+        font-weight:600;
+        border-color: transparent;
+      }
+
     }
+
   }
 }
 

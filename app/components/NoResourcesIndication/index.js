@@ -17,7 +17,7 @@ const Container = styled.div`
   justify-content: center;
   text-align: center;
   font-size:46px;
-  color:#F7F8F8;
+  color:#dedfdf;
   padding-top: 100px;
 `;
 
