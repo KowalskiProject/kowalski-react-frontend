@@ -31,7 +31,7 @@ const DayLabelWrapper = styled.div`
 const SlotsContainer = styled.div`
   flex-basis: ${100 - wrapperFlexBasis}%;
   background-color: ${slotsBackgroundColor};
-  border: solid 0.5px rgba(102,78,164,0.4);;
+  border: solid 0.5px rgba(102,78,164,0.4);
   border-left:0px;
   display: flex;
   flex-direction: column;
@@ -41,6 +41,7 @@ const generateSlotWrapper = (hourSlot, totalSlot) => styled.a`
   display: flex;
   flex-direction: column;
   flex-basis: ${(hourSlot * 100) / totalSlot}%;
+  border-bottom: solid 0.5px rgba(102,78,164,0.4);;
   justify-content: center;
   text-align: center;
   padding: 10px;
