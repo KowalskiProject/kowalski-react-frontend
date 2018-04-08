@@ -91,6 +91,7 @@ function NewTaskForm(props) {
         <Field
           name="description"
           id="description"
+          placeholder={formatMessage(messages.newTaskLabelDescriptionPlaceholder)}
           component={TextAreaField}
           label={formatMessage(messages.newTaskLabelDescription)}
           validate={[required]}

@@ -13,6 +13,7 @@ export default defineMessages({
   newTaskLabelAccountableId: { id: 'app.containers.ProjectPage.newTaskLabelAccountableId' },
   newTaskSelectAccountableId: { id: 'app.containers.ProjectPage.newTaskSelectAccountableId' },
   newTaskLabelDescription: { id: 'app.containers.ProjectPage.newTaskLabelDescription' },
+  newTaskLabelDescriptionPlaceholder: { id: 'app.containers.ProjectPage.newTaskLabelDescriptionPlaceholder' },
   newTaskButtonSaveAndAddNew: { id: 'app.containers.ProjectPage.newTaskButtonSaveAndAddNew' },
   newTaskButtonAdd: { id: 'app.containers.ProjectPage.newTaskButtonAdd' },
   newTaskButtonCancel: { id: 'app.containers.ProjectPage.newTaskButtonCancel' },

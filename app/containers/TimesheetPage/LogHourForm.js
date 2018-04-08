@@ -186,7 +186,6 @@ class LogHourForm extends React.Component { // eslint-disable-line react/prefer-
             name="comment"
             id="comment"
             component={TextAreaField}
-            validate={[required]}
             label={formatMessage(messages.labelComment)}
             disabled={durationAndCommentDisabled}
             placeholder=""
