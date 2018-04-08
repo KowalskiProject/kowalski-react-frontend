@@ -131,7 +131,7 @@ function renderDays(
   return dayColumns;
 }
 
-class TimesheetPage extends React.Component {
+export class TimesheetPage extends React.Component {
   constructor(props) {
     super(props);
     this.forwardOneMonth = this.forwardOneMonth.bind(this);

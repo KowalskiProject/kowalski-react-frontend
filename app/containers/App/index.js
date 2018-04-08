@@ -40,7 +40,7 @@ const AppWrapper = styled.div`
   flex-direction: column;
 `;
 
-function App(props) {
+export function App(props) {
   const { navigateTo, logout, intl: { formatMessage } } = props;
 
   return (
