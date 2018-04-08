@@ -16,7 +16,9 @@ import messages from '../../containers/TimesheetPage/messages';
 
 const SelectButton = styled.button`
   width: 100%;
-  height: 50px !important;
+  min-height: 50px;
+  height: initial !important;
+  white-space: normal !important;
   ${(props) => props.hasError ? 'border-color: red !important;' : ''}
 `;
 
