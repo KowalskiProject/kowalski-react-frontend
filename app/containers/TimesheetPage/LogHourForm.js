@@ -189,7 +189,7 @@ class LogHourForm extends React.Component { // eslint-disable-line react/prefer-
             validate={[required]}
             label={formatMessage(messages.labelComment)}
             disabled={durationAndCommentDisabled}
-            placeholder={formatMessage(messages.commentPlaceholder)}
+            placeholder=""
           />
 
           {
