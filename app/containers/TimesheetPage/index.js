@@ -56,6 +56,7 @@ const MainContainerWrapper = styled.div`
 const ColumnsWrapper = styled.div`
   flex-grow: 1;
   display: flex;
+  max-height: 100%;
 `;
 
 const CalendarColumn = styled.div`
@@ -82,6 +83,7 @@ const DayColumnsWrapper = styled.div`
   flex-direction: column !important;
   padding-left:0px !important;
   border-left:none;
+  height: 100% !important;
 `;
 
 const AboveDaysArea = styled.div`
@@ -94,6 +96,8 @@ const AboveDaysArea = styled.div`
 const DaysArea = styled.div`
   display: flex;
   flex-grow: 1;
+  height: 100%;
+  max-height: 100%;
   flex-direction: row;
 `;
 
@@ -234,9 +238,9 @@ class TimesheetPage extends React.Component {
               />
             )}
           />
-          <ColumnsWrapper className="columns">
+          <ColumnsWrapper>
             {/* Calendar */}
-            <CalendarColumn className="column">
+            <CalendarColumn>
               <TimeSheetLabelWrapper>
                 <TimeSheetLabelInsideWrapper>
                   <FormattedMessage {... messages.timesheetLabel} />
@@ -259,7 +263,7 @@ class TimesheetPage extends React.Component {
                 </TimeSheetLabelInsideWrapper>
               </TimeSheetLabelWrapper>
             </CalendarColumn>
-            <DayColumnsWrapper className="column">
+            <DayColumnsWrapper>
               <AboveDaysArea>
               </AboveDaysArea>
               <DaysArea>

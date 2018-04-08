@@ -29,7 +29,7 @@ const DayLabelWrapper = styled.div`
 `;
 
 const SlotsContainer = styled.div`
-  flex-basis: ${100 - wrapperFlexBasis}%;
+  height: ${100 - wrapperFlexBasis}% !important;
   background-color: ${slotsBackgroundColor};
   border: solid 0.5px rgba(102,78,164,0.4);
   border-left:0px;
@@ -40,7 +40,8 @@ const SlotsContainer = styled.div`
 const generateSlotWrapper = (hourSlot, totalSlot) => styled.a`
   display: flex;
   flex-direction: column;
-  flex-basis: ${(hourSlot * 100) / totalSlot}%;
+  height: ${(hourSlot * 100) / totalSlot}% !important;
+  overflow: hidden;
   border-bottom: solid 0.5px rgba(102,78,164,0.4);;
   justify-content: center;
   text-align: center;
@@ -61,21 +62,30 @@ const generatePlusSlotWrapper = (hourSlot, totalSlot) => generateSlotWrapper(hou
   }
 `;
 
+const TimeRecordDescription = styled.p`
+  font-size: 12px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+`;
+
+const extractTimeRecordDescription = (timeRecord) => {
+  const text = `${(timeRecord.get('projectCode') || '[PROJ]')} - ` +
+    `${(timeRecord.get('activityName') || 'Undefined activity Name - ')}` +
+    `${(timeRecord.get('taskName') || 'Undefined task Name')}`;
+  return text;
+};
+
 const renderTimeRecords = (timeRecords, onSlotClicked, day) => (
   timeRecords.map((timeRecord) => {
     const amountOfHours = parseAmountOfHours(timeRecord.get('reportedTime'));
     const SlotWrapper = generateSlotWrapper(amountOfHours, 8.0);
     const id = timeRecord.get('trId');
     return (
-      <SlotWrapper key={id} onClick={() => onSlotClicked(id, day)}>
+      <SlotWrapper key={id} onClick={() => onSlotClicked(id, day)} title={extractTimeRecordDescription(timeRecord)}>
         <p>{ timeRecord.get('reportedTime') }</p>
-        <p>
-          {
-            `${(timeRecord.get('projectCode') || '[PROJ]')} - ` +
-            `${(timeRecord.get('activityName') || 'Activity Name - ')}` +
-            `${(timeRecord.get('taskName') || 'Task Name')}`
-          }
-        </p>
+        <TimeRecordDescription>
+          { extractTimeRecordDescription(timeRecord) }
+        </TimeRecordDescription>
       </SlotWrapper>
     );
   })
