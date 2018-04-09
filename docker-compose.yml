@@ -1,8 +1,19 @@
-version: '3'
+version: '3.5'
 services:
   app:
     image: nginx:alpine
     volumes:
       - ./app/.nginx.conf:/etc/nginx/conf.d/nginx.conf:ro
+      - ./build/:/var/www:ro
+      - ./cert.pem:/etc/nginx/ssl/certificate.crt:ro
+      - ./key.pem:/etc/nginx/ssl/server.key:ro
     ports:
-      - "3000:80"
+      - "80:80"
+      - "443:443"
+    networks: 
+      - frontend
+
+
+networks:
+  frontend:
+    name: kowalski-front-end-network
