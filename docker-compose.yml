@@ -1,6 +1,8 @@
-version: '2'
+version: '3'
 services:
   app:
-    build: .
+    image: nginx:alpine
+    volumes:
+      - ./app/.nginx.conf:/etc/nginx/conf.d/nginx.conf:ro
     ports:
       - "3000:80"
