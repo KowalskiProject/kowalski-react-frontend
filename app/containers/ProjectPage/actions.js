@@ -32,6 +32,10 @@ import {
   LOAD_USERS,
   ENDED_LOAD_USERS,
   UPDATE_MEMBER_LIST,
+  UPDATE_PROJECT_ATTRIBUTE,
+  END_UPDATING_PROJECT_ATTRIBUTE,
+  UPDATE_LOADED_PROJECT_ATTRIBUTE,
+  POP_UPDATE_PROJECT_ERROR_MSG,
 } from './constants';
 
 export function defaultAction() {
@@ -213,5 +217,33 @@ export function updateMemberList(payload) {
   return {
     type: UPDATE_MEMBER_LIST,
     payload,
+  };
+}
+
+export function updateProjectAttribute(payload) {
+  return {
+    type: UPDATE_PROJECT_ATTRIBUTE,
+    payload,
+  };
+}
+
+export function updateLoadedProjectAttribute(payload) {
+  return {
+    type: UPDATE_LOADED_PROJECT_ATTRIBUTE,
+    payload,
+  };
+}
+
+export function endUpdatingProjectAttribute(payload) {
+  return {
+    type: END_UPDATING_PROJECT_ATTRIBUTE,
+    payload,
+  };
+}
+
+export function popUpdateProjectErrorMsg(msg) {
+  return {
+    type: POP_UPDATE_PROJECT_ERROR_MSG,
+    payload: msg,
   };
 }

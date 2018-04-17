@@ -1,20 +1,59 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { List } from 'immutable';
+import { List, Map } from 'immutable';
+import { createStructuredSelector } from 'reselect';
+import { compose } from 'redux';
 import { FormattedMessage } from 'react-intl';
 import Modal from 'components/Modal/Loadable';
+import ErrorMessageBox from 'components/ErrorMessageBox/Loadable';
 import AddPeopleForm from './AddPeopleForm';
 import PeopleFlexGrid from '../../components/PeopleFlexGrid';
 import { userCanAccess } from '../../support/auth/utils';
 import { ADD } from '../../support/auth/resources';
 import messages from './messages';
+import InlineEdit from '../../components/InlineEdit';
+import { updateProjectAttribute } from './actions';
+import { makeSelectUpdateProjectAttributesStatus, makeSelectUpdateProjectAttributesErrorMsg } from './selectors';
 
-const ProjectNameWrapper = styled.h3`
+const ProjectNameWrapper = styled.div`
+  margin-right: 2rem;
+  font-size: 1.8rem;
+  padding-bottom: 1rem;
+`;
+
+const ProjectInfoWrapper = styled.div`
+  margin-right: 2rem;
+  display: flex;
+  padding-bottom: 1rem;
+`;
+
+const ProjectStartDateHeader = styled.h4`
+`;
+
+const ProjectStartDateContent = styled.div`
+`;
+
+const ProjectEndDateHeader = styled.h4`
+`;
+
+const ProjectEndDateContent = styled.div`
+`;
+
+const ProjectStartDateWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+const ProjectEndDateWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
 `;
 
 const ProjectDescriptionWrapper = styled.div`
-  margin-top: 1rem;
+  margin-right: 2rem;
+  padding-bottom: 1.8rem;
 `;
 
 const ProjectDescriptionHeader = styled.h4`
@@ -24,7 +63,6 @@ const ProjectDescriptionContent = styled.div`
 `;
 
 const ProjectPeopleWrapper = styled.div`
-  margin-top: 2rem;
   flex-grow: 1;
   display: flex;
   flex-direction: column;
@@ -58,35 +96,74 @@ const AddPeopleButton = styled.button`
   color: white;
 `;
 
-export default function GeneralTab(props) {
+const ErrorMsgBoxWrapper = styled.div`
+  display: flex;
+  margin-right: 2rem;
+  padding-bottom: 1rem;
+`;
+
+export function GeneralTab(props) {
   const {
     project,
     isAddPeopleFormOpen,
     closeAddPeopleForm,
     usersNotInProject,
+    updateProjectAttributesErrorMsg,
   } = props;
 
   if (!project) {
     return <div></div>;
   }
 
+  const projectId = project.get('projectId');
+
   return (
     <div style={{ flexGrow: '1', display: 'flex', flexDirection: 'column' }}>
+      <ErrorMsgBoxWrapper>
+        <ErrorMessageBox errorMsg={updateProjectAttributesErrorMsg} />
+      </ErrorMsgBoxWrapper>
       <ProjectNameWrapper>
-        {project.get('name')}
+        <InlineEdit
+          onCommit={(name) => props.updateProjectAttribute(Map({ name, projectId }))}
+          saving={props.updateProjectAttributesStatus.get('name')}
+        >
+          {project.get('name')}
+        </InlineEdit>
       </ProjectNameWrapper>
+      <ProjectInfoWrapper className="columns">
+        <ProjectStartDateWrapper className="column">
+          <ProjectStartDateHeader>
+            <FormattedMessage {... messages.generalTabProjectStartDate} />
+          </ProjectStartDateHeader>
+          <ProjectStartDateContent>
+            {project.get('endStart')}
+          </ProjectStartDateContent>
+        </ProjectStartDateWrapper>
+        <ProjectEndDateWrapper className="column">
+          <ProjectEndDateHeader>
+            <FormattedMessage {... messages.generalTabProjectEndDate} />
+          </ProjectEndDateHeader>
+          <ProjectEndDateContent>
+            {project.get('endDate')}
+          </ProjectEndDateContent>
+        </ProjectEndDateWrapper>
+      </ProjectInfoWrapper>
       <ProjectDescriptionWrapper>
         <ProjectDescriptionHeader>
           <FormattedMessage {... messages.generalTabProjectDescription} />
         </ProjectDescriptionHeader>
         <ProjectDescriptionContent>
-          <p>{project.get('description')}</p>
+          <InlineEdit
+            onCommit={(description) => props.updateProjectAttribute(Map({ description, projectId }))}
+            saving={props.updateProjectAttributesStatus.get('description')}
+          >
+            {project.get('description')}
+          </InlineEdit>
         </ProjectDescriptionContent>
       </ProjectDescriptionWrapper>
       <ProjectPeopleWrapper>
         <ProjectPeopleHeader>
           <div style={{ display: 'flex', flexDirection: 'column-reverse' }}>
-
             <h4>
               <FormattedMessage {... messages.generalTabProjectPeople} />
             </h4>
@@ -121,4 +198,18 @@ GeneralTab.propTypes = {
   openAddPeopleForm: PropTypes.func.isRequired,
   submitAddPeopleFormAndCloseIt: PropTypes.func.isRequired,
   usersNotInProject: PropTypes.instanceOf(List).isRequired,
+  updateProjectAttributesStatus: PropTypes.object.isRequired,
+  updateProjectAttribute: PropTypes.func.isRequired,
+  updateProjectAttributesErrorMsg: PropTypes.string,
 };
+
+const mapStateToProps = createStructuredSelector({
+  updateProjectAttributesStatus: makeSelectUpdateProjectAttributesStatus(),
+  updateProjectAttributesErrorMsg: makeSelectUpdateProjectAttributesErrorMsg(),
+});
+
+const withConnect = connect(mapStateToProps, { updateProjectAttribute });
+
+export default compose(
+  withConnect,
+)(GeneralTab);

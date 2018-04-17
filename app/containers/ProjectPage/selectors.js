@@ -136,6 +136,16 @@ const makeSelectUsersNotInProject = () => createSelector(
   (userIdsInProject, users) => users.filter((user) => !userIdsInProject.includes(user.get('kUserId'))),
 );
 
+const makeSelectUpdateProjectAttributesStatus = () => createSelector(
+  selectProjectPageDomain,
+  (substate) => substate.get('updateProjectAttributesStatus'),
+);
+
+const makeSelectUpdateProjectAttributesErrorMsg = () => createSelector(
+  selectProjectPageDomain,
+  (substate) => substate.get('updateProjectAttributesErrorMsg'),
+);
+
 export default makeSelectProjectPage;
 
 export {
@@ -159,5 +169,7 @@ export {
   makeSelectUsersInProject,
   makeSelectUsersNotInProject,
   makeSelectLoadingUsersError,
+  makeSelectUpdateProjectAttributesStatus,
+  makeSelectUpdateProjectAttributesErrorMsg,
 };
 

@@ -102,7 +102,7 @@ class NewPersonForm extends React.Component {
   renderRoles() {
     const { intl: { formatMessage } } = this.props;
     const options = [
-      <option value="">
+      <option value="" key="select">
         <FormattedMessage {... messages.newPersonFormSelectARole} />
       </option>,
     ];

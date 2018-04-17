@@ -22,7 +22,12 @@ import {
   OPEN_ADD_PEOPLE_FORM,
   ENDED_LOAD_USERS,
   UPDATE_MEMBER_LIST,
+  UPDATE_PROJECT_ATTRIBUTE,
+  END_UPDATING_PROJECT_ATTRIBUTE,
+  UPDATE_LOADED_PROJECT_ATTRIBUTE,
+  POP_UPDATE_PROJECT_ERROR_MSG,
 } from './constants';
+import { CLEAN_UP_STATE } from '../App/constants';
 
 const initialState = fromJS({
   projectCodes: [],
@@ -43,6 +48,10 @@ const initialState = fromJS({
   loadingProjectError: '',
   loadingUsersError: '',
   isAddPeopleFormOpen: false,
+  updateProjectAttributesStatus: {
+    name: false,
+  },
+  updateProjectAttributesErrorMsg: '',
 });
 
 function projectPageReducer(state = initialState, { type, payload }) {
@@ -107,6 +116,25 @@ function projectPageReducer(state = initialState, { type, payload }) {
       ],
       payload.taskList
     );
+    case UPDATE_PROJECT_ATTRIBUTE:
+      return state.updateIn(
+        ['updateProjectAttributesStatus'],
+        (updateProjectAttributesStatus) => updateProjectAttributesStatus.merge(payload.map(() => true))
+      );
+    case END_UPDATING_PROJECT_ATTRIBUTE:
+      return state.updateIn(
+        ['updateProjectAttributesStatus'],
+        (updateProjectAttributesStatus) => updateProjectAttributesStatus.merge(payload.map(() => false))
+      );
+    case UPDATE_LOADED_PROJECT_ATTRIBUTE:
+      return state.updateIn(
+        ['selectedProject'],
+        (project) => project.merge(payload)
+      );
+    case POP_UPDATE_PROJECT_ERROR_MSG:
+      return state.set('updateProjectAttributesErrorMsg', payload);
+    case CLEAN_UP_STATE:
+      return initialState;
     default:
       return state;
   }

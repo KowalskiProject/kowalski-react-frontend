@@ -50,6 +50,14 @@ export function createProject({ config: { baseUrl }, token, projectData }) {
   });
 }
 
+export function updateProject({ config: { baseUrl }, token, projectId, projectData }) {
+  return request(`${baseUrl}/projects/${projectId}`, {
+    method: 'PUT',
+    body: JSON.stringify(projectData),
+    headers: generateCommonHeaders(token),
+  });
+}
+
 export function createActivity({ config: { baseUrl }, token, projectId, activityData }) {
   return request(`${baseUrl}/projects/${projectId}/activities`, {
     method: 'POST',

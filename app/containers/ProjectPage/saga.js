@@ -17,6 +17,7 @@ import {
   LOAD_USERS,
   SUBMIT_ADD_PEOPLE_FORM_AND_CLOSE_IT,
   ADD_PEOPLE_FORM_ID,
+  UPDATE_PROJECT_ATTRIBUTE,
 } from './constants';
 
 import {
@@ -29,6 +30,9 @@ import {
   endedUsersLoading,
   updateMemberList,
   closeAddPeopleForm,
+  updateLoadedProjectAttribute,
+  endUpdatingProjectAttribute,
+  popUpdateProjectErrorMsg,
 } from './actions';
 
 import {
@@ -42,6 +46,7 @@ import {
   getActivityTasks,
   getPeople,
   addPeopleToProject,
+  updateProject,
 } from '../../support/backend/KowalskiBackendClient';
 
 import { requestErrorReceived } from '../App/actions';
@@ -256,6 +261,26 @@ export function* handleSubmitAddPeopleForm({ payload }) {
   return false;
 }
 
+export function* handleUpdateProjectAttribute({ payload }) {
+  const projectId = payload.get('projectId');
+  const projectData = payload.delete('projectId');
+  try {
+    yield call(
+      updateProject, { ...genCommonReqConfig(), projectId, projectData }
+    );
+    yield put(updateLoadedProjectAttribute(projectData));
+    yield put(endUpdatingProjectAttribute(projectData));
+  } catch (e) {
+    yield put(requestErrorReceived({
+      error: e,
+      dispatchOnAnyError: [endUpdatingProjectAttribute(projectData)],
+      dispatchOnOtherErrors: [
+        popUpdateProjectErrorMsg(`Houve um erro ao tentar salvar o atriburo ${projectData.keySeq().join(', ')}`),
+      ],
+    }));
+  }
+}
+
 // Individual exports for testing
 export default function* defaultSaga() {
   yield takeEvery(UPDATE_SELECTED_PROJECT_CODE, handleSelectedProjectId);
@@ -270,4 +295,5 @@ export default function* defaultSaga() {
   yield takeEvery(DISMISS_NEW_TASK_DIALOG, clearTaskForm);
   yield takeEvery(EXPAND_TASK_LIST_ITEM, handleFetchTaskList);
   yield takeEvery(SUBMIT_ADD_PEOPLE_FORM_AND_CLOSE_IT, handleSubmitAddPeopleForm);
+  yield takeEvery(UPDATE_PROJECT_ATTRIBUTE, handleUpdateProjectAttribute);
 }
