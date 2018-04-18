@@ -96,6 +96,8 @@ class InlineEdit extends Component {
     this.contentChanged = this.contentChanged.bind(this);
     this.dicardChanges = this.dicardChanges.bind(this);
     this.commitChanges = this.commitChanges.bind(this);
+    this.renderNormalOrHoveredContent = this.renderNormalOrHoveredContent.bind(this);
+    this.renderTextArea = this.renderTextArea.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -115,23 +117,11 @@ class InlineEdit extends Component {
   }
 
   dicardChanges() {
-    console.log('Discard changes!');
     this.setState({ name: STATE_NORMAL, content: this.props.children });
   }
 
   commitChanges() {
-    console.log('Start the commit of changes!');
-    this.setState({ ...this.state, name: STATE_SAVING });
-
-    // Gives some time to capture the 'discardChange' event
-    setTimeout(() => {
-      if (this.state.name === STATE_SAVING) {
-        console.log('Commited the changes');
-        this.props.onCommit(this.state.content);
-      } else {
-        console.log('Did not commit the changes');
-      }
-    }, 10);
+    this.props.onCommit(this.state.content);
   }
 
   hover() {
@@ -176,6 +166,15 @@ class InlineEdit extends Component {
     );
   }
 
+  renderNormalOrHoveredContent() {
+    const innerText = this.props.children;
+    if (!innerText) {
+      return <span>Not set</span>;
+    }
+
+    return innerText;
+  }
+
   render() {
     return (
       <Container
@@ -186,7 +185,7 @@ class InlineEdit extends Component {
         title={'Click for edit'}
       >
         <ContentContainer>
-          { (this.state.name === STATE_NORMAL || this.state.name === STATE_HOVERED) && this.props.children }
+          { (this.state.name === STATE_NORMAL || this.state.name === STATE_HOVERED) && this.renderNormalOrHoveredContent() }
           { this.state.name === STATE_EDITING && this.renderTextArea() }
           { this.state.name === STATE_SAVING && <TextBeingSaved>{this.state.content}</TextBeingSaved> }
           { this.state.name === STATE_EDITING && this.renderButtonsContainerForEditingState(this.state.name) }

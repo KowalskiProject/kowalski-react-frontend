@@ -136,7 +136,12 @@ export function GeneralTab(props) {
             <FormattedMessage {... messages.generalTabProjectStartDate} />
           </ProjectStartDateHeader>
           <ProjectStartDateContent>
-            {project.get('endStart')}
+            <InlineEdit
+              onCommit={(startDate) => props.updateProjectAttribute(Map({ startDate, projectId }))}
+              saving={props.updateProjectAttributesStatus.get('startDate')}
+            >
+              {project.get('startDate')}
+            </InlineEdit>
           </ProjectStartDateContent>
         </ProjectStartDateWrapper>
         <ProjectEndDateWrapper className="column">
@@ -144,7 +149,12 @@ export function GeneralTab(props) {
             <FormattedMessage {... messages.generalTabProjectEndDate} />
           </ProjectEndDateHeader>
           <ProjectEndDateContent>
-            {project.get('endDate')}
+            <InlineEdit
+              onCommit={(endDate) => props.updateProjectAttribute(Map({ endDate, projectId }))}
+              saving={props.updateProjectAttributesStatus.get('endDate')}
+            >
+              {project.get('endDate')}
+            </InlineEdit>
           </ProjectEndDateContent>
         </ProjectEndDateWrapper>
       </ProjectInfoWrapper>
