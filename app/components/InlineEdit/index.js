@@ -10,7 +10,6 @@ import styled from 'styled-components';
 import FaPencil from 'react-icons/lib/fa/pencil';
 import FaCheck from 'react-icons/lib/fa/check';
 import TiTimes from 'react-icons/lib/ti/times';
-import TextareaAutoresize from 'react-autosize-textarea';
 import { ClipLoader } from 'react-spinners';
 
 const Container = styled.div`
@@ -54,12 +53,6 @@ const EditActionsWrapper = styled.div`
 const EditButton = styled.div`
 `;
 
-const TextArea = styled(TextareaAutoresize)`
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-`;
-
 const CheckChangesButton = styled.a`
   display: flex;
   color: inherit;
@@ -97,7 +90,6 @@ class InlineEdit extends Component {
     this.dicardChanges = this.dicardChanges.bind(this);
     this.commitChanges = this.commitChanges.bind(this);
     this.renderNormalOrHoveredContent = this.renderNormalOrHoveredContent.bind(this);
-    this.renderTextArea = this.renderTextArea.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -155,17 +147,6 @@ class InlineEdit extends Component {
     );
   }
 
-  renderTextArea() {
-    return (
-      <TextArea
-        autoFocus="true"
-        value={this.state.content}
-        onChange={this.contentChanged}
-        onBlur={this.commitChanges}
-      />
-    );
-  }
-
   renderNormalOrHoveredContent() {
     const innerText = this.props.children;
     if (!innerText) {
@@ -186,7 +167,14 @@ class InlineEdit extends Component {
       >
         <ContentContainer>
           { (this.state.name === STATE_NORMAL || this.state.name === STATE_HOVERED) && this.renderNormalOrHoveredContent() }
-          { this.state.name === STATE_EDITING && this.renderTextArea() }
+          {
+            this.state.name === STATE_EDITING &&
+              this.props.renderEditComponent({
+                content: this.state.content,
+                onChange: this.contentChanged,
+                onBlur: this.commitChanges,
+              })
+          }
           { this.state.name === STATE_SAVING && <TextBeingSaved>{this.state.content}</TextBeingSaved> }
           { this.state.name === STATE_EDITING && this.renderButtonsContainerForEditingState(this.state.name) }
         </ContentContainer>
@@ -202,6 +190,7 @@ InlineEdit.propTypes = {
   children: PropTypes.any,
   onCommit: PropTypes.func.isRequired,
   saving: PropTypes.bool,
+  renderEditComponent: PropTypes.func.isRequired,
 };
 
 export default InlineEdit;
