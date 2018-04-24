@@ -13,9 +13,10 @@ import PeopleFlexGrid from '../../components/PeopleFlexGrid';
 import { userCanAccess } from '../../support/auth/utils';
 import { ADD } from '../../support/auth/resources';
 import messages from './messages';
-import InlineEdit from '../../components/InlineEdit';
 import { updateProjectAttribute } from './actions';
 import { makeSelectUpdateProjectAttributesStatus, makeSelectUpdateProjectAttributesErrorMsg } from './selectors';
+import InlineTextEdit from '../../components/InlineTextEdit';
+import InlineDateEdit from '../../components/InlineDateEdit';
 
 const ProjectNameWrapper = styled.div`
   margin-right: 2rem;
@@ -123,12 +124,12 @@ export function GeneralTab(props) {
         <ErrorMessageBox errorMsg={updateProjectAttributesErrorMsg} />
       </ErrorMsgBoxWrapper>
       <ProjectNameWrapper>
-        <InlineEdit
+        <InlineTextEdit
           onCommit={(name) => props.updateProjectAttribute(Map({ name, projectId }))}
           saving={props.updateProjectAttributesStatus.get('name')}
         >
           {project.get('name')}
-        </InlineEdit>
+        </InlineTextEdit>
       </ProjectNameWrapper>
       <ProjectInfoWrapper className="columns">
         <ProjectStartDateWrapper className="column">
@@ -136,7 +137,12 @@ export function GeneralTab(props) {
             <FormattedMessage {... messages.generalTabProjectStartDate} />
           </ProjectStartDateHeader>
           <ProjectStartDateContent>
-            {project.get('endStart')}
+            <InlineDateEdit
+              onCommit={(startDate) => props.updateProjectAttribute(Map({ startDate, projectId }))}
+              saving={props.updateProjectAttributesStatus.get('startDate')}
+            >
+              {project.get('startDate')}
+            </InlineDateEdit>
           </ProjectStartDateContent>
         </ProjectStartDateWrapper>
         <ProjectEndDateWrapper className="column">
@@ -144,7 +150,12 @@ export function GeneralTab(props) {
             <FormattedMessage {... messages.generalTabProjectEndDate} />
           </ProjectEndDateHeader>
           <ProjectEndDateContent>
-            {project.get('endDate')}
+            <InlineDateEdit
+              onCommit={(endDate) => props.updateProjectAttribute(Map({ endDate, projectId }))}
+              saving={props.updateProjectAttributesStatus.get('endDate')}
+            >
+              {project.get('endDate')}
+            </InlineDateEdit>
           </ProjectEndDateContent>
         </ProjectEndDateWrapper>
       </ProjectInfoWrapper>
@@ -153,12 +164,12 @@ export function GeneralTab(props) {
           <FormattedMessage {... messages.generalTabProjectDescription} />
         </ProjectDescriptionHeader>
         <ProjectDescriptionContent>
-          <InlineEdit
+          <InlineTextEdit
             onCommit={(description) => props.updateProjectAttribute(Map({ description, projectId }))}
             saving={props.updateProjectAttributesStatus.get('description')}
           >
             {project.get('description')}
-          </InlineEdit>
+          </InlineTextEdit>
         </ProjectDescriptionContent>
       </ProjectDescriptionWrapper>
       <ProjectPeopleWrapper>

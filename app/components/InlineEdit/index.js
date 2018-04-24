@@ -10,7 +10,6 @@ import styled from 'styled-components';
 import FaPencil from 'react-icons/lib/fa/pencil';
 import FaCheck from 'react-icons/lib/fa/check';
 import TiTimes from 'react-icons/lib/ti/times';
-import TextareaAutoresize from 'react-autosize-textarea';
 import { ClipLoader } from 'react-spinners';
 
 const Container = styled.div`
@@ -52,12 +51,6 @@ const EditActionsWrapper = styled.div`
 `;
 
 const EditButton = styled.div`
-`;
-
-const TextArea = styled(TextareaAutoresize)`
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
 `;
 
 const CheckChangesButton = styled.a`
@@ -115,23 +108,11 @@ class InlineEdit extends Component {
   }
 
   dicardChanges() {
-    console.log('Discard changes!');
     this.setState({ name: STATE_NORMAL, content: this.props.children });
   }
 
   commitChanges() {
-    console.log('Start the commit of changes!');
-    this.setState({ ...this.state, name: STATE_SAVING });
-
-    // Gives some time to capture the 'discardChange' event
-    setTimeout(() => {
-      if (this.state.name === STATE_SAVING) {
-        console.log('Commited the changes');
-        this.props.onCommit(this.state.content);
-      } else {
-        console.log('Did not commit the changes');
-      }
-    }, 10);
+    this.props.onCommit(this.state.content);
   }
 
   hover() {
@@ -165,17 +146,6 @@ class InlineEdit extends Component {
     );
   }
 
-  renderTextArea() {
-    return (
-      <TextArea
-        autoFocus="true"
-        value={this.state.content}
-        onChange={this.contentChanged}
-        onBlur={this.commitChanges}
-      />
-    );
-  }
-
   render() {
     return (
       <Container
@@ -187,7 +157,13 @@ class InlineEdit extends Component {
       >
         <ContentContainer>
           { (this.state.name === STATE_NORMAL || this.state.name === STATE_HOVERED) && this.props.children }
-          { this.state.name === STATE_EDITING && this.renderTextArea() }
+          { this.state.name === STATE_EDITING &&
+              this.props.renderEditComponent({
+                content: this.state.content,
+                onChange: this.commitChanges,
+                onBlur: this.commitChanges,
+              })
+          }
           { this.state.name === STATE_SAVING && <TextBeingSaved>{this.state.content}</TextBeingSaved> }
           { this.state.name === STATE_EDITING && this.renderButtonsContainerForEditingState(this.state.name) }
         </ContentContainer>
@@ -203,6 +179,7 @@ InlineEdit.propTypes = {
   children: PropTypes.any,
   onCommit: PropTypes.func.isRequired,
   saving: PropTypes.bool,
+  renderEditComponent: PropTypes.func.isRequired,
 };
 
 export default InlineEdit;
