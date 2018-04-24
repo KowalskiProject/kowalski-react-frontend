@@ -146,6 +146,19 @@ class InlineEdit extends Component {
     );
   }
 
+  renderContentOnSaving() {
+    if (this.props.displayEditElementWhenSaving) {
+      return this.props.renderEditComponent({
+        content: this.state.content,
+        onCommit: this.commitChanges,
+        onDiscard: this.dicardChanges,
+        onChange: this.contentChanged,
+      });
+    }
+
+    return this.state.content;
+  }
+
   render() {
     return (
       <Container
@@ -160,11 +173,12 @@ class InlineEdit extends Component {
           { this.state.name === STATE_EDITING &&
               this.props.renderEditComponent({
                 content: this.state.content,
-                onChange: this.commitChanges,
-                onBlur: this.commitChanges,
+                onCommit: this.commitChanges,
+                onDiscard: this.dicardChanges,
+                onChange: this.contentChanged,
               })
           }
-          { this.state.name === STATE_SAVING && <TextBeingSaved>{this.state.content}</TextBeingSaved> }
+          { this.state.name === STATE_SAVING && <TextBeingSaved>{this.renderContentOnSaving()}</TextBeingSaved> }
           { this.state.name === STATE_EDITING && this.renderButtonsContainerForEditingState(this.state.name) }
         </ContentContainer>
         <ButtonsContainer stateName={this.state.name}>
@@ -180,6 +194,7 @@ InlineEdit.propTypes = {
   onCommit: PropTypes.func.isRequired,
   saving: PropTypes.bool,
   renderEditComponent: PropTypes.func.isRequired,
+  displayEditElementWhenSaving: PropTypes.bool,
 };
 
 export default InlineEdit;

@@ -10,11 +10,11 @@ import 'flatpickr/dist/themes/material_green.css';
 import Flatpickr from 'react-flatpickr';
 import InlineEdit from '../InlineEdit';
 
-const renderDatePicker = ({ content, onChange, onBlur }) => (
+const renderDatePicker = ({ content, onCommit, onChange }) => (
   <Flatpickr
     value={content}
-    onChange={onChange}
-    onBlur={onBlur}
+    onChange={([date]) => onChange({ target: { value: date } })}
+    onClose={() => setTimeout(onCommit)}
     ref={(ref) => {
       if (ref && ref.node) {
         ref.node.focus();
@@ -25,8 +25,8 @@ const renderDatePicker = ({ content, onChange, onBlur }) => (
 
 renderDatePicker.propTypes = {
   content: PropTypes.string,
+  onCommit: PropTypes.func.isRequired,
   onChange: PropTypes.func.isRequired,
-  onBlur: PropTypes.func.isRequired,
 };
 
 class InlineDateEdit extends Component { // eslint-disable-line react/prefer-stateless-function
@@ -35,6 +35,7 @@ class InlineDateEdit extends Component { // eslint-disable-line react/prefer-sta
       <InlineEdit
         {...this.props}
         renderEditComponent={renderDatePicker}
+        displayEditElementWhenSaving
       />
     );
   }

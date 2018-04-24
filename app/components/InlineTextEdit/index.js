@@ -16,19 +16,19 @@ const TextArea = styled(TextareaAutoresize)`
   overflow: hidden;
 `;
 
-const renderTextarea = ({ content, onChange, onBlur }) => (
+const renderTextarea = ({ content, onCommit, onChange }) => (
   <TextArea
     autoFocus="true"
     value={content}
     onChange={onChange}
-    onBlur={onBlur}
+    onBlur={onCommit}
   />
 );
 
 renderTextarea.propTypes = {
   content: PropTypes.string,
+  onCommit: PropTypes.func.isRequired,
   onChange: PropTypes.func.isRequired,
-  onBlur: PropTypes.func.isRequired,
 };
 
 class InlineTextEdit extends Component { // eslint-disable-line react/prefer-stateless-function
