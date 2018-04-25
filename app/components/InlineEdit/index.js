@@ -67,10 +67,10 @@ const DiscardChangesButton = styled.a`
   margin-right: 2px;
 `;
 
-const STATE_NORMAL = 'STATE_NORMAL';
-const STATE_HOVERED = 'STATE_HOVERED';
-const STATE_EDITING = 'STATE_EDITING';
-const STATE_SAVING = 'STATE_SAVING';
+export const STATE_NORMAL = 'STATE_NORMAL';
+export const STATE_HOVERED = 'STATE_HOVERED';
+export const STATE_EDITING = 'STATE_EDITING';
+export const STATE_SAVING = 'STATE_SAVING';
 
 const TextBeingSaved = styled.span`
   font-style: italic;
@@ -80,7 +80,7 @@ const TextBeingSaved = styled.span`
 class InlineEdit extends Component {
   constructor(props) {
     super(props);
-    this.state = { name: props.saving ? STATE_SAVING : STATE_NORMAL, content: props.children };
+    this.state = { name: props.saving ? STATE_SAVING : STATE_NORMAL, content: props.value };
 
     this.unhover = this.unhover.bind(this);
     this.hover = this.hover.bind(this);
@@ -93,7 +93,20 @@ class InlineEdit extends Component {
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.saving !== (this.state.name === STATE_SAVING)) {
-      this.setState({ ...this.state, name: nextProps.saving ? STATE_SAVING : STATE_NORMAL });
+      this.setState({
+        ...this.state,
+        name: nextProps.saving ? STATE_SAVING : STATE_NORMAL,
+        content: nextProps.saving ? this.state.content : this.props.value,
+      });
+    }
+
+    // Whenever a new value is received, update the content
+    if (this.props.value !== nextProps.value) {
+      this.setState({
+        ...this.state,
+        state: STATE_NORMAL,
+        content: nextProps.value,
+      });
     }
   }
 
@@ -108,7 +121,7 @@ class InlineEdit extends Component {
   }
 
   dicardChanges() {
-    this.setState({ name: STATE_NORMAL, content: this.props.children });
+    this.setState({ name: STATE_NORMAL, content: this.props.value });
   }
 
   commitChanges() {
@@ -153,6 +166,7 @@ class InlineEdit extends Component {
         onCommit: this.commitChanges,
         onDiscard: this.dicardChanges,
         onChange: this.contentChanged,
+        stateName: this.state.name,
       });
     }
 
@@ -169,13 +183,14 @@ class InlineEdit extends Component {
         title={'Click for edit'}
       >
         <ContentContainer>
-          { (this.state.name === STATE_NORMAL || this.state.name === STATE_HOVERED) && this.props.children }
+          { (this.state.name === STATE_NORMAL || this.state.name === STATE_HOVERED) && this.props.value }
           { this.state.name === STATE_EDITING &&
               this.props.renderEditComponent({
                 content: this.state.content,
                 onCommit: this.commitChanges,
                 onDiscard: this.dicardChanges,
                 onChange: this.contentChanged,
+                stateName: this.state.name,
               })
           }
           { this.state.name === STATE_SAVING && <TextBeingSaved>{this.renderContentOnSaving()}</TextBeingSaved> }
@@ -190,11 +205,11 @@ class InlineEdit extends Component {
 }
 
 InlineEdit.propTypes = {
-  children: PropTypes.any,
   onCommit: PropTypes.func.isRequired,
   saving: PropTypes.bool,
   renderEditComponent: PropTypes.func.isRequired,
   displayEditElementWhenSaving: PropTypes.bool,
+  value: PropTypes.oneOf(PropTypes.string, PropTypes.number, PropTypes.instanceOf(Date)),
 };
 
 export default InlineEdit;

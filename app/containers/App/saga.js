@@ -30,6 +30,7 @@ export function* handleExpiredSection() {
 }
 
 export function* handleUnauthorizedAccess() {
+  yield put(cleanUpState());
   yield put(push('/auth'));
 }
 

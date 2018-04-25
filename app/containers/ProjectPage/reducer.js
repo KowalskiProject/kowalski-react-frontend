@@ -48,9 +48,7 @@ const initialState = fromJS({
   loadingProjectError: '',
   loadingUsersError: '',
   isAddPeopleFormOpen: false,
-  updateProjectAttributesStatus: {
-    name: false,
-  },
+  updateProjectAttributesStatus: {},
   updateProjectAttributesErrorMsg: '',
 });
 
@@ -58,6 +56,10 @@ function projectPageReducer(state = initialState, { type, payload }) {
   switch (type) {
     case UPDATE_SELECTED_PROJECT_CODE:
       return state
+        .set('updateProjectAttributesStatus', initialState.get('updateProjectAttributesStatus'))
+        .set('updateProjectAttributesErrorMsg', initialState.get('updateProjectAttributesErrorMsg'))
+        .set('loadingProjectError', '')
+        .set('selectedProject', null)
         .set('selectedProjectId', payload);
     case LOADED_SELECTED_PROJECT:
       return state

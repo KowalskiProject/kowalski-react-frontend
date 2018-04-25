@@ -88,10 +88,10 @@ export function* handleTimeRecordsLoading({ payload }) {
     return;
   }
 
-  const from = formatDate(startOfWeek(payload));
-  const to = formatDate(endOfWeek(payload));
-
   try {
+    const from = formatDate(startOfWeek(payload));
+    const to = formatDate(endOfWeek(payload));
+
     const timeRecords = yield call(fetchTimeRecords, {
       params: { from, to },
       userId,

@@ -127,9 +127,8 @@ export function GeneralTab(props) {
         <InlineTextEdit
           onCommit={(name) => props.updateProjectAttribute(Map({ name, projectId }))}
           saving={props.updateProjectAttributesStatus.get('name')}
-        >
-          {project.get('name')}
-        </InlineTextEdit>
+          value={project.get('name')}
+        />
       </ProjectNameWrapper>
       <ProjectInfoWrapper className="columns">
         <ProjectStartDateWrapper className="column">
@@ -140,9 +139,8 @@ export function GeneralTab(props) {
             <InlineDateEdit
               onCommit={(startDate) => props.updateProjectAttribute(Map({ startDate, projectId }))}
               saving={props.updateProjectAttributesStatus.get('startDate')}
-            >
-              {project.get('startDate')}
-            </InlineDateEdit>
+              value={project.get('startDate')}
+            />
           </ProjectStartDateContent>
         </ProjectStartDateWrapper>
         <ProjectEndDateWrapper className="column">
@@ -153,9 +151,8 @@ export function GeneralTab(props) {
             <InlineDateEdit
               onCommit={(endDate) => props.updateProjectAttribute(Map({ endDate, projectId }))}
               saving={props.updateProjectAttributesStatus.get('endDate')}
-            >
-              {project.get('endDate')}
-            </InlineDateEdit>
+              value={project.get('endDate')}
+            />
           </ProjectEndDateContent>
         </ProjectEndDateWrapper>
       </ProjectInfoWrapper>
@@ -167,9 +164,8 @@ export function GeneralTab(props) {
           <InlineTextEdit
             onCommit={(description) => props.updateProjectAttribute(Map({ description, projectId }))}
             saving={props.updateProjectAttributesStatus.get('description')}
-          >
-            {project.get('description')}
-          </InlineTextEdit>
+            value={project.get('description')}
+          />
         </ProjectDescriptionContent>
       </ProjectDescriptionWrapper>
       <ProjectPeopleWrapper>
