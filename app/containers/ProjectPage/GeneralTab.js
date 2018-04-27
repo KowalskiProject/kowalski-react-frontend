@@ -17,6 +17,7 @@ import { updateProjectAttribute } from './actions';
 import { makeSelectUpdateProjectAttributesStatus, makeSelectUpdateProjectAttributesErrorMsg } from './selectors';
 import InlineTextEdit from '../../components/InlineTextEdit';
 import InlineDateEdit from '../../components/InlineDateEdit';
+import InlineSelectEdit from '../../components/InlineSelectEdit';
 
 const ProjectNameWrapper = styled.div`
   margin-right: 2rem;
@@ -30,24 +31,7 @@ const ProjectInfoWrapper = styled.div`
   padding-bottom: 1rem;
 `;
 
-const ProjectStartDateHeader = styled.h4`
-`;
-
-const ProjectStartDateContent = styled.div`
-`;
-
-const ProjectEndDateHeader = styled.h4`
-`;
-
-const ProjectEndDateContent = styled.div`
-`;
-
-const ProjectStartDateWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
-
-const ProjectEndDateWrapper = styled.div`
+const FlexFieldContainer = styled.div`
   display: flex;
   flex-direction: column;
 `;
@@ -105,18 +89,22 @@ const ErrorMsgBoxWrapper = styled.div`
 
 export function GeneralTab(props) {
   const {
-    project,
     isAddPeopleFormOpen,
     closeAddPeopleForm,
     usersNotInProject,
     updateProjectAttributesErrorMsg,
   } = props;
 
+  const project = props.project;
+
   if (!project) {
     return <div></div>;
   }
 
   const projectId = project.get('projectId');
+  const accountableOptions = project.get('people').map(
+    (person) => ({ value: person.get('kUserId'), label: person.get('name') })
+  ).toJS();
 
   return (
     <div style={{ flexGrow: '1', display: 'flex', flexDirection: 'column' }}>
@@ -131,30 +119,37 @@ export function GeneralTab(props) {
         />
       </ProjectNameWrapper>
       <ProjectInfoWrapper className="columns">
-        <ProjectStartDateWrapper className="column">
-          <ProjectStartDateHeader>
-            <FormattedMessage {... messages.generalTabProjectStartDate} />
-          </ProjectStartDateHeader>
-          <ProjectStartDateContent>
+        <FlexFieldContainer className="column">
+          <h4><FormattedMessage {... messages.generalTabProjectAccountable} /></h4>
+          <div>
+            <InlineSelectEdit
+              onCommit={(accountableId) => props.updateProjectAttribute(Map({ accountableId, projectId }))}
+              saving={props.updateProjectAttributesStatus.get('accountableId')}
+              value={project.get('accountableId')}
+              options={accountableOptions}
+            />
+          </div>
+        </FlexFieldContainer>
+        <FlexFieldContainer className="column">
+          <h4><FormattedMessage {... messages.generalTabProjectStartDate} /></h4>
+          <div>
             <InlineDateEdit
               onCommit={(startDate) => props.updateProjectAttribute(Map({ startDate, projectId }))}
               saving={props.updateProjectAttributesStatus.get('startDate')}
               value={project.get('startDate')}
             />
-          </ProjectStartDateContent>
-        </ProjectStartDateWrapper>
-        <ProjectEndDateWrapper className="column">
-          <ProjectEndDateHeader>
-            <FormattedMessage {... messages.generalTabProjectEndDate} />
-          </ProjectEndDateHeader>
-          <ProjectEndDateContent>
+          </div>
+        </FlexFieldContainer>
+        <FlexFieldContainer className="column">
+          <h4><FormattedMessage {... messages.generalTabProjectEndDate} /></h4>
+          <div>
             <InlineDateEdit
               onCommit={(endDate) => props.updateProjectAttribute(Map({ endDate, projectId }))}
               saving={props.updateProjectAttributesStatus.get('endDate')}
               value={project.get('endDate')}
             />
-          </ProjectEndDateContent>
-        </ProjectEndDateWrapper>
+          </div>
+        </FlexFieldContainer>
       </ProjectInfoWrapper>
       <ProjectDescriptionWrapper>
         <ProjectDescriptionHeader>

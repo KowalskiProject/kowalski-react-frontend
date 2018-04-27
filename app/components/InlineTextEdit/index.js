@@ -20,7 +20,7 @@ const renderTextarea = ({ content, onCommit, onChange }) => (
   <TextArea
     autoFocus="true"
     value={content}
-    onChange={onChange}
+    onChange={(evt) => onChange(evt.target.value)}
     onBlur={onCommit}
   />
 );

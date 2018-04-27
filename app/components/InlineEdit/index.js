@@ -92,6 +92,14 @@ class InlineEdit extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    // Whenever a new value is received, update the content
+    if (this.props.value !== nextProps.value) {
+      this.setState({
+        ...this.state,
+        content: nextProps.value,
+      });
+    }
+
     if (nextProps.saving !== (this.state.name === STATE_SAVING)) {
       this.setState({
         ...this.state,
@@ -99,19 +107,10 @@ class InlineEdit extends Component {
         content: nextProps.saving ? this.state.content : this.props.value,
       });
     }
-
-    // Whenever a new value is received, update the content
-    if (this.props.value !== nextProps.value) {
-      this.setState({
-        ...this.state,
-        state: STATE_NORMAL,
-        content: nextProps.value,
-      });
-    }
   }
 
-  contentChanged(evt) {
-    this.setState({ ...this.state, content: evt.target.value });
+  contentChanged(content) {
+    this.setState({ ...this.state, content });
   }
 
   unhover() {
@@ -137,13 +136,8 @@ class InlineEdit extends Component {
   edit() { this.setState({ ...this.state, name: STATE_EDITING }); }
   save() { this.setState({ ...this.state, name: STATE_SAVING }); }
 
-  renderButtonsContainerNonEditingState() {
-    return (
-      <EditButton>
-        { this.state.name !== STATE_SAVING && <FaPencil size={18} /> }
-        { this.state.name === STATE_SAVING && <ClipLoader size={18} /> }
-      </EditButton>
-    );
+  formatValue() {
+    return this.props.formatter ? this.props.formatter(this.props.value) : this.props.value;
   }
 
   renderButtonsContainerForEditingState(stateName) {
@@ -159,18 +153,57 @@ class InlineEdit extends Component {
     );
   }
 
+  renderEditComponent() {
+    return this.props.renderEditComponent({
+      content: this.state.content,
+      onCommit: this.commitChanges,
+      onDiscard: this.dicardChanges,
+      onChange: this.contentChanged,
+      stateName: this.state.name,
+    });
+  }
+
   renderContentOnSaving() {
     if (this.props.displayEditElementWhenSaving) {
-      return this.props.renderEditComponent({
-        content: this.state.content,
-        onCommit: this.commitChanges,
-        onDiscard: this.dicardChanges,
-        onChange: this.contentChanged,
-        stateName: this.state.name,
-      });
+      return <TextBeingSaved>{this.renderEditComponent()}</TextBeingSaved>;
     }
 
-    return this.state.content;
+    return (
+      <TextBeingSaved>
+        {
+          this.props.formatter
+            ? this.props.formatter(this.state.content)
+            : this.state.content
+        }
+      </TextBeingSaved>
+    );
+  }
+
+  renderButtonsContainerNonEditingState() {
+    return (
+      <EditButton>
+        { this.state.name !== STATE_SAVING && <FaPencil size={18} /> }
+        { this.state.name === STATE_SAVING && <ClipLoader size={18} /> }
+      </EditButton>
+    );
+  }
+
+  renderContentOnHovered() {
+    const formattedValue = this.formatValue();
+    if (this.props.displayEditElementWhenOnHover) {
+      return this.renderEditComponent();
+    }
+
+    return formattedValue;
+  }
+
+  renderContentOnNormalState() {
+    const formattedValue = this.formatValue();
+    if (this.props.displayEditElementWhenNormal) {
+      return this.renderEditComponent();
+    }
+
+    return formattedValue;
   }
 
   render() {
@@ -183,18 +216,11 @@ class InlineEdit extends Component {
         title={'Click for edit'}
       >
         <ContentContainer>
-          { (this.state.name === STATE_NORMAL || this.state.name === STATE_HOVERED) && this.props.value }
-          { this.state.name === STATE_EDITING &&
-              this.props.renderEditComponent({
-                content: this.state.content,
-                onCommit: this.commitChanges,
-                onDiscard: this.dicardChanges,
-                onChange: this.contentChanged,
-                stateName: this.state.name,
-              })
-          }
-          { this.state.name === STATE_SAVING && <TextBeingSaved>{this.renderContentOnSaving()}</TextBeingSaved> }
+          { this.state.name === STATE_NORMAL && this.renderContentOnNormalState() }
+          { this.state.name === STATE_HOVERED && this.renderContentOnHovered() }
+          { this.state.name === STATE_EDITING && this.renderEditComponent() }
           { this.state.name === STATE_EDITING && this.renderButtonsContainerForEditingState(this.state.name) }
+          { this.state.name === STATE_SAVING && this.renderContentOnSaving() }
         </ContentContainer>
         <ButtonsContainer stateName={this.state.name}>
           { this.state.name !== STATE_EDITING && this.renderButtonsContainerNonEditingState() }
@@ -205,10 +231,13 @@ class InlineEdit extends Component {
 }
 
 InlineEdit.propTypes = {
+  formatter: PropTypes.func, // Optional function to format the value shown
   onCommit: PropTypes.func.isRequired,
   saving: PropTypes.bool,
   renderEditComponent: PropTypes.func.isRequired,
   displayEditElementWhenSaving: PropTypes.bool,
+  displayEditElementWhenOnHover: PropTypes.bool,
+  displayEditElementWhenNormal: PropTypes.bool,
   value: PropTypes.oneOf(PropTypes.string, PropTypes.number, PropTypes.instanceOf(Date)),
 };
 

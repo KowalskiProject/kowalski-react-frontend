@@ -61,6 +61,7 @@
   "app.containers.ProjectPage.activitiesTab": "Activities",
   "app.containers.ProjectPage.activitiesTab.resourceNamePlural": "activities",
   "app.containers.ProjectPage.generalTabProjectDescription": "Description",
+  "app.containers.ProjectPage.generalTabProjectAccountable": "Accountable",
   "app.containers.ProjectPage.generalTabProjectStartDate": "Start Date",
   "app.containers.ProjectPage.generalTabProjectEndDate": "End Date",
   "app.containers.ProjectPage.generalTabProjectPeople": "People",

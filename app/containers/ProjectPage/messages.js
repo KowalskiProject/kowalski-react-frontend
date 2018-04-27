@@ -20,6 +20,7 @@ export default defineMessages({
   generalTab: { id: 'app.containers.ProjectPage.generalTab' },
   activitiesTab: { id: 'app.containers.ProjectPage.activitiesTab' },
   generalTabProjectDescription: { id: 'app.containers.ProjectPage.generalTabProjectDescription' },
+  generalTabProjectAccountable: { id: 'app.containers.ProjectPage.generalTabProjectAccountable' },
   generalTabProjectStartDate: { id: 'app.containers.ProjectPage.generalTabProjectStartDate' },
   generalTabProjectEndDate: { id: 'app.containers.ProjectPage.generalTabProjectEndDate' },
   generalTabProjectPeople: { id: 'app.containers.ProjectPage.generalTabProjectPeople' },

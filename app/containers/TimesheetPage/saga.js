@@ -81,10 +81,12 @@ export function* handleSubmitLogForm({ payload }) {
 }
 
 export function* handleTimeRecordsLoading({ payload }) {
+  console.log('Started fetching time records');
   const userId = localStorage.getItem('currentUserId');
 
   if (!userId) {
     yield put(expiredSessionDetected());
+    console.log('Oh no, expired session detected');
     return;
   }
 
@@ -92,14 +94,17 @@ export function* handleTimeRecordsLoading({ payload }) {
     const from = formatDate(startOfWeek(payload));
     const to = formatDate(endOfWeek(payload));
 
+    console.log('Will fetch now');
     const timeRecords = yield call(fetchTimeRecords, {
       params: { from, to },
       userId,
       ...genCommonReqConfig(),
     });
 
+    console.log('Fetched time records successfully');
     yield put(endedLoadingTimeRecords({ success: true, data: fromJS(timeRecords) }));
   } catch (error) {
+    console.log('God danmit. Hit an error while trying to load the timerecords');
     yield put(requestErrorReceived({
       error,
       dispatchOnAuthError: [endedLoadingTimeRecords({ success: false })],

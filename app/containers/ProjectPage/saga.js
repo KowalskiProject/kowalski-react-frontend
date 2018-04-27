@@ -38,7 +38,6 @@ import {
 import {
   getProjects,
   getProject,
-  // getProjectAccountable,
   getProjectMembers,
   getProjectActivities,
   createActivity,

@@ -13,7 +13,7 @@ import InlineEdit, { STATE_SAVING } from '../InlineEdit';
 const renderDatePicker = ({ content, onCommit, onChange, stateName }) => (
   <Flatpickr
     value={content}
-    onChange={([date]) => onChange({ target: { value: date } })}
+    onChange={([date]) => onChange(date)}
     onClose={() => setTimeout(onCommit)}
     ref={(ref) => {
       if (ref && ref.node && stateName !== STATE_SAVING) {
