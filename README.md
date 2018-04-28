@@ -11,6 +11,14 @@ docker build . -t kowalski/saturno
 docker run --rm -p 3443:443 -v /path/to/certificate.crt:/etc/nginx/ssl/certificate.crt -v /path/to/server.key:/etc/nginx/ssl/server.key kowalski/saturno
 ```
 
+# Roadmap
+
+* Fix current unit tests
+* Setup CI/CD with unit tests coverage information being visible in the README.md
+* Reach 90% coverage of unit tests
+* Migrate codebase to Typescript
+* Update react to 16.3+ and Redux to 4.0+
+
 # Contribution Guidelines
   * Fork the project.
   * Branch master and start working on your feature.
