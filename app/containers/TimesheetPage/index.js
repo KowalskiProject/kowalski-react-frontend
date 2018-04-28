@@ -142,7 +142,7 @@ class TimesheetPage extends React.Component {
     this.selectTimeRecordForEdition = this.selectTimeRecordForEdition.bind(this);
   }
 
-  componentWillMount() {
+  componentDidMount() {
     if (!isSameWeek(this.props.selectedDate, this.props.cachedSelectedDate)) {
       this.props.loadTimeRecordsForWeekDate(this.props.selectedDate);
       this.props.updateCachedSelectDate(this.props.selectedDate);

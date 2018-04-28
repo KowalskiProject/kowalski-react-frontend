@@ -274,7 +274,8 @@ export function* handleUpdateProjectAttribute({ payload }) {
       error: e,
       dispatchOnAnyError: [endUpdatingProjectAttribute(projectData)],
       dispatchOnOtherErrors: [
-        popUpdateProjectErrorMsg(`Houve um erro ao tentar salvar o atriburo ${projectData.keySeq().join(', ')}`),
+        // popUpdateProjectErrorMsg(`Houve um erro ao tentar salvar o atriburo ${projectData.keySeq().join(', ')}`),
+        popUpdateProjectErrorMsg(`${projectData.keySeq().join(', ')}`),
       ],
     }));
   }

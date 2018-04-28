@@ -19,7 +19,17 @@ export default defineMessages({
   newTaskButtonCancel: { id: 'app.containers.ProjectPage.newTaskButtonCancel' },
   generalTab: { id: 'app.containers.ProjectPage.generalTab' },
   activitiesTab: { id: 'app.containers.ProjectPage.activitiesTab' },
+
+  generalTabErrorUpdatingCode: { id: 'app.containers.ProjectPage.generalTabErrorUpdatingCode' },
+  generalTabErrorUpdatingDescription: { id: 'app.containers.ProjectPage.generalTabErrorUpdatingDescription' },
+  generalTabErrorUpdatingName: { id: 'app.containers.ProjectPage.generalTabErrorUpdatingName' },
+  generalTabErrorUpdatingAccountableId: { id: 'app.containers.ProjectPage.generalTabErrorUpdatingAccountableId' },
+  generalTabErrorUpdatingStartDate: { id: 'app.containers.ProjectPage.generalTabErrorUpdatingStartDate' },
+  generalTabErrorUpdatingEndDate: { id: 'app.containers.ProjectPage.generalTabErrorUpdatingEndDate' },
+  generalTabErrorUpdatingAttribute: { id: 'app.containers.ProjectPage.generalTabErrorUpdatingAttribute' },
+
   generalTabProjectDescription: { id: 'app.containers.ProjectPage.generalTabProjectDescription' },
+  generalTabProjectCode: { id: 'app.containers.ProjectPage.generalTabProjectCode' },
   generalTabProjectAccountable: { id: 'app.containers.ProjectPage.generalTabProjectAccountable' },
   generalTabProjectStartDate: { id: 'app.containers.ProjectPage.generalTabProjectStartDate' },
   generalTabProjectEndDate: { id: 'app.containers.ProjectPage.generalTabProjectEndDate' },

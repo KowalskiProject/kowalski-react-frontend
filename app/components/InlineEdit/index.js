@@ -14,6 +14,7 @@ import { ClipLoader } from 'react-spinners';
 
 const Container = styled.div`
   display: flex;
+  flex-grow: 1;
 
   ${({ stateName }) => (
     [STATE_HOVERED, STATE_EDITING].includes(stateName) ? `

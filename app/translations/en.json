@@ -60,7 +60,17 @@
   "app.containers.ProjectPage.generalTab": "General",
   "app.containers.ProjectPage.activitiesTab": "Activities",
   "app.containers.ProjectPage.activitiesTab.resourceNamePlural": "activities",
+
+  "app.containers.ProjectPage.generalTabErrorUpdatingAttribute": "There was an erro while trying to update the field",
+  "app.containers.ProjectPage.generalTabErrorUpdatingCode": "code",
+  "app.containers.ProjectPage.generalTabErrorUpdatingDescription": "description",
+  "app.containers.ProjectPage.generalTabErrorUpdatingName": "name",
+  "app.containers.ProjectPage.generalTabErrorUpdatingAccountableId": "accountable",
+  "app.containers.ProjectPage.generalTabErrorUpdatingStartDate": "start date",
+  "app.containers.ProjectPage.generalTabErrorUpdatingEndDate": "end date",
+
   "app.containers.ProjectPage.generalTabProjectDescription": "Description",
+  "app.containers.ProjectPage.generalTabProjectCode": "Code",
   "app.containers.ProjectPage.generalTabProjectAccountable": "Accountable",
   "app.containers.ProjectPage.generalTabProjectStartDate": "Start Date",
   "app.containers.ProjectPage.generalTabProjectEndDate": "End Date",
