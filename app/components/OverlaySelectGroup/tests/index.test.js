@@ -1,10 +1,13 @@
-// import React from 'react';
-// import { shallow } from 'enzyme';
+import React from 'react';
+import { shallow } from 'enzyme';
 
-// import OverlaySelectGroup from '../index';
+import OverlaySelectGroup from '../index';
 
 describe('<OverlaySelectGroup />', () => {
-  it('Expect to have unit tests specified', () => {
-    expect(true).toEqual(false);
+  it('renders', () => {
+    const renderedComponent = shallow(
+      <OverlaySelectGroup />
+    );
+    expect(renderedComponent.html()).toMatchSnapshot();
   });
 });

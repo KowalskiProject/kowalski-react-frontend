@@ -30,7 +30,9 @@ InputField.propTypes = {
   type: PropTypes.string,
   placeholder: PropTypes.string,
   label: PropTypes.string,
-  meta: PropTypes.any,
+  meta: PropTypes.shape({
+    touched: PropTypes.bool,
+  }).isRequired,
   fieldStyle: PropTypes.object,
   disabled: PropTypes.bool,
 };

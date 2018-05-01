@@ -1,18 +1,18 @@
 
 import {
-  defaultAction,
+  startPeopleLoading,
 } from '../actions';
 import {
-  DEFAULT_ACTION,
+  START_PEOPLE_LOADING,
 } from '../constants';
 
 describe('PeoplePage actions', () => {
-  describe('Default Action', () => {
-    it('has a type of DEFAULT_ACTION', () => {
+  describe('Start People Loading Action', () => {
+    it('has a type of START_PEOPLE_LOADING', () => {
       const expected = {
-        type: DEFAULT_ACTION,
+        type: START_PEOPLE_LOADING,
       };
-      expect(defaultAction()).toEqual(expected);
+      expect(startPeopleLoading()).toEqual(expected);
     });
   });
 });

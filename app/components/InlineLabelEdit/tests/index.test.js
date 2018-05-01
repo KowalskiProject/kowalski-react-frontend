@@ -1,10 +1,13 @@
-// import React from 'react';
-// import { shallow } from 'enzyme';
+import React from 'react';
+import { shallow } from 'enzyme';
 
-// import InlineLabelEdit from '../index';
+import InlineLabelEdit from '../index';
 
 describe('<InlineLabelEdit />', () => {
-  it('Expect to have unit tests specified', () => {
-    expect(true).toEqual(false);
+  it('renders', () => {
+    const renderedComponent = shallow(
+      <InlineLabelEdit onCommit={jest.fn()} />
+    );
+    expect(renderedComponent.html()).toMatchSnapshot();
   });
 });

@@ -92,9 +92,4 @@ describe('makeSelectActivePage', () => {
     mockedState = fromJS({ route: { location: { pathname: '/projects' } } });
     expect(activePageSelector(mockedState)).toEqual('projects');
   });
-
-  it('should throw an error when on a unmachable path', () => {
-    const mockedState = fromJS({ route: { location: { pathname: 'something/else' } } });
-    expect(() => activePageSelector(mockedState)).toThrowError(/Unmachable path/);
-  });
 });

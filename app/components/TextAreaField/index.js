@@ -23,11 +23,15 @@ function TextAreaField({ input, label, type = 'text', placeholder, meta: { touch
 }
 
 TextAreaField.propTypes = {
-  input: PropTypes.object.isRequired,
+  input: PropTypes.shape({
+    id: PropTypes.any,
+  }).isRequired,
   type: PropTypes.string,
   placeholder: PropTypes.string,
   label: PropTypes.string,
-  meta: PropTypes.any,
+  meta: PropTypes.shape({
+    touched: PropTypes.bool.isRequired,
+  }).isRequired,
   disabled: PropTypes.bool,
 };
 

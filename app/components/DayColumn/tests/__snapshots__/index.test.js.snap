@@ -1,0 +1,3 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<DayColumn /> renders 1`] = `"<div class=\\"DayColumn__Wrapper-giFadl feTokT\\"><div class=\\"DayColumn__DayLabelWrapper-jaSPPb cLwSvO\\"><p>Tue</p><p>1</p></div><div class=\\"DayColumn__SlotsContainer-cgmRlA eZlanx\\"><a class=\\"sc-bdVaJa dVJLzw\\" role=\\"button\\" tabindex=\\"0\\">+</a></div></div>"`;

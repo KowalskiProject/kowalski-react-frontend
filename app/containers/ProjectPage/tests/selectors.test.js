@@ -1,8 +1,14 @@
-// import { fromJS } from 'immutable';
-// import { selectProjectPageDomain } from '../selectors';
+import { fromJS } from 'immutable';
+import { selectProjectPageDomain } from '../selectors';
 
 describe('selectProjectPageDomain', () => {
-  it('Expect to have unit tests specified', () => {
-    expect(true).toEqual(false);
+  it('selects the proper substate', () => {
+    const state = fromJS({
+      testing: 'a',
+      projectspage: {
+        testing2: 'b',
+      },
+    });
+    expect(selectProjectPageDomain(state)).toMatchSnapshot();
   });
 });

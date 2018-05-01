@@ -86,7 +86,7 @@ const TabContentWrapper = styled.div`
   margin-left: 2rem;
 `;
 
-class ProjectPage extends React.PureComponent {
+export class ProjectPage extends React.PureComponent {
   componentDidMount() {
     this.props.loadProjectCodes();
     this.props.loadUsers();
@@ -217,8 +217,8 @@ class ProjectPage extends React.PureComponent {
 ProjectPage.propTypes = {
   projectCodes: PropTypes.objectOf(List).isRequired,
   match: PropTypes.object,
-  updateSelectedProjectId: PropTypes.func,
-  loadProjectCodes: PropTypes.func,
+  updateSelectedProjectId: PropTypes.func.isRequired,
+  loadProjectCodes: PropTypes.func.isRequired,
   loadUsers: PropTypes.func.isRequired,
   selectedTab: PropTypes.number,
   selectedTabChanged: PropTypes.func,

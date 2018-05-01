@@ -88,7 +88,7 @@ const ProjectListWrapper = styled.div`
   flex-direction: column;
 `;
 
-class ProjectsPage extends React.Component { // eslint-disable-line react/prefer-stateless-function
+export class ProjectsPage extends React.Component { // eslint-disable-line react/prefer-stateless-function
   componentDidMount() {
     this.props.startProjectLoading();
   }
@@ -165,7 +165,7 @@ class ProjectsPage extends React.Component { // eslint-disable-line react/prefer
 }
 
 ProjectsPage.propTypes = {
-  projects: PropTypes.instanceOf(List),
+  projects: PropTypes.instanceOf(List).isRequired,
   openNewProjectForm: PropTypes.func,
   isNewProjectFormOpen: PropTypes.bool,
   closeNewProjectForm: PropTypes.func,

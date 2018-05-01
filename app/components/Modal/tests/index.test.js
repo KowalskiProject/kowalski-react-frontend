@@ -1,10 +1,13 @@
-// import React from 'react';
-// import { shallow } from 'enzyme';
+import React from 'react';
+import { shallow } from 'enzyme';
 
-// import Modal from '../index';
+import Modal from '../index';
 
 describe('<Modal />', () => {
-  it('Expect to have unit tests specified', () => {
-    expect(true).toEqual(false);
+  it('renders', () => {
+    const renderedComponent = shallow(
+      <Modal />
+    );
+    expect(renderedComponent.html()).toMatchSnapshot();
   });
 });

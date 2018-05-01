@@ -1,0 +1,3 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<ProjectsPage /> renders 1`] = `"<div class=\\"kowalski-react-basic-container ProjectsPage__MainContainerWrapper-WbKmc jXcUyd\\"><!-- react-empty: 2 --><div class=\\"ProjectsPage__TitleBar-fqHHBt dGBGys\\"><h1 class=\\"ProjectsPage__PageTitle-NmeSH fIKzgA\\"><span>Projects</span></h1></div><div class=\\"ProjectsPage__ProjectListWrapper-kVbeTB jZprfF\\"><div class=\\"css-jxiqlq\\"><div class=\\"css-1lt1sep\\"></div><div class=\\"css-1vahj0q\\"></div></div></div><!-- react-empty: 9 --></div>"`;

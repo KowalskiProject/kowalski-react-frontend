@@ -1,0 +1,10 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`authPageReducer returns the initial state 1`] = `
+Immutable.Map {
+  username: "",
+  password: "",
+  isSubmitting: false,
+  serverErrorMsg: "",
+}
+`;

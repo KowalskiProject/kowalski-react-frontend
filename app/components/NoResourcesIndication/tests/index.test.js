@@ -1,10 +1,17 @@
-// import React from 'react';
-// import { shallow } from 'enzyme';
+import React from 'react';
+import { mount } from 'enzyme';
+import { IntlProvider } from 'react-intl';
 
-// import NoResourcesIndication from '../index';
+import NoResourcesIndication from '../index';
+import { translationMessages } from '../../../i18n';
 
 describe('<NoResourcesIndication />', () => {
-  it('Expect to have unit tests specified', () => {
-    expect(true).toEqual(false);
+  it('renders', () => {
+    const renderedComponent = mount(
+      <IntlProvider locale="en" messages={translationMessages.en}>
+        <NoResourcesIndication resourceName="users" />
+      </IntlProvider>
+    );
+    expect(renderedComponent.html()).toMatchSnapshot();
   });
 });

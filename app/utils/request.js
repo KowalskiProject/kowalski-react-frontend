@@ -39,7 +39,7 @@ function checkStatus(response) {
  *
  * @return {object}           The response data
  */
-export default function request(url, { parseResponse = true, saveNewToken = true, ...options }) {
+export default function request(url, { parseResponse = true, saveNewToken = true, ...options } = {}) {
   return fetch(url, options)
     .then(checkStatus)
     .then((response) => saveNewToken ? saveToken(response) : response)

@@ -31,10 +31,9 @@ const makeSelectActivePage = () => createSelector(
       return 'projects';
     } else if (path.match(/people/gi)) {
       return 'people';
-    } else if (path.match(/timesheet/gi)) {
-      return 'timesheet';
     }
-    throw new Error(`Unmachable path: ${path}`);
+
+    return 'timesheet';
   }
 );
 
