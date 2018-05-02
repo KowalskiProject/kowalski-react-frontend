@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/KowalskiProject/kowalski-react-frontend.svg?branch=master)](https://travis-ci.org/KowalskiProject/kowalski-react-frontend)
+
 # Quick Start
 ```shell
 yarn install
