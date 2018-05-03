@@ -12,7 +12,7 @@ describe('<DayColumn />', () => {
       <IntlProvider locale="en" messages={translationMessages.en}>
         {
           React.createElement(injectIntl(DayColumn), {
-            day: new Date(),
+            day: new Date(2014, 1, 1),
             onFreeSlotClick: jest.fn(),
             onSlotClicked: jest.fn(),
             timeRecords: fromJS([]),

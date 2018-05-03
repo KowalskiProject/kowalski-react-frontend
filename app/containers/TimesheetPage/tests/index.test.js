@@ -12,8 +12,8 @@ describe('<TimesheetPage />', () => {
       <MemoryRouter>
         <IntlProvider locale="en" messages={translationMessages.en}>
           <TimesheetPage
-            selectedDate={new Date()}
-            selectedRange={[new Date(), new Date()]}
+            selectedDate={new Date(2014, 1, 1)}
+            selectedRange={[new Date(2014, 1, 1), new Date(2014, 1, 1)]}
             closeTaskOverlaySelect={jest.fn()}
             openTaskOverlaySelect={jest.fn()}
             updateCachedSelectDate={jest.fn()}
