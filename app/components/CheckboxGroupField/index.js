@@ -7,6 +7,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import { fromJS } from 'immutable';
 
 const CheckboxContainer = styled.div`
   display: flex;
@@ -33,12 +34,11 @@ DefaultCheckboxGroupItem.propTypes = {
 };
 
 const createChangeHandler = ({ input, input: { onChange, onBlur }, value }) => (event) => {
-  // TODO change the code to handle value as a List from immutable
-  const arr = [...input.value];
+  let arr = input.value || fromJS([]);
   if (event.target.checked) {
-    arr.push(value);
+    arr = arr.push(value);
   } else {
-    arr.splice(arr.indexOf(value), 1);
+    arr = arr.delete(arr.findIndex((v) => v === input.value));
   }
   onBlur(arr);
   return onChange(arr);
