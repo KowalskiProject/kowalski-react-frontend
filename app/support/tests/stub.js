@@ -1,6 +1,11 @@
+import format from 'date-fns/format';
+
 export const dummyBooleanFunction = () => true;
-export const dummyStringFunction = () => '';
-export const dummyIntlObject = { formatMessage: dummyStringFunction };
+export const dummyStringFunction = () => 'dummy';
+export const dummyIntlObject = { intl: {
+  formatMessage: dummyStringFunction,
+  formatDate: format,
+} };
 export const mockLocalStorage = () => {
   const storage = {};
 

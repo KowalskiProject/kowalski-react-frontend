@@ -14,7 +14,7 @@ import { injectIntl } from 'react-intl';
 import isWithinRange from 'date-fns/is_within_range';
 import addDays from 'date-fns/add_days';
 import getDate from 'date-fns/get_date';
-import filter from 'lodash/filter';
+import keys from 'lodash/keys';
 import FaChevronLeft from 'react-icons/lib/fa/chevron-left';
 import FaChevronRight from 'react-icons/lib/fa/chevron-right';
 import { capitalize } from '../../support/string/utils';
@@ -44,14 +44,14 @@ const renderCalendarDay = (
 ) => {
   const isWithinCurrentMonth = isSameMonth(day, referenceDate);
   const isActive = isSameDay(day, referenceDate);
-  const tooltip = filter(tooltips, (k) => isSameDay(k, day))[0];
+  const tooltipKey = keys(tooltips).find((k) => isSameDay(k, day));
   const isStartOfRange = highlightedRanges.some((range) => isSameDay(day, range[0]));
   const isEndOfRange = highlightedRanges.some((range) => isSameDay(day, range[1]));
   const withinRange = isStartOfRange || isEndOfRange || highlightedRanges.some((range) => isWithinRange(day, range[0], range[1]));
 
   const outerClassNameSufixes = [
     isWithinCurrentMonth ? '' : ' is-disabled',
-    tooltip ? ' tooltip' : '',
+    tooltipKey ? ' tooltip' : '',
     withinRange ? ' calendar-range' : '',
     isStartOfRange ? ' range-start' : '',
     isEndOfRange ? ' range-end' : '',
@@ -71,8 +71,8 @@ const renderCalendarDay = (
     className: `date-item ${innerClassNameSufixes.join('')}`,
   };
 
-  if (tooltip) {
-    outerElementProperties['data-tooltip'] = tooltip;
+  if (tooltipKey) {
+    outerElementProperties['data-tooltip'] = tooltips[tooltipKey];
   }
 
   if (dateClickCallback) {
@@ -95,7 +95,7 @@ const renderCalendarDay = (
 const renderCalendarDays = (date, options, dateClickCallback) => extractDaysForCalendar(date)
   .map(renderCalendarDay.bind(this, date, options, dateClickCallback));
 
-function AppCalendar({ selectedDate, options = {}, onNextMonthClicked, onPreviousMonthClicked, onDateClicked, intl }) {
+export function AppCalendar({ selectedDate, options = {}, onNextMonthClicked, onPreviousMonthClicked, onDateClicked, intl }) {
   return (
     <div className="calendar">
       <div className="calendar-nav">
