@@ -1,3 +1,5 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`<ErrorMessageBox /> renders 1`] = `"<div></div>"`;
+exports[`<ErrorMessageBox /> renders properly when there are no messages 1`] = `"<div></div>"`;
+
+exports[`<ErrorMessageBox /> renders properly when there is a message 1`] = `"<div class=\\"message is-danger ErrorMessageBox__Container-dsKmoD jLVSwp\\"><div class=\\"message-body ErrorMessageBox__Container-dsKmoD jLVSwp\\">test</div></div>"`;

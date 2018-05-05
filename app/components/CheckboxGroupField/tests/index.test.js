@@ -48,7 +48,7 @@ describe('<CheckboxGroupField />', () => {
   it('updates the state accordingly', () => {
     const renderedComponent = renderComponent();
     const getStoreValue = () => (store.getState().get('form').get('test').get('values') || fromJS({})).get('test');
-    // expect(getStoreValue()).toBeFalsy();
+    expect(getStoreValue()).toBeFalsy();
     renderedComponent.find('input[type="checkbox"][value="A"]').first().simulate('change', { target: { checked: true } });
     expect(getStoreValue()).toEqual(fromJS(['A']));
     renderedComponent.find('input[type="checkbox"][value="B"]').first().simulate('change', { target: { checked: true } });

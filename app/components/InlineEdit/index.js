@@ -78,6 +78,17 @@ const TextBeingSaved = styled.span`
   color: grey;
 `;
 
+// TODO Refactor to be a presentational component, should not have internal state
+// InlineEdit =>
+//  Presentational component
+//  Props:
+//    - state(saving, normal, hovered, editing)
+//    - value
+//    - onCommit onDiscard onChange
+//    - children: Funcao para renderizacao do componente de edicao ()
+// InlineEdit =>
+//  Presentational component
+//  Props:
 class InlineEdit extends Component {
   constructor(props) {
     super(props);
@@ -101,7 +112,7 @@ class InlineEdit extends Component {
       });
     }
 
-    if (nextProps.saving !== (this.state.name === STATE_SAVING)) {
+    if (!!nextProps.saving !== (this.state.name === STATE_SAVING)) {
       this.setState({
         ...this.state,
         name: nextProps.saving ? STATE_SAVING : STATE_NORMAL,

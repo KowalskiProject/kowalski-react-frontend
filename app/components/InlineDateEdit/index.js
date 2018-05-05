@@ -10,11 +10,14 @@ import 'flatpickr/dist/themes/material_green.css';
 import Flatpickr from 'react-flatpickr';
 import InlineEdit, { STATE_SAVING } from '../InlineEdit';
 
+export const onDatePickerChange = (onChange) => ([date]) => onChange(date);
+export const onDatePickerClose = (onCommit) => () => setTimeout(onCommit);
+
 const renderDatePicker = ({ content, onCommit, onChange, stateName }) => (
   <Flatpickr
     value={content}
-    onChange={([date]) => onChange(date)}
-    onClose={() => setTimeout(onCommit)}
+    onChange={onDatePickerChange(onChange)}
+    onClose={onDatePickerClose(onCommit)}
     ref={(ref) => {
       if (ref && ref.node && stateName !== STATE_SAVING) {
         ref.node.focus();
