@@ -18,7 +18,9 @@ const SelectedOption = styled.a`
 `;
 
 function OverlaySelectOption({ onOptionSelect, selectedOption, children, value }) {
-  const OptionElement = selectedOption ? SelectedOption : Option;
+  const OptionElement = selectedOption === value || children
+    ? SelectedOption
+    : Option;
   const finalValue = value || children;
 
   return (

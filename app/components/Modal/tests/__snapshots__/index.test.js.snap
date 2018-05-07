@@ -1,3 +1,5 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`<Modal /> renders 1`] = `"<div class=\\"modal\\"><div class=\\"modal-background\\"></div><div class=\\"modal-content\\"></div><button class=\\"modal-close is-large\\" aria-label=\\"close\\"></button></div>"`;
+exports[`<Modal /> when it is active renders 1`] = `"<div class=\\"modal is-active\\"><div class=\\"modal-background\\"></div><div class=\\"modal-content\\">teste</div><button class=\\"modal-close is-large\\" aria-label=\\"close\\"></button></div>"`;
+
+exports[`<Modal /> when it is not active does not render 1`] = `"<div class=\\"modal\\"><div class=\\"modal-background\\"></div><div class=\\"modal-content\\">teste</div><button class=\\"modal-close is-large\\" aria-label=\\"close\\"></button></div>"`;

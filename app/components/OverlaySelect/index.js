@@ -77,7 +77,7 @@ OverlaySelect.propTypes = {
   children: PropTypes.any,
   onOptionSelect: PropTypes.func.isRequired,
   selectedOption: PropTypes.any,
-  title: PropTypes.string,
+  title: PropTypes.string.isRequired,
   opened: PropTypes.bool.isRequired,
   onDismiss: PropTypes.func.isRequired,
 };

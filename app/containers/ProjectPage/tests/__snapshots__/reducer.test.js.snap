@@ -23,6 +23,39 @@ Immutable.Map {
   isNewActivityFormDialogOpened: false,
   selectedTab: 0,
   loadingUsersError: "",
+  inlineProjectFormFields: Immutable.Map {
+    name: Immutable.Map {
+      state: "STATE_NORMAL",
+      value: undefined,
+      originalValue: undefined,
+    },
+    accountableId: Immutable.Map {
+      state: "STATE_NORMAL",
+      value: undefined,
+      originalValue: undefined,
+    },
+    startDate: Immutable.Map {
+      state: "STATE_NORMAL",
+      value: undefined,
+      originalValue: undefined,
+    },
+    endDate: Immutable.Map {
+      state: "STATE_NORMAL",
+      value: undefined,
+      originalValue: undefined,
+    },
+    description: Immutable.Map {
+      state: "STATE_NORMAL",
+      value: undefined,
+      originalValue: undefined,
+    },
+    code: Immutable.Map {
+      state: "STATE_NORMAL",
+      value: undefined,
+      originalValue: undefined,
+    },
+  },
+  inlineProjectFormErrorMsg: "",
   selectedProject: null,
   isSubmittingNewActivity: false,
   loadingProjectCodesError: "",

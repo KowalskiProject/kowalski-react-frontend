@@ -1,3 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`<OverlaySelect /> Expect to have unit tests specified 1`] = `"<div class=\\"OverlaySelect__Overlay-kpvDhg gGlSub\\"><h3></h3><div class=\\"OverlaySelect__OverlaySelectInnerContentContainer-dZagTg gNCBAw\\"></div></div>"`;
+exports[`<OverlaySelect /> when not opened does not render 1`] = `"<div></div>"`;
+
+exports[`<OverlaySelect /> when opened when having some children renders 1`] = `"<div class=\\"OverlaySelect__Overlay-kpvDhg gGlSub\\"><h3>My Select is here!</h3><div class=\\"OverlaySelect__OverlaySelectInnerContentContainer-dZagTg gNCBAw\\"><div class=\\"OverlaySelectGroup__OverlaySelectGroupContainer-iMhecZ iNNeSU\\"><h4 class=\\"OverlaySelectGroupHeader__Title-eXcWxW fzQpjT\\"></h4><a class=\\"OverlaySelectOption__Option-douNpL tMoZj\\"></a></div><div class=\\"OverlaySelectGroup__OverlaySelectGroupContainer-iMhecZ iNNeSU\\"><h4 class=\\"OverlaySelectGroupHeader__Title-eXcWxW fzQpjT\\"></h4><a class=\\"OverlaySelectOption__SelectedOption-lkCHwo gNWKrc\\">2</a></div></div></div>"`;
+
+exports[`<OverlaySelect /> when opened without children renders 1`] = `"<div class=\\"OverlaySelect__Overlay-kpvDhg gGlSub\\"><h3>My Select is here!</h3><div class=\\"OverlaySelect__OverlaySelectInnerContentContainer-dZagTg gNCBAw\\"></div></div>"`;

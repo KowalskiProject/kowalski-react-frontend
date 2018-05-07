@@ -14,7 +14,7 @@ describe('<InlineLabelEdit />', () => {
   const renderComponent = () => mount(
     <InlineLabelEdit
       state={STATE_EDITING}
-      onStateChanged={jest.fn()}
+      onStateChange={jest.fn()}
       {...{ onCommit, onChange, onDiscard, value }}
     />
   );

@@ -1,5 +1,0 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
-
-exports[`<OverlaySelectOption /> when the option is not selected Renders one anchor not blue colored 1`] = `"<a class=\\"OverlaySelectOption__Option-douNpL tMoZj\\">Some text</a>"`;
-
-exports[`<OverlaySelectOption /> when the option is selected Renders one anchor tag blue colored 1`] = `"<a class=\\"OverlaySelectOption__SelectedOption-lkCHwo gNWKrc\\">Some text</a>"`;

@@ -6,52 +6,64 @@ import InlineSelectEdit from '../index';
 import InlineEdit, { STATE_EDITING, STATE_NORMAL } from '../../InlineEdit';
 
 describe('<InlineSelectEdit />', () => {
-  const onCommit = jest.fn();
-  const onChange = jest.fn();
-  const onDiscard = jest.fn();
-  const placeholderMsg = 'placeholderMsg';
-  const notSetMsg = 'notSetMsg';
-  const options = [{ label: 'Abscsder', value: 'A' }, { label: 'Bytro', value: 'B' }];
+  let onCommit;
+  let onChange;
+  let onDiscard;
+  let placeholderMsg;
+  let notSetMsg;
+  let options;
   let state;
   let value;
   let componentWrapper;
 
   const renderComponent = () => shallow(
     <InlineSelectEdit
-      onStateChanged={jest.fn()}
+      onStateChange={jest.fn()}
       {...{ onCommit, onChange, onDiscard, options, placeholderMsg, notSetMsg, state, value }}
     />
   );
 
-  describe('when on normal state', () => {
-    beforeEach(() => { state = STATE_NORMAL; });
+  beforeEach(() => {
+    onCommit = jest.fn();
+    onChange = jest.fn();
+    onDiscard = jest.fn();
+    placeholderMsg = 'placeholderMsg';
+    notSetMsg = 'notSetMsg';
+    options = [{ label: 'Abscsder', value: 'A' }, { label: 'Bytro', value: 'B' }];
+  });
 
-    describe('when value is in provided options', () => {
+  describe('when in normal mode', () => {
+    beforeEach(() => {
+      state = STATE_NORMAL;
+    });
+
+    describe('when value is within provided options', () => {
       beforeEach(() => {
         value = options[0].value;
         componentWrapper = renderComponent();
       });
 
       it('renders the formatted value', () => {
-        expect(componentWrapper.html()).toContain(options.find((v) => v.value === value).label);
+        expect(componentWrapper.html()).toContain(options[0].label);
       });
     });
 
-    describe('when value is empty', () => {
+    describe('when value is not within provided options', () => {
       beforeEach(() => {
-        value = '';
+        value = 'blabla';
         componentWrapper = renderComponent();
       });
 
-      it('renders not set msg', () => {
-        expect(componentWrapper.html()).toMatchSnapshot();
+      it('renders the not set msg', () => {
         expect(componentWrapper.html()).toContain(notSetMsg);
       });
     });
   });
 
-  describe('when on editing state', () => {
-    beforeEach(() => { state = STATE_EDITING; });
+  describe('when in editing mode', () => {
+    beforeEach(() => {
+      state = STATE_EDITING;
+    });
 
     describe('when value is undefined', () => {
       beforeEach(() => {
@@ -77,9 +89,10 @@ describe('<InlineSelectEdit />', () => {
       });
 
       describe('when the value is changed in the input', () => {
-        const newValue = options[1].value;
+        let newValue;
 
         beforeEach(() => {
+          newValue = options[1].value;
           componentWrapper.find(InlineEdit).dive().find(Select).simulate('change', { value: newValue });
         });
 

@@ -1,60 +1,64 @@
 import React from 'react';
-import { mount } from 'enzyme';
+import { shallow } from 'enzyme';
 import Flatpickr from 'react-flatpickr';
-import { format } from 'date-fns';
 
-import InlineDateEdit, { onDatePickerChange, onDatePickerClose } from '../index';
-import InlineEdit from '../../InlineEdit';
-
-const renderComponent = ({ onCommit = jest.fn(), value, saving } = {}) => mount(
-  <InlineDateEdit {...{ onCommit, value, saving }} />
-);
+import InlineDateEdit, { refCallback } from '../index';
+import { STATE_EDITING, STATE_NORMAL } from '../../InlineEdit';
+import { formatDate } from '../../../support/backend/formatters';
 
 jest.useFakeTimers();
 
 describe('<InlineDateEdit />', () => {
-  it('renders', () => {
-    const renderedComponent = renderComponent();
-    expect(renderedComponent.html()).toMatchSnapshot();
+  let onCommit;
+  let value;
+  let component;
+  let onStateChange;
+  let onDiscard;
+  let onChange;
+
+  const renderComponent = () => shallow(
+    <InlineDateEdit
+      state={STATE_EDITING}
+      {...{ onCommit, value, onStateChange, onDiscard, onChange }}
+    />
+  );
+
+  beforeEach(() => {
+    onCommit = jest.fn();
+    onStateChange = jest.fn();
+    onDiscard = jest.fn();
+    onChange = jest.fn();
+    value = formatDate(new Date(2014, 1, 1));
+    component = renderComponent();
   });
 
-  describe('when saving', () => {
-    it('renders', () => {
-      const date = new Date(2014, 1, 1);
-      const renderedComponent = renderComponent({ saving: true, value: format(date) });
-      const inlineEditComponent = renderedComponent.find(InlineEdit);
-      // Change state to 'editing'
-      inlineEditComponent.simulate('click');
-      expect(renderedComponent.html()).toMatchSnapshot();
-    });
+  it('renders the datepicker', () => {
+    expect(component.html()).toMatchSnapshot();
+  });
+
+  it('processes ref callback accordingly', () => {
+    refCallback(null);
+    refCallback({});
+
+    const focus = jest.fn();
+    refCallback({ node: { focus } });
+    expect(focus).toHaveBeenCalled();
   });
 
   describe('when editing', () => {
-    const date = new Date(2014, 1, 1);
-
-    it('renders the datepicker', () => {
-      const inlineDateComponent = renderComponent({ value: format(date) });
-      const inlineEditComponent = inlineDateComponent.find(InlineEdit);
-      // Change state to 'editing'
-      inlineEditComponent.simulate('click');
-      const datepicker = inlineDateComponent.find(Flatpickr);
-      expect(datepicker.html()).toMatchSnapshot();
-    });
-
     it('callbacks onChange correctly', () => {
-      const onChange = jest.fn();
-      const newValue = new Date(2014, 1, 1);
-      onDatePickerChange(onChange)([newValue]);
+      component.dive().find(Flatpickr).simulate('change', [value]);
       expect(onChange.mock.calls.length).toEqual(1);
-      expect(onChange.mock.calls[0][0]).toEqual(newValue);
+      expect(onChange.mock.calls[0][0]).toEqual(value);
+      expect(onCommit.mock.calls.length).toEqual(1);
     });
 
-    it('callbacks onCommit correctly', () => {
-      const onCommit = jest.fn();
-      onDatePickerClose(onCommit)();
+    it('callbacks onDiscard correctly', () => {
+      component.dive().find(Flatpickr).simulate('close', [value]);
       jest.runAllTimers();
-      expect(onCommit.mock.calls.length).toEqual(1);
-      expect(onCommit.mock.calls[0][0]).toEqual(undefined);
+      expect(onDiscard.mock.calls.length).toEqual(1);
+      expect(onStateChange.mock.calls.length).toEqual(1);
+      expect(onStateChange.mock.calls[0][0]).toEqual(STATE_NORMAL);
     });
   });
 });

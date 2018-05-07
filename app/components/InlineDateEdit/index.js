@@ -11,17 +11,23 @@ import Flatpickr from 'react-flatpickr';
 import InlineEdit, { STATE_EDITING, statePropType, STATE_NORMAL } from '../InlineEdit';
 import { formatDate } from '../../support/backend/formatters';
 
-export const onDatePickerChange = (onChange, onCommit) => ([date]) => {
+const onDatePickerChange = (onChange, onCommit) => ([date]) => {
   onChange(formatDate(date));
   onCommit();
 };
 
-export const onDatePickerClose = (state, onDiscard, onStateChange) => () => {
+const onDatePickerClose = (state, onDiscard, onStateChange) => () => {
   if (state === STATE_EDITING) {
     setTimeout(() => {
       onDiscard();
       onStateChange(STATE_NORMAL);
     });
+  }
+};
+
+export const refCallback = (ref) => {
+  if (ref && ref.node) {
+    ref.node.focus();
   }
 };
 
@@ -33,11 +39,7 @@ function InlineDateEdit(props) {
           value={props.value}
           onChange={onDatePickerChange(props.onChange, props.onCommit)}
           onClose={onDatePickerClose(props.state, props.onDiscard, props.onStateChange)}
-          ref={(ref) => {
-            if (ref && ref.node) {
-              ref.node.focus();
-            }
-          }}
+          ref={refCallback}
         />
       ) }
     </InlineEdit>

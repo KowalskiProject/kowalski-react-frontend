@@ -10,7 +10,7 @@ import styled from 'styled-components';
 import TextareaAutoresize from 'react-autosize-textarea';
 import InlineEdit from '../InlineEdit';
 
-const TextArea = styled(TextareaAutoresize)`
+export const TextArea = styled(TextareaAutoresize)`
   width: 100%;
   height: 100%;
   overflow: hidden;
