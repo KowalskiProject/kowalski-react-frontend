@@ -26,8 +26,14 @@ import {
   END_UPDATING_PROJECT_ATTRIBUTE,
   UPDATE_LOADED_PROJECT_ATTRIBUTE,
   POP_UPDATE_PROJECT_ERROR_MSG,
+  UPDATE_INLINE_PROJECT_FORM_ERROR_MSG,
+  UPDATE_FIELD,
+  RESET_FIELD_VALUE,
 } from './constants';
 import { CLEAN_UP_STATE } from '../App/constants';
+import { STATE_NORMAL } from '../../components/InlineEdit';
+
+const inlineProjectFormFieldInitState = { state: STATE_NORMAL, value: undefined, originalValue: undefined };
 
 const initialState = fromJS({
   projectCodes: [],
@@ -50,6 +56,15 @@ const initialState = fromJS({
   isAddPeopleFormOpen: false,
   updateProjectAttributesStatus: {},
   updateProjectAttributesErrorMsg: '',
+  inlineProjectFormFields: {
+    name: inlineProjectFormFieldInitState,
+    accountableId: inlineProjectFormFieldInitState,
+    startDate: inlineProjectFormFieldInitState,
+    endDate: inlineProjectFormFieldInitState,
+    description: inlineProjectFormFieldInitState,
+    code: inlineProjectFormFieldInitState,
+  },
+  inlineProjectFormErrorMsg: '',
 });
 
 function projectPageReducer(state = initialState, { type, payload }) {
@@ -64,7 +79,28 @@ function projectPageReducer(state = initialState, { type, payload }) {
     case LOADED_SELECTED_PROJECT:
       return state
         .set('loadingProjectError', payload.success ? '' : payload.errorMsg)
-        .set('selectedProject', payload.success ? payload.data : null);
+        .set('selectedProject', payload.success ? payload.data : null)
+        .set(
+          'inlineProjectFormFields',
+          state.get('inlineProjectFormFields').map((value, fieldName) => (
+            value
+              .set('state', STATE_NORMAL)
+              .set('value', payload.data.get(fieldName))
+              .set('originalValue', payload.data.get(fieldName))
+          ))
+        );
+    case UPDATE_FIELD:
+      return state.updateIn(
+        ['inlineProjectFormFields', payload.fieldName],
+        (field) => payload.attribute !== 'originalValue'
+          ? field.set(payload.attribute, payload.newValue)
+          : field,
+      );
+    case RESET_FIELD_VALUE:
+      return state.setIn(
+        ['inlineProjectFormFields', payload, 'value'],
+        state.getIn(['inlineProjectFormFields', payload, 'originalValue']),
+      );
     case END_PROJECT_CODES_LOADING:
       return state
         .set('loadingProjectCodesError', payload.success ? '' : payload.errorMsg)
@@ -135,6 +171,8 @@ function projectPageReducer(state = initialState, { type, payload }) {
       );
     case POP_UPDATE_PROJECT_ERROR_MSG:
       return state.set('updateProjectAttributesErrorMsg', payload);
+    case UPDATE_INLINE_PROJECT_FORM_ERROR_MSG:
+      return state.set('inlineProjectFormErrorMsg', payload);
     case CLEAN_UP_STATE:
       return initialState;
     default:

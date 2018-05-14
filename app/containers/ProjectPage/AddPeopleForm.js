@@ -61,7 +61,7 @@ AddPeopleCheckbox.propTypes = {
 
 function AddPeopleForm(props) {
   const { error, submitting, onCancel, handleSubmit, onAdd } = props;
-  const { project, availableUsers } = props;
+  const { projectId, availableUsers } = props;
 
   const addPeopleOptions = availableUsers.map((user) => ({
     label: user.get('name'),
@@ -72,7 +72,7 @@ function AddPeopleForm(props) {
     func(
       formData
         .delete('role') // Temporary -> role has still to be added in the backend
-        .set('projectId', project.get('projectId'))
+        .set('projectId', projectId)
     )
   );
 
@@ -123,7 +123,7 @@ function AddPeopleForm(props) {
 }
 
 AddPeopleForm.propTypes = {
-  project: PropTypes.any.isRequired,
+  projectId: PropTypes.number.isRequired,
   error: PropTypes.any,
   submitting: PropTypes.any.isRequired,
   onCancel: PropTypes.func,

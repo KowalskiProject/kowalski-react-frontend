@@ -112,13 +112,18 @@ const makeSelectUsers = () => createSelector(
   (substate) => substate.get('users'),
 );
 
-const makeSelectUserIdsInProject = () => createSelector(
+const makeSelectSelectedProjectPeople = () => createSelector(
   makeSelectSelectedProject(),
   (selectedProject) => (
     selectedProject
-       ? selectedProject.get('people').map((person) => person.get('kUserId'))
-       : List()
+      ? selectedProject.get('people')
+      : List()
   ),
+);
+
+const makeSelectUserIdsInProject = () => createSelector(
+  makeSelectSelectedProjectPeople(),
+  (selectedProjectPeople) => selectedProjectPeople.map((person) => person.get('kUserId')),
 );
 
 const makeSelectLoadingUsersError = () => createSelector(
@@ -146,6 +151,21 @@ const makeSelectUpdateProjectAttributesErrorMsg = () => createSelector(
   (substate) => substate.get('updateProjectAttributesErrorMsg'),
 );
 
+const makeSelectInlineProjectFormFields = () => createSelector(
+  selectProjectPageDomain,
+  (substate) => substate.get('inlineProjectFormFields'),
+);
+
+const makeSelectInlineProjectFormErrorMsg = () => createSelector(
+  selectProjectPageDomain,
+  (substate) => substate.get('inlineProjectFormErrorMsg'),
+);
+
+const makeSelectAccountableOptions = () => createSelector(
+  makeSelectSelectedProjectPeople(),
+  (people) => people.map((person) => ({ value: person.get('kUserId'), label: person.get('name') })).toJS(),
+);
+
 export default makeSelectProjectPage;
 
 export {
@@ -153,6 +173,7 @@ export {
   makeSelectProjectCodes,
   makeSelectSelectedProjectId,
   makeSelectSelectedProject,
+  makeSelectSelectedProjectPeople,
   makeSelectSelectedTab,
   makeSelectActivityFilteringText,
   makeSelectExpandedTaskIds,
@@ -171,5 +192,8 @@ export {
   makeSelectLoadingUsersError,
   makeSelectUpdateProjectAttributesStatus,
   makeSelectUpdateProjectAttributesErrorMsg,
+  makeSelectInlineProjectFormFields,
+  makeSelectInlineProjectFormErrorMsg,
+  makeSelectAccountableOptions,
 };
 

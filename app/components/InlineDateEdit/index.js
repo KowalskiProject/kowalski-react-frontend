@@ -4,46 +4,53 @@
 *
 */
 
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import 'flatpickr/dist/themes/material_green.css';
 import Flatpickr from 'react-flatpickr';
-import InlineEdit, { STATE_SAVING } from '../InlineEdit';
+import InlineEdit, { STATE_EDITING, statePropType, STATE_NORMAL } from '../InlineEdit';
+import { formatDate } from '../../support/backend/formatters';
 
-export const onDatePickerChange = (onChange) => ([date]) => onChange(date);
-export const onDatePickerClose = (onCommit) => () => setTimeout(onCommit);
-
-const renderDatePicker = ({ content, onCommit, onChange, stateName }) => (
-  <Flatpickr
-    value={content}
-    onChange={onDatePickerChange(onChange)}
-    onClose={onDatePickerClose(onCommit)}
-    ref={(ref) => {
-      if (ref && ref.node && stateName !== STATE_SAVING) {
-        ref.node.focus();
-      }
-    }}
-  />
-);
-
-renderDatePicker.propTypes = {
-  content: PropTypes.string,
-  onCommit: PropTypes.func.isRequired,
-  onChange: PropTypes.func.isRequired,
-  stateName: PropTypes.string.isRequired,
+export const onDatePickerChange = (onChange, onCommit) => ([date]) => {
+  onChange(formatDate(date));
+  onCommit();
 };
 
-class InlineDateEdit extends Component { // eslint-disable-line react/prefer-stateless-function
-  render() {
-    return (
-      <InlineEdit
-        {...this.props}
-        renderEditComponent={renderDatePicker}
-        displayEditElementWhenSaving
-      />
-    );
+export const onDatePickerClose = (state, onDiscard, onStateChange) => () => {
+  if (state === STATE_EDITING) {
+    setTimeout(() => {
+      onDiscard();
+      onStateChange(STATE_NORMAL);
+    });
   }
+};
+
+function InlineDateEdit(props) {
+  return (
+    <InlineEdit {...props} >
+      { () => (
+        <Flatpickr
+          value={props.value}
+          onChange={onDatePickerChange(props.onChange, props.onCommit)}
+          onClose={onDatePickerClose(props.state, props.onDiscard, props.onStateChange)}
+          ref={(ref) => {
+            if (ref && ref.node) {
+              ref.node.focus();
+            }
+          }}
+        />
+      ) }
+    </InlineEdit>
+  );
 }
 
-export default InlineDateEdit;
+InlineDateEdit.propTypes = {
+  onStateChange: PropTypes.func.isRequired,
+  onDiscard: PropTypes.func.isRequired,
+  state: statePropType.isRequired,
+  value: PropTypes.string.isRequired,
+  onCommit: PropTypes.func.isRequired,
+  onChange: PropTypes.func.isRequired,
+};
 
+export default InlineDateEdit;

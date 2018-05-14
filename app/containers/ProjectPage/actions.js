@@ -36,6 +36,10 @@ import {
   END_UPDATING_PROJECT_ATTRIBUTE,
   UPDATE_LOADED_PROJECT_ATTRIBUTE,
   POP_UPDATE_PROJECT_ERROR_MSG,
+  UPDATE_FIELD,
+  UPDATE_INLINE_PROJECT_FORM_ERROR_MSG,
+  PROJECT_PAGE_MOUNTED,
+  RESET_FIELD_VALUE,
 } from './constants';
 
 export function defaultAction() {
@@ -227,6 +231,18 @@ export function updateProjectAttribute(payload) {
   };
 }
 
+export function updateField(...payload) {
+  return {
+    type: UPDATE_FIELD,
+    payload: {
+      projectId: payload[0],
+      fieldName: payload[1],
+      attribute: payload[2],
+      newValue: payload[3],
+    },
+  };
+}
+
 export function updateLoadedProjectAttribute(payload) {
   return {
     type: UPDATE_LOADED_PROJECT_ATTRIBUTE,
@@ -245,5 +261,26 @@ export function popUpdateProjectErrorMsg(msg) {
   return {
     type: POP_UPDATE_PROJECT_ERROR_MSG,
     payload: msg,
+  };
+}
+
+export function updateInlineProjectFormErrorMsg(message) {
+  return {
+    type: UPDATE_INLINE_PROJECT_FORM_ERROR_MSG,
+    payload: message,
+  };
+}
+
+export function projectPageMounted(payload) {
+  return {
+    type: PROJECT_PAGE_MOUNTED,
+    payload,
+  };
+}
+
+export function resetFieldValue(payload) {
+  return {
+    type: RESET_FIELD_VALUE,
+    payload,
   };
 }

@@ -14,35 +14,34 @@ const Input = styled.input`
   height: 100%;
 `;
 
-const renderTextInput = ({ content, onCommit, onChange }) => (
-  <Input
-    type="text"
-    value={content}
-    onChange={(evt) => onChange(evt.target.value)}
-    innerRef={(ref) => {
-      if (ref) {
-        ref.focus();
-        ref.selectionStart = ref.value.length + 1; // eslint-disable-line no-param-reassign
-        ref.selectionEnd = ref.value.length + 1; // eslint-disable-line no-param-reassign
-      }
-    }}
-    onBlur={onCommit}
-  />
-);
-
-renderTextInput.propTypes = {
-  content: PropTypes.string,
-  onCommit: PropTypes.func.isRequired,
-  onChange: PropTypes.func.isRequired,
-};
-
 function InlineLabelEdit(props) {
   return (
-    <InlineEdit
-      {...props}
-      renderEditComponent={(editProps) => renderTextInput({ ...editProps })}
-    />
+    <InlineEdit {...props}>
+      { () => (
+        <Input
+          type="text"
+          value={props.value}
+          onChange={(evt) => props.onChange(evt.target.value)}
+          innerRef={(ref) => {
+            if (ref) {
+              ref.focus();
+              if (ref.value) {
+                ref.selectionStart = ref.value.length + 1; // eslint-disable-line no-param-reassign
+                ref.selectionEnd = ref.value.length + 1; // eslint-disable-line no-param-reassign
+              }
+            }
+          }}
+          onBlur={props.onCommit}
+        />
+      ) }
+    </InlineEdit>
   );
 }
+
+InlineLabelEdit.propTypes = {
+  onCommit: PropTypes.func.isRequired,
+  onChange: PropTypes.func.isRequired,
+  value: PropTypes.string,
+};
 
 export default InlineLabelEdit;

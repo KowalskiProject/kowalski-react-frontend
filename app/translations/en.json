@@ -79,6 +79,9 @@
   "app.containers.ProjectPage.generalTabSelectOneOrMorePeople": "Select one or more users",
   "app.containers.ProjectPage.generalTabAddPeopleFormButtonAdd": "Add",
   "app.containers.ProjectPage.generalTabAddPeopleFormButtonCancel": "Cancel",
+  "app.containers.ProjectPage.generalTabInlineProjectFormTooltip": "Click for editing",
+  "app.containers.ProjectPage.generalTabInlineProjectFormNotSetMsg": "Not Set",
+  
   "app.containers.ProjectPage.activitiesTabButtonAddActivity": "Add Activity",
   "app.containers.ProjectPage.activitiesTabTask": "Task",
   "app.containers.ProjectPage.activitiesOwner": "Owner",

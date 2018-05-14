@@ -16,36 +16,31 @@ const TextArea = styled(TextareaAutoresize)`
   overflow: hidden;
 `;
 
-// TODO refactor renderTextarea to dedicated file and rename it to be InlineEditTextArea
-const renderTextarea = ({ content, onCommit, onChange, maxRows }) => (
-  <TextArea
-    autoFocus="true"
-    value={content}
-    onChange={(evt) => onChange(evt.target.value)}
-    onBlur={onCommit}
-    maxRows={maxRows}
-  />
-);
-
-renderTextarea.propTypes = {
-  content: PropTypes.string,
-  onCommit: PropTypes.func.isRequired,
-  onChange: PropTypes.func.isRequired,
-  maxRows: PropTypes.number,
-};
-
 function InlineTextEdit(props) {
-  const { maxRows } = props;
   return (
-    <InlineEdit
-      {...props}
-      renderEditComponent={(editProps) => renderTextarea({ ...editProps, maxRows })}
-    />
+    <InlineEdit {...props}>
+      { () => (
+        <TextArea
+          autoFocus="true"
+          value={props.value}
+          onChange={(evt) => props.onChange(evt.target.value)}
+          onBlur={props.onCommit}
+          maxRows={props.maxRows}
+        />
+      ) }
+    </InlineEdit>
   );
 }
 
 InlineTextEdit.propTypes = {
   maxRows: PropTypes.number,
+  onChange: PropTypes.func.isRequired,
+  onCommit: PropTypes.func.isRequired,
+  value: PropTypes.string.isRequired,
+};
+
+InlineTextEdit.defaultProps = {
+  value: '',
 };
 
 export default InlineTextEdit;

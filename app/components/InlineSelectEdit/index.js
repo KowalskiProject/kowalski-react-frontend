@@ -10,39 +10,36 @@ import Select from 'react-select';
 import 'react-select/dist/react-select.css';
 import InlineEdit from '../InlineEdit';
 
-const renderSelect = (options, { content, onCommit, onChange, onDiscard }) => (
-  <Select
-    autoFocus
-    onBlurResetsInput={false}
-    onSelectResetsInput={false}
-    clearable={false}
-    value={content}
-    onChange={({ value }) => { onChange(value); onCommit(); }}
-    onBlur={onDiscard}
-    options={options}
-    searchable
-    autosize={false}
-    openOnFocus
-    placeholder="Select a user..."
-  />
-);
-
-const valueFormatterForSelect = (options, toBeFormatted) => {
+const valueFormatterForSelect = (options, toBeFormatted, notSetMsg) => {
   const correspondingOption = options.find(({ value }) => toBeFormatted === value);
   if (!correspondingOption) {
-    return 'Not defined';
+    return notSetMsg;
   }
 
   return correspondingOption.label;
 };
 
 function InlineSelectEdit(props) {
+  const { value, onChange, onCommit, onDiscard, options, placeholderMsg, notSetMsg } = props;
+
   return (
-    <InlineEdit
-      {...props}
-      formatter={(value) => valueFormatterForSelect(props.options, value)}
-      renderEditComponent={({ ...editProps }) => renderSelect(props.options, editProps)}
-    >
+    <InlineEdit {...props} formatter={(rawValue) => valueFormatterForSelect(props.options, rawValue, notSetMsg)}>
+      { () => (
+        <Select
+          autoFocus
+          onBlurResetsInput={false}
+          onSelectResetsInput={false}
+          clearable={false}
+          value={value}
+          onChange={(obj) => { onChange(obj.value); onCommit(); }}
+          onBlur={onDiscard}
+          options={options}
+          searchable
+          autosize={false}
+          openOnFocus
+          placeholder={placeholderMsg}
+        />
+      ) }
     </InlineEdit>
   );
 }
@@ -52,6 +49,12 @@ InlineSelectEdit.propTypes = {
     label: PropTypes.string.isRequired,
     value: PropTypes.any.isRequired,
   })),
+  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number, PropTypes.instanceOf(Date)]),
+  onChange: PropTypes.func.isRequired,
+  onCommit: PropTypes.func.isRequired,
+  onDiscard: PropTypes.func.isRequired,
+  placeholderMsg: PropTypes.string.isRequired,
+  notSetMsg: PropTypes.string.isRequired,
 };
 
 export default InlineSelectEdit;

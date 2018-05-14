@@ -35,6 +35,8 @@ export default defineMessages({
   generalTabProjectEndDate: { id: 'app.containers.ProjectPage.generalTabProjectEndDate' },
   generalTabProjectPeople: { id: 'app.containers.ProjectPage.generalTabProjectPeople' },
   generalTabProjectAddPeople: { id: 'app.containers.ProjectPage.generalTabProjectAddPeople' },
+  generalTabInlineProjectFormTooltip: { id: 'app.containers.ProjectPage.generalTabInlineProjectFormTooltip' },
+  generalTabInlineProjectFormNotSetMsg: { id: 'app.containers.ProjectPage.generalTabInlineProjectFormNotSetMsg' },
   generalTabSelectOneOrMorePeople: { id: 'app.containers.ProjectPage.generalTabSelectOneOrMorePeople' },
   generalTabAddPeopleFormButtonAdd: { id: 'app.containers.ProjectPage.generalTabAddPeopleFormButtonAdd' },
   generalTabAddPeopleFormButtonCancel: { id: 'app.containers.ProjectPage.generalTabAddPeopleFormButtonCancel' },

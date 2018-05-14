@@ -4,14 +4,13 @@
  *
  */
 
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import styled from 'styled-components';
 import { connect } from 'react-redux';
-import { Helmet } from 'react-helmet';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 import { injectIntl } from 'react-intl';
+import bind from 'memoize-bind';
 
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
@@ -26,67 +25,30 @@ import {
   makeSelectIsAddPeopleFormOpen,
   makeSelectUsersNotInProject,
   makeSelectLoadingUsersError,
+  makeSelectInlineProjectFormFields,
+  makeSelectUpdateProjectAttributesErrorMsg,
+  makeSelectSelectedProjectPeople,
+  makeSelectAccountableOptions,
 } from './selectors';
 import reducer from './reducer';
 import saga from './saga';
 import * as actions from './actions';
+import Meta from './Meta';
+import ProjectPaneTabBar from './ProjectPaneTabBar';
+import ProjectMenu from './ProjectMenu';
 import ActivitiesTab from './ActivitiesTab';
-import GeneralTab from './GeneralTab';
 import messages from './messages';
+import InlineProjectForm from './InlineProjectForm';
+import ProjectPeople from './ProjectPeople';
+import Container from './Container';
+import ProjectPaneWrapper from './ProjectPaneWrapper';
+import TabContentWrapper from './TabContentWrapper';
+import Wrapper from './Wrapper';
+import ProjectSelectorWrapper from './ProjectSelectorWrapper';
+import ProjectPaneLoadingError from './ProjectPaneLoadingError';
+import { capitalize } from '../../support/string/utils';
 
-const Wrapper = styled.div`
-  display: flex;
-  flex-grow: 1;
-  align-items: stretch;
-`;
-
-const ProjectSelectorWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  flex-basis: 200px;
-  flex-grow: 0;
-  border-right: 0.5px solid #dbdbdb;
-  align-items: stretch;
-  background:#FBFAFF;
-`;
-
-const OuterWrapper = styled.div`
-  display: flex;
-  flex-grow: 1;
-`;
-
-const ProjectCodeWrapper = styled.a`
-  display: block;
-  width: 200px;
-  padding: 2rem;
-  text-align: center;
-  color:#414549;
-  border-bottom: 0.5px solid #dbdbdb;
-  ${(props) => props.selected ? 'background-color: #D2CCEB;' : ''}
-
-  &:hover {
-    ${(props) => props.selected ? '' : 'background-color: #DFD9FA;'}
-  }
-`;
-
-const ProjectPaneWrapper = styled.div`
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-`;
-
-const TabsWrapper = styled.div`
-  margin-top: 8px;
-`;
-
-const TabContentWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
-  margin-left: 2rem;
-`;
-
-export class ProjectPage extends React.PureComponent {
+export class ProjectPage extends Component {
   componentDidMount() {
     this.props.loadProjectCodes();
     this.props.loadUsers();
@@ -103,113 +65,91 @@ export class ProjectPage extends React.PureComponent {
     return parseInt(this.props.match.params.code, 10);
   }
 
-  renderProjectMenuItems() {
-    const {
-      projectCodes,
-      otherProjectClicked,
-      selectedProjectId,
-      loadingProjectCodesError,
-    } = this.props;
-
-    if (loadingProjectCodesError) {
-      return (
-        <article className="message is-danger">
-          <div className="message-body">
-            { loadingProjectCodesError }
-          </div>
-        </article>
-      );
-    }
-
-    return (projectCodes).map((group) => (
-      <ProjectCodeWrapper
-        selected={group.get('id') === selectedProjectId}
-        key={group.get('id')}
-        onClick={() => otherProjectClicked(group.get('id'))}
-      >
-        { group.get('code') }
-      </ProjectCodeWrapper>
-    ));
-  }
-
-  renderProjectPane() {
-    const {
-      loadingProjectError,
-      loadingUsersError,
-      selectedTab,
-      selectedTabChanged,
-      selectedProject,
-      isAddPeopleFormOpen,
-      closeAddPeopleForm,
-      openAddPeopleForm,
-      submitAddPeopleFormAndCloseIt,
-      usersNotInProject,
-      intl: { formatMessage },
-    } = this.props;
-
-    const generalTabProps = {
-      project: selectedProject,
-      isAddPeopleFormOpen,
-      closeAddPeopleForm,
-      openAddPeopleForm,
-      submitAddPeopleFormAndCloseIt,
-      usersNotInProject,
-    };
-
-    const loadingError = loadingProjectError || loadingUsersError;
-    if (loadingError) {
-      return (
-        <ProjectPaneWrapper>
-          <div className="control" style={{ marginTop: '1rem' }}>
-            <article className="message is-danger">
-              <div className="message-body">
-                { loadingError }
-              </div>
-            </article>
-          </div>
-        </ProjectPaneWrapper>
-      );
-    }
+  renderMeta() {
+    const { formatMessage } = this.props.intl;
+    const { selectedProject } = this.props;
 
     return (
-      <ProjectPaneWrapper>
-        <TabsWrapper className="tabs">
-          <ul>
-            <li className={selectedTab === 0 ? 'is-active' : ''}>
-              <a role="button" tabIndex={0} onClick={() => selectedTabChanged(0)}>{formatMessage(messages.generalTab)}</a>
-            </li>
-            <li className={selectedTab === 1 ? 'is-active' : ''}>
-              <a role="button" tabIndex={0} onClick={() => selectedTabChanged(1)}>{formatMessage(messages.activitiesTab)}</a>
-            </li>
-          </ul>
-        </TabsWrapper>
-        <TabContentWrapper>
-          {selectedTab === 0 && <GeneralTab {...generalTabProps} />}
-          {selectedTab === 1 && <ActivitiesTab project={selectedProject} />}
-        </TabContentWrapper>
-      </ProjectPaneWrapper>
+      <Meta
+        title={formatMessage(messages.title, { code: selectedProject.get('code') })}
+        description={formatMessage(messages.description, { code: selectedProject.get('code') })}
+      />
+    );
+  }
+
+  renderGeneralTab() {
+    if (this.props.selectedTab !== 0 || !this.props.selectedProject) {
+      return [];
+    }
+
+    const { intl: { formatMessage }, updateProjectAttributesErrorMsg } = this.props;
+    const errorMsg = updateProjectAttributesErrorMsg
+      ? (
+          `${formatMessage(messages.generalTabErrorUpdatingAttribute)} '` +
+          `${formatMessage(messages[`generalTabErrorUpdating${capitalize(updateProjectAttributesErrorMsg)}`])}'`
+        )
+      : updateProjectAttributesErrorMsg;
+
+    return (
+      <Container>
+        <InlineProjectForm
+          fields={this.props.inlineProjectFormFields}
+          labels={{
+            accountable: formatMessage(messages.generalTabProjectAccountable),
+            startDate: formatMessage(messages.generalTabProjectStartDate),
+            endDate: formatMessage(messages.generalTabProjectEndDate),
+            code: formatMessage(messages.generalTabProjectCode),
+            description: formatMessage(messages.generalTabProjectDescription),
+          }}
+          errorMsg={errorMsg}
+          updateField={bind(this.props.updateField, this, this.props.selectedProjectId)}
+          tooltipText={formatMessage(messages.generalTabInlineProjectFormTooltip)}
+          notSetMsg={formatMessage(messages.generalTabInlineProjectFormNotSetMsg)}
+          accountableOptions={this.props.accountableOptions}
+        />
+        <ProjectPeople
+          sectionTitle={formatMessage(messages.generalTabProjectPeople)}
+          addPeopleBtnText={formatMessage(messages.generalTabAddPeopleFormButtonAdd)}
+          onAddPeopleFormOpen={this.props.openAddPeopleForm}
+          addPeopleFormOpened={this.props.isAddPeopleFormOpen}
+          onAddPeopleFormDismiss={this.props.closeAddPeopleForm}
+          onAddPeopleFormSubmit={this.props.submitAddPeopleFormAndCloseIt}
+          availableUsers={this.props.usersNotInProject}
+          people={this.props.selectedProjectPeople}
+          projectId={this.props.selectedProjectId}
+        />
+      </Container>
     );
   }
 
   render() {
-    const { intl: { formatMessage }, selectedProject } = this.props;
-
     return (
-      <OuterWrapper>
-        {
-          selectedProject &&
-            <Helmet>
-              <title>{formatMessage(messages.title, { code: selectedProject.get('code') })}</title>
-              <meta name="description" content={formatMessage(messages.description, { code: selectedProject.get('code') })} />
-            </Helmet>
-        }
+      <Container>
+        { this.props.selectedProject && this.renderMeta() }
         <Wrapper>
           <ProjectSelectorWrapper>
-            { this.renderProjectMenuItems() }
+            <ProjectMenu
+              projectGroups={this.props.projectCodes}
+              onProjectSelect={this.props.otherProjectClicked}
+              selectedProjectId={this.props.selectedProjectId}
+              projectCodesLoadingErrorMsg={this.props.loadingProjectCodesError}
+            />
           </ProjectSelectorWrapper>
-          { this.renderProjectPane() }
+          <ProjectPaneWrapper>
+            <ProjectPaneLoadingError loadingError={this.props.loadingProjectError || this.props.loadingUsersError} />
+            <ProjectPaneTabBar
+              selectedTab={this.props.selectedTab}
+              onTabSelect={this.props.selectedTabChanged}
+              generalTabTitle={this.props.intl.formatMessage(messages.generalTab)}
+              activitiesTabTitle={this.props.intl.formatMessage(messages.activitiesTab)}
+            />
+            <TabContentWrapper>
+              {this.props.selectedTab === 0 && this.renderGeneralTab() }
+              {this.props.selectedTab === 1 && <ActivitiesTab project={this.props.selectedProject} />}
+            </TabContentWrapper>
+          </ProjectPaneWrapper>
         </Wrapper>
-      </OuterWrapper>
+      </Container>
     );
   }
 }
@@ -217,9 +157,6 @@ export class ProjectPage extends React.PureComponent {
 ProjectPage.propTypes = {
   projectCodes: PropTypes.objectOf(List).isRequired,
   match: PropTypes.object,
-  updateSelectedProjectId: PropTypes.func.isRequired,
-  loadProjectCodes: PropTypes.func.isRequired,
-  loadUsers: PropTypes.func.isRequired,
   selectedTab: PropTypes.number,
   selectedTabChanged: PropTypes.func,
   otherProjectClicked: PropTypes.func,
@@ -228,24 +165,36 @@ ProjectPage.propTypes = {
   loadingUsersError: PropTypes.string.isRequired,
   selectedProjectId: PropTypes.number,
   selectedProject: PropTypes.object,
+  selectedProjectPeople: PropTypes.object.isRequired,
   isAddPeopleFormOpen: PropTypes.bool.isRequired,
   closeAddPeopleForm: PropTypes.func.isRequired,
   openAddPeopleForm: PropTypes.func.isRequired,
   submitAddPeopleFormAndCloseIt: PropTypes.func.isRequired,
   usersNotInProject: PropTypes.instanceOf(List).isRequired,
   intl: PropTypes.object.isRequired,
+  updateField: PropTypes.func.isRequired,
+  inlineProjectFormFields: PropTypes.object.isRequired,
+  updateProjectAttributesErrorMsg: PropTypes.string.isRequired,
+  loadProjectCodes: PropTypes.func.isRequired,
+  updateSelectedProjectId: PropTypes.func.isRequired,
+  loadUsers: PropTypes.func.isRequired,
+  accountableOptions: PropTypes.array.isRequired,
 };
 
 const mapStateToProps = createStructuredSelector({
   projectCodes: makeSelectProjectCodes(),
   selectedProjectId: makeSelectSelectedProjectId(),
   selectedProject: makeSelectSelectedProject(),
+  selectedProjectPeople: makeSelectSelectedProjectPeople(),
   selectedTab: makeSelectSelectedTab(),
   loadingProjectCodesError: makeSelectLoadingProjectCodesError(),
   loadingProjectError: makeSelectLoadingProjectError(),
   loadingUsersError: makeSelectLoadingUsersError(),
   isAddPeopleFormOpen: makeSelectIsAddPeopleFormOpen(),
   usersNotInProject: makeSelectUsersNotInProject(),
+  inlineProjectFormFields: makeSelectInlineProjectFormFields(),
+  updateProjectAttributesErrorMsg: makeSelectUpdateProjectAttributesErrorMsg(),
+  accountableOptions: makeSelectAccountableOptions(),
 });
 
 const withConnect = connect(mapStateToProps, actions);

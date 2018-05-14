@@ -18,6 +18,8 @@ import {
   SUBMIT_ADD_PEOPLE_FORM_AND_CLOSE_IT,
   ADD_PEOPLE_FORM_ID,
   UPDATE_PROJECT_ATTRIBUTE,
+  UPDATE_FIELD,
+  PROJECT_PAGE_MOUNTED,
 } from './constants';
 
 import {
@@ -33,6 +35,10 @@ import {
   updateLoadedProjectAttribute,
   endUpdatingProjectAttribute,
   popUpdateProjectErrorMsg,
+  updateField,
+  loadProjectCodes,
+  loadUsers,
+  resetFieldValue,
 } from './actions';
 
 import {
@@ -52,6 +58,7 @@ import { requestErrorReceived } from '../App/actions';
 
 import { handleProjectSelected } from '../ProjectsPage/saga';
 import { genCommonReqConfig } from '../../support/backend/utils';
+import { STATE_NORMAL, STATE_SAVING } from '../../components/InlineEdit';
 
 export function* handleSelectedProjectId({ payload }) {
   const commonConfig = {
@@ -281,6 +288,42 @@ export function* handleUpdateProjectAttribute({ payload }) {
   }
 }
 
+function* handleUpdateAttribute({ payload: { projectId, fieldName, attribute, newValue } }) {
+  if (attribute !== 'originalValue') {
+    return;
+  }
+
+  if (!fieldName) {
+    throw new Error(`fieldName is madatory. Got ${fieldName} instead.`);
+  }
+
+  const projectData = {};
+  projectData[fieldName] = newValue;
+
+  try {
+    yield put(updateField(projectId, fieldName, 'state', STATE_SAVING));
+    yield call(updateProject, { ...genCommonReqConfig(), projectId, projectData });
+    yield put(updateField(projectId, fieldName, 'value', newValue));
+    yield put(updateField(projectId, fieldName, 'state', STATE_NORMAL));
+  } catch (e) {
+    yield put(updateField(projectId, fieldName, 'state', STATE_NORMAL));
+    yield put(resetFieldValue(fieldName));
+    yield put(requestErrorReceived({
+      error: e,
+      dispatchOnOtherErrors: [popUpdateProjectErrorMsg(`${Object.keys(projectData).join(', ')}`)],
+    }));
+  }
+}
+
+export function* handleProjectPageMounted({ payload: { urlParams, selectedProjectId } }) {
+  yield put(loadProjectCodes());
+  yield put(loadUsers());
+  const projectId = parseInt(urlParams.code, 10);
+  if (projectId !== selectedProjectId) {
+    yield put(updateSelectedProjectId(projectId));
+  }
+}
+
 // Individual exports for testing
 export default function* defaultSaga() {
   yield takeEvery(UPDATE_SELECTED_PROJECT_CODE, handleSelectedProjectId);
@@ -296,4 +339,6 @@ export default function* defaultSaga() {
   yield takeEvery(EXPAND_TASK_LIST_ITEM, handleFetchTaskList);
   yield takeEvery(SUBMIT_ADD_PEOPLE_FORM_AND_CLOSE_IT, handleSubmitAddPeopleForm);
   yield takeEvery(UPDATE_PROJECT_ATTRIBUTE, handleUpdateProjectAttribute);
+  yield takeEvery(UPDATE_FIELD, handleUpdateAttribute);
+  yield takeEvery(PROJECT_PAGE_MOUNTED, handleProjectPageMounted);
 }
