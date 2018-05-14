@@ -14,7 +14,7 @@ describe('<InlineEdit />', () => {
   let placeholderMsg;
   let renderEditComponent;
   let notSetMsg;
-  let onStateChanged;
+  let onStateChange;
   let tooltipText;
   let state;
   let value;
@@ -30,7 +30,7 @@ describe('<InlineEdit />', () => {
         notSetMsg,
         state,
         value,
-        onStateChanged,
+        onStateChange,
         tooltipText,
       }}
     >
@@ -45,7 +45,7 @@ describe('<InlineEdit />', () => {
     placeholderMsg = 'placeholderMsg';
     renderEditComponent = jest.fn();
     notSetMsg = 'notSetMsg';
-    onStateChanged = jest.fn();
+    onStateChange = jest.fn();
     tooltipText = 'click for editing';
   });
 
@@ -87,7 +87,7 @@ describe('<InlineEdit />', () => {
         beforeEach(() => { renderedComponent.simulate('mouseEnter'); });
 
         it('callbacks onStateChange with STATE_HOVERED', () => {
-          expect(onStateChanged).toBeCalledWith(STATE_HOVERED);
+          expect(onStateChange).toBeCalledWith(STATE_HOVERED);
         });
       });
     });
@@ -122,15 +122,15 @@ describe('<InlineEdit />', () => {
       beforeEach(() => { renderedComponent.simulate('mouseLeave'); });
 
       it('callbacks onStateChange with STATE_NORMAL', () => {
-        expect(onStateChanged).toBeCalledWith(STATE_NORMAL);
+        expect(onStateChange).toBeCalledWith(STATE_NORMAL);
       });
     });
 
-    describe('when mouse is turned down', () => {
-      beforeEach(() => { renderedComponent.simulate('mouseDown'); });
+    describe('when is clicked', () => {
+      beforeEach(() => { renderedComponent.simulate('click'); });
 
       it('callbacks onStateChange with STATE_EDITING', () => {
-        expect(onStateChanged).toBeCalledWith(STATE_EDITING);
+        expect(onStateChange).toBeCalledWith(STATE_EDITING);
       });
     });
   });

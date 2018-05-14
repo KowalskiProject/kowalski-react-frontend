@@ -159,7 +159,7 @@ ProjectPage.propTypes = {
   match: PropTypes.object,
   selectedTab: PropTypes.number,
   selectedTabChanged: PropTypes.func,
-  otherProjectClicked: PropTypes.func,
+  otherProjectClicked: PropTypes.func.isRequired,
   loadingProjectCodesError: PropTypes.string,
   loadingProjectError: PropTypes.string,
   loadingUsersError: PropTypes.string.isRequired,
